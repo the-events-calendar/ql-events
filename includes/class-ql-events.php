@@ -120,7 +120,6 @@ if ( ! class_exists( 'QL_Events' ) ) :
 			}
 
 			// Required non-autoloaded classes.
-			require_once QL_EVENTS_PLUGIN_DIR . 'access-functions.php';
 			require_once QL_EVENTS_PLUGIN_DIR . 'class-inflect.php';
 		}
 

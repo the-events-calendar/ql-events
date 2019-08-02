@@ -7,8 +7,6 @@
  * Author URI: https://axistaylor.com
  * Text Domain: ql-events
  * Domain Path: /languages
- * License: GPL-3
- * License URI: https://www.gnu.org/licenses/gpl-3.0.html
  *
  * @package     WPGraphQL\Extensions\QLEvents
  * @author      kidunot89

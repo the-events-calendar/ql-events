@@ -20,7 +20,6 @@ coverage:
     whitelist:
       include:
         - ql-events.php
-        - access-functions.php
         - class-inflect.php
         - includes/*.php
 extensions:
