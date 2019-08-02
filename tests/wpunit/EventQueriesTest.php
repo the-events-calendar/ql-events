@@ -30,10 +30,14 @@ class EventQueriesTest extends \Codeception\TestCase\WPTestCase {
 
     // tests
     public function testEventsQueries() {
-        $organizer_id = $this->factory()->organizer->create();
+        $organizer_one = $this->factory()->organizer->create();
+        $organizer_two = $this->factory()->organizer->create();
         $venue_id     = $this->factory()->venue->create();
         $event_id     = $this->factory()->event->create(
-            array( 'venue' => $venue_id, 'organizer' => array( $organizer_id ) )
+            array(
+                'venue' => $venue_id,
+                'organizers' => array( $organizer_one, $organizer_two ),
+            )
         );
 
         // Create test query
@@ -60,6 +64,11 @@ class EventQueriesTest extends \Codeception\TestCase\WPTestCase {
                     featured
                     venue {
                         id
+                    }
+                    organizers {
+                        nodes {
+                            id
+                        }
                     }
                 }
             }

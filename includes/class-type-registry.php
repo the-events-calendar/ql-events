@@ -8,10 +8,6 @@
 
 namespace WPGraphQL\Extensions\QL_Events;
 
-use WPGraphQL\Extensions\QL_Events\Type\WPObject\Event_Type;
-use WPGraphQL\Extensions\QL_Events\Type\WPObject\Organizer_Type;
-use WPGraphQL\Extensions\QL_Events\Type\WPObject\Venue_Type;
-
 /**
  * Class Type_Registry
  */
@@ -28,8 +24,12 @@ class Type_Registry {
 	 * Registers TEC types, connection, and mutations to GraphQL schema
 	 */
 	public static function graphql_register_types() {
-		Event_Type::register_fields();
-		Organizer_Type::register_fields();
-		Venue_Type::register_fields();
+		// Object fields.
+		\WPGraphQL\Extensions\QL_Events\Type\WPObject\Event_Type::register_fields();
+		\WPGraphQL\Extensions\QL_Events\Type\WPObject\Organizer_Type::register_fields();
+		\WPGraphQL\Extensions\QL_Events\Type\WPObject\Venue_Type::register_fields();
+
+		// Connections.
+		\WPGraphQL\Extensions\QL_Events\Connection\Organizers::register_connections();
 	}
 }

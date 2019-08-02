@@ -88,7 +88,7 @@ script:
   - |
     if [ ! -z "$WP_VERSION" ]; then
       docker-compose run \
-        -e SUITES='acceptance;functional;wpunit' \
+        -e SUITES='wpunit' \
         -e COVERAGE=${COVERAGE:-0} \
         -e DEBUG=${DEBUG:-0} \
         testing --rm testing --scale app=0
@@ -96,7 +96,7 @@ script:
   - |
     if [ "$PHPCS" == "1" ]; then
       vendor/bin/phpcs \
-        wp-graphql-woocommerce.php \
+        ql-events.php \
         class-inflect.php \
         includes/*.php --standard=WordPress
     fi

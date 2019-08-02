@@ -8,6 +8,8 @@
 
 namespace WPGraphQL\Extensions\QL_Events;
 
+use Tribe__Events__Main as Main;
+
 /**
  * Class Core_Schema_Filters
  */
@@ -19,6 +21,13 @@ class Core_Schema_Filters {
 	public static function add_filters() {
 		add_action( 'register_post_type_args', array( __CLASS__, 'register_post_types' ), 10, 2 );
 		add_action( 'register_taxonomy_args', array( __CLASS__, 'register_taxonomies' ), 10, 2 );
+
+		add_filter(
+			'graphql_post_object_connection_query_args',
+			array( __CLASS__, 'organizer_connection_query_args' ),
+			10,
+			5
+		);
 	}
 
 	/**
@@ -30,19 +39,19 @@ class Core_Schema_Filters {
 	 * @return array
 	 */
 	public static function register_post_types( $args, $post_type ) {
-		if ( 'tribe_events' === $post_type ) {
+		if ( MAIN::POSTTYPE === $post_type ) {
 			$args['show_in_graphql']     = true;
 			$args['graphql_single_name'] = 'Event';
 			$args['graphql_plural_name'] = 'Events';
 		}
 
-		if ( 'tribe_organizer' === $post_type ) {
+		if ( MAIN::ORGANIZER_POST_TYPE === $post_type ) {
 			$args['show_in_graphql']     = true;
 			$args['graphql_single_name'] = 'Organizer';
 			$args['graphql_plural_name'] = 'Organizers';
 		}
 
-		if ( 'tribe_venue' === $post_type ) {
+		if ( MAIN::VENUE_POST_TYPE === $post_type ) {
 			$args['show_in_graphql']     = true;
 			$args['graphql_single_name'] = 'Venue';
 			$args['graphql_plural_name'] = 'Venues';
@@ -60,12 +69,27 @@ class Core_Schema_Filters {
 	 * @return array
 	 */
 	public static function register_taxonomies( $args, $taxonomy ) {
-		if ( 'tribe_events_cat' === $taxonomy ) {
+		if ( MAIN::TAXONOMY === $taxonomy ) {
 			$args['show_in_graphql']     = true;
 			$args['graphql_single_name'] = 'EventsCategory';
 			$args['graphql_plural_name'] = 'EventsCategories';
 		}
 
 		return $args;
+	}
+
+	/**
+	 * Filter PostObjectConnectionResolver's query_args and adds args to used when querying TEC Organizer CPT
+	 *
+	 * @param array       $query_args - WP_Query args.
+	 * @param mixed       $source     - Connection parent resolver.
+	 * @param array       $args       - Connection arguments.
+	 * @param AppContext  $context    - AppContext object.
+	 * @param ResolveInfo $info       - ResolveInfo object.
+	 *
+	 * @return mixed
+	 */
+	public static function organizer_connection_query_args( $query_args, $source, $args, $context, $info ) {
+		return \WPGraphQL\Extensions\QL_Events\Data\Connection\Organizer_Connection_Resolver::get_query_args( $query_args, $source, $args, $context, $info );
 	}
 }

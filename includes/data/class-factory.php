@@ -10,11 +10,6 @@
 
 namespace WPGraphQL\Extensions\QL_Events\Data;
 
-use GraphQL\Deferred;
-use GraphQL\Error\UserError;
-use GraphQL\Type\Definition\ResolveInfo;
-use WPGraphQL\AppContext;
-
 /**
  * Class Factory
  */
