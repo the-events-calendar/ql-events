@@ -96,7 +96,7 @@ script:
   - |
     if [ "$PHPCS" == "1" ]; then
       vendor/bin/phpcs \
-        wp-graphql-woocommerce.php \
+        ql-events.php \
         class-inflect.php \
         includes/*.php --standard=WordPress
     fi
