@@ -3,9 +3,9 @@
 
 ## Quick Install
 1. Install & activate [The Events Calendar/The Events Calendar Prop](https://woocommerce.com/)
-  1b. (Optional) Install & activate [Ticket Events/Ticket Events Pro](https://woocommerce.com/)
+  - (Optional) Install & activate [Ticket Events/Ticket Events Pro](https://woocommerce.com/)
 2. Install & activate [WPGraphQL](https://www.wpgraphql.com/)
-  2b. (Optional) Install & activate [WPGraphQL-JWT-Authentication](https://github.com/wp-graphql/wp-graphql-jwt-authentication) to add a `login` mutation that returns a JSON Web Token.
+  - (Optional) Install & activate [WPGraphQL-JWT-Authentication](https://github.com/wp-graphql/wp-graphql-jwt-authentication) to add a `login` mutation that returns a JSON Web Token.
 3. Clone or download the zip of this repository into your WordPress plugin directory & activate the **QL Events** plugin
 
 ## What does this plugin do?
