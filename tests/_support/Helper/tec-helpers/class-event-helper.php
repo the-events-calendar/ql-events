@@ -1,10 +1,11 @@
 <?php
 
 use GraphQLRelay\Relay;
+use Tribe__Events__Main as Main;
 
 class Event_Helper extends WCG_Helper {
 	protected function __construct() {
-		$this->node_type = 'tribe_events';
+		$this->node_type = MAIN::POSTTYPE;
 
 		parent::__construct();
 	}
@@ -63,9 +64,17 @@ class Event_Helper extends WCG_Helper {
 				: false,
 			'venue'           => array(
 				'id' => Relay::toGlobalId( 
-					'tribe_venue',
+					MAIN::VENUE_POST_TYPE,
 					get_post_meta( $data->ID, '_EventVenueID', true )
 				),
+			),
+			'organizers'      => array(
+				'nodes' => array_map(
+					function( $id ) use ( $data ) {
+						return array( 'id' => Relay::toGlobalId( MAIN::ORGANIZER_POST_TYPE, $id ) );
+					},
+					array_reverse( get_post_meta( $data->ID, '_EventOrganizerID' ) )
+				)
 			),
 		);
 	}

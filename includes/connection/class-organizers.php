@@ -10,16 +10,29 @@
 
 namespace WPGraphQL\Extensions\QL_Events\Connection;
 
-use WPGraphQL\Extensions\WooCommerce\Data\Factory;
+use Tribe__Events__Main as Main;
+use WPGraphQL\Connection\PostObjects;
 
 /**
  * Class - Organizers
  */
-class Organizers {
+class Organizers extends PostObjects {
 	/**
 	 * Registers the various connections from other Types to Organizer
 	 */
 	public static function register_connections() {
-
+		/**
+		 * From Product to MediaItem
+		 */
+		register_graphql_connection(
+			self::get_connection_config(
+				get_post_type_object( Main::ORGANIZER_POST_TYPE ),
+				array(
+					'fromType'      => 'Event',
+					'toType'        => 'Organizer',
+					'fromFieldName' => 'organizers',
+				)
+			)
+		);
 	}
 }
