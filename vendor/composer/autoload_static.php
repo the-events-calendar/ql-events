@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb4ff44711db4945337c839dee8942abe
+class ComposerStaticInitbe877364d45ac961bba01ffe749c79f4
 {
     public static $prefixLengthsPsr4 = array (
         'W' => 
@@ -22,14 +22,17 @@ class ComposerStaticInitb4ff44711db4945337c839dee8942abe
 
     public static $classMap = array (
         'QL_Events' => __DIR__ . '/../..' . '/includes/class-ql-events.php',
-        'WPGraphQL\\Extensions\\QL_Events\\Connection\\Events' => __DIR__ . '/../..' . '/includes/connection/class-events.php',
+        'WPGraphQL\\Extensions\\QL_Events\\Connection\\Attendees' => __DIR__ . '/../..' . '/includes/connection/class-attendees.php',
         'WPGraphQL\\Extensions\\QL_Events\\Connection\\Organizers' => __DIR__ . '/../..' . '/includes/connection/class-organizers.php',
-        'WPGraphQL\\Extensions\\QL_Events\\Connection\\Venues' => __DIR__ . '/../..' . '/includes/connection/class-venues.php',
+        'WPGraphQL\\Extensions\\QL_Events\\Connection\\Tickets' => __DIR__ . '/../..' . '/includes/connection/class-tickets.php',
         'WPGraphQL\\Extensions\\QL_Events\\Core_Schema_Filters' => __DIR__ . '/../..' . '/includes/class-core-schema-filters.php',
+        'WPGraphQL\\Extensions\\QL_Events\\Data\\Connection\\Attendee_Connection_Resolver' => __DIR__ . '/../..' . '/includes/data/connection/class-attendee-connection-resolver.php',
         'WPGraphQL\\Extensions\\QL_Events\\Data\\Connection\\Organizer_Connection_Resolver' => __DIR__ . '/../..' . '/includes/data/connection/class-organizer-connection-resolver.php',
         'WPGraphQL\\Extensions\\QL_Events\\Data\\Factory' => __DIR__ . '/../..' . '/includes/data/class-factory.php',
+        'WPGraphQL\\Extensions\\QL_Events\\Type\\WPObject\\Attendee_Type' => __DIR__ . '/../..' . '/includes/types/object/class-attendee-type.php',
         'WPGraphQL\\Extensions\\QL_Events\\Type\\WPObject\\Event_Type' => __DIR__ . '/../..' . '/includes/types/object/class-event-type.php',
         'WPGraphQL\\Extensions\\QL_Events\\Type\\WPObject\\Organizer_Type' => __DIR__ . '/../..' . '/includes/types/object/class-organizer-type.php',
+        'WPGraphQL\\Extensions\\QL_Events\\Type\\WPObject\\Ticket_Type' => __DIR__ . '/../..' . '/includes/types/object/class-ticket-type.php',
         'WPGraphQL\\Extensions\\QL_Events\\Type\\WPObject\\Venue_Type' => __DIR__ . '/../..' . '/includes/types/object/class-venue-type.php',
         'WPGraphQL\\Extensions\\QL_Events\\Type_Registry' => __DIR__ . '/../..' . '/includes/class-type-registry.php',
     );
@@ -37,9 +40,9 @@ class ComposerStaticInitb4ff44711db4945337c839dee8942abe
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb4ff44711db4945337c839dee8942abe::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb4ff44711db4945337c839dee8942abe::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitb4ff44711db4945337c839dee8942abe::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitbe877364d45ac961bba01ffe749c79f4::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitbe877364d45ac961bba01ffe749c79f4::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitbe877364d45ac961bba01ffe749c79f4::$classMap;
 
         }, null, ClassLoader::class);
     }

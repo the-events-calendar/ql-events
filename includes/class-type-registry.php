@@ -24,12 +24,22 @@ class Type_Registry {
 	 * Registers TEC types, connection, and mutations to GraphQL schema
 	 */
 	public static function graphql_register_types() {
-		// Object fields.
+		// TEC Object fields.
 		\WPGraphQL\Extensions\QL_Events\Type\WPObject\Event_Type::register_fields();
 		\WPGraphQL\Extensions\QL_Events\Type\WPObject\Organizer_Type::register_fields();
 		\WPGraphQL\Extensions\QL_Events\Type\WPObject\Venue_Type::register_fields();
 
-		// Connections.
+		// TEC Connections.
 		\WPGraphQL\Extensions\QL_Events\Connection\Organizers::register_connections();
+
+		// Register type fields if Event Tickets in installed and loaded.
+		if ( TEC_EVENT_TICKETS_LOADED ) {
+			
+		}
+
+		// Register type fields if Event Tickets Plus in installed and loaded.
+		if ( TEC_EVENT_TICKETS_PLUS_LOADED ) {
+			
+		}
 	}
 }

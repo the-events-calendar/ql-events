@@ -9,7 +9,6 @@
 namespace WPGraphQL\Extensions\QL_Events;
 
 use Tribe__Events__Main as Main;
-
 /**
  * Class Core_Schema_Filters
  */
@@ -28,6 +27,14 @@ class Core_Schema_Filters {
 			10,
 			5
 		);
+
+		if ( TEC_EVENT_TICKETS_LOADED ) {
+
+		}
+
+		if ( TEC_EVENT_TICKETS_PLUS_LOADED ) {
+			
+		}
 	}
 
 	/**
@@ -57,6 +64,13 @@ class Core_Schema_Filters {
 			$args['graphql_plural_name'] = 'Venues';
 		}
 
+		if ( TEC_EVENT_TICKETS_LOADED ) {
+		}
+
+		if ( TEC_EVENT_TICKETS_PLUS_LOADED ) {
+			
+		}
+
 		return $args;
 	}
 
@@ -79,7 +93,8 @@ class Core_Schema_Filters {
 	}
 
 	/**
-	 * Filter PostObjectConnectionResolver's query_args and adds args to used when querying TEC Organizer CPT
+	 * Filter PostObjectConnectionResolver's query_args and adds args to used when querying
+	 * TEC's "Organizer" CPT
 	 *
 	 * @param array       $query_args - WP_Query args.
 	 * @param mixed       $source     - Connection parent resolver.
