@@ -7,6 +7,7 @@ services:
     image: "kidunot89/ql-events-app:wp${WP_VERSION:-5.2.2}-php${PHP_VERSION:-7.3}"
     volumes:
       - '.:/var/www/html/wp-content/plugins/ql-events'
+      - '../wp-graphql-woocommerce:/var/www/html/wp-content/plugins/wp-graphql-woocommerce'
       - './.log/app:/var/log/apache2'
     env_file: .env.dist
     environment:
@@ -45,6 +46,7 @@ services:
     image: woographql-testing
     volumes:
       - '.:/var/www/html/wp-content/plugins/ql-events'
+      - '../wp-graphql-woocommerce:/var/www/html/wp-content/plugins/wp-graphql-woocommerce:ro'
       - './.log/testing:/var/log/apache2'
     env_file: .env.dist
     environment:

@@ -29,11 +29,21 @@ class Core_Schema_Filters {
 		);
 
 		if ( TEC_EVENT_TICKETS_LOADED ) {
-
+			add_filter(
+				'graphql_post_object_connection_query_args',
+				array( __CLASS__, 'ticket_connection_query_args' ),
+				10,
+				5
+			);
 		}
 
 		if ( TEC_EVENT_TICKETS_PLUS_LOADED ) {
-			
+			add_filter(
+				'graphql_post_object_connection_query_args',
+				array( __CLASS__, 'ticket_plus_connection_query_args' ),
+				10,
+				5
+			);
 		}
 	}
 
@@ -65,10 +75,40 @@ class Core_Schema_Filters {
 		}
 
 		if ( TEC_EVENT_TICKETS_LOADED ) {
+			$ticket_types = array(
+				'RSVP'   => tribe( 'tickets.rsvp' ),
+				'PayPal' => tribe( 'tickets.commerce.paypal' ),
+			);
+
+			foreach ( $ticket_types as $key => $instance ) {
+				if ( $instance::ATTENDEE_OBJECT === $post_type ) {
+					$args['show_in_graphql']     = true;
+					$args['graphql_single_name'] = "{$key}Attendee";
+					$args['graphql_plural_name'] = "{$key}Attendees";
+				}
+
+				if ( $instance->ticket_object === $post_type ) {
+					$args['show_in_graphql']     = true;
+					$args['graphql_single_name'] = "{$key}Ticket";
+					$args['graphql_plural_name'] = "{$key}Tickets";
+				}
+
+				if ( $instance::ORDER_OBJECT === $post_type
+					&& $instance::ORDER_OBJECT !== $instance::ATTENDEE_OBJECT ) {
+					$args['show_in_graphql']     = true;
+					$args['graphql_single_name'] = "{$key}Order";
+					$args['graphql_plural_name'] = "{$key}Orders";
+				}
+			}
 		}
 
 		if ( TEC_EVENT_TICKETS_PLUS_LOADED ) {
-			
+			$wootickets = tribe( 'tickets-plus.commerce.woo' );
+			if ( $instance::ATTENDEE_OBJECT === $post_type ) {
+				$args['show_in_graphql']     = true;
+				$args['graphql_single_name'] = 'WooAttendee';
+				$args['graphql_plural_name'] = 'WooAttendees';
+			}
 		}
 
 		return $args;
@@ -106,5 +146,37 @@ class Core_Schema_Filters {
 	 */
 	public static function organizer_connection_query_args( $query_args, $source, $args, $context, $info ) {
 		return \WPGraphQL\Extensions\QL_Events\Data\Connection\Organizer_Connection_Resolver::get_query_args( $query_args, $source, $args, $context, $info );
+	}
+
+	/**
+	 * Filter PostObjectConnectionResolver's query_args and adds args to used when querying
+	 * Ticket Events' "Ticket" CPTs
+	 *
+	 * @param array       $query_args - WP_Query args.
+	 * @param mixed       $source     - Connection parent resolver.
+	 * @param array       $args       - Connection arguments.
+	 * @param AppContext  $context    - AppContext object.
+	 * @param ResolveInfo $info       - ResolveInfo object.
+	 *
+	 * @return mixed
+	 */
+	public static function ticket_connection_query_args( $query_args, $source, $args, $context, $info ) {
+		return \WPGraphQL\Extensions\QL_Events\Data\Connection\Ticket_Connection_Resolver::get_ticket_args( $query_args, $source, $args, $context, $info );
+	}
+
+	/**
+	 * Filter PostObjectConnectionResolver's query_args and adds args to used when querying
+	 * Ticket Events Plus' "Ticket" CPTs
+	 *
+	 * @param array       $query_args - WP_Query args.
+	 * @param mixed       $source     - Connection parent resolver.
+	 * @param array       $args       - Connection arguments.
+	 * @param AppContext  $context    - AppContext object.
+	 * @param ResolveInfo $info       - ResolveInfo object.
+	 *
+	 * @return mixed
+	 */
+	public static function ticket_plus_connection_query_args( $query_args, $source, $args, $context, $info ) {
+		return \WPGraphQL\Extensions\QL_Events\Data\Connection\Ticket_Connection_Resolver::get_ticket_plus_args( $query_args, $source, $args, $context, $info );
 	}
 }

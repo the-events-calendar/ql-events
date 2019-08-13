@@ -34,12 +34,19 @@ class Type_Registry {
 
 		// Register type fields if Event Tickets in installed and loaded.
 		if ( TEC_EVENT_TICKETS_LOADED ) {
-			
+			\WPGraphQL\Extensions\QL_Events\Type\WPObject\PayPalAttendee_Type::register_fields();
+			\WPGraphQL\Extensions\QL_Events\Type\WPObject\PayPalOrder_Type::register_fields();
+			\WPGraphQL\Extensions\QL_Events\Type\WPObject\PayPalTicket_Type::register_fields();
+			\WPGraphQL\Extensions\QL_Events\Type\WPObject\RSVPAttendee_Type::register_fields();
+			\WPGraphQL\Extensions\QL_Events\Type\WPObject\RSVPTicket_Type::register_fields();
+
+			// Event Tickets Connections.
+			\WPGraphQL\Extensions\QL_Events\Connection\Tickets::register_connections();
 		}
 
 		// Register type fields if Event Tickets Plus in installed and loaded.
 		if ( TEC_EVENT_TICKETS_PLUS_LOADED ) {
-			
+			\WPGraphQL\Extensions\QL_Events\Type\WPObject\WooAttendee_Type::register_fields();
 		}
 	}
 }

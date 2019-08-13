@@ -1,8 +1,8 @@
 <?php
 /**
- * WPObject Type - Attendee
+ * WPObject Type - RSVPTicket
  *
- * Registers "Attendee" WPObject type and queries
+ * Registers "RSVPTicket" WPObject type fields
  *
  * @package \WPGraphQL\Extensions\QL_Events\Type\WPObject
  * @since   0.0.1
@@ -16,13 +16,15 @@ use WPGraphQL\Data\DataSource;
 /**
  * Class - Attendee_Type
  */
-class Attendee_Type {
+class RSVPTicket_Type {
 	/**
 	 * Registers "Attendee" type fields.
 	 */
 	public static function register_fields() {
+		// Retrieve Ticket Events' RSVP class instance.
+		$rsvp = tribe( 'tickets.rsvp' );
 		register_graphql_fields(
-			'Attendee',
+			'RSVPTicket',
 			array()
 		);
 	}
