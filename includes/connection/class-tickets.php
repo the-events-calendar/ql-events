@@ -12,6 +12,8 @@ namespace WPGraphQL\Extensions\QL_Events\Connection;
 
 use Tribe__Tickets__RSVP as RSVP;
 use WPGraphQL\Connection\PostObjects;
+use WPGraphQL\Extensions\WooCommerce\Connection\Products;
+use WPGraphQL\Extensions\WooCommerce\Data\Factory;
 
 /**
  * Class - Tickets
@@ -57,9 +59,16 @@ class Tickets extends PostObjects {
 				self::get_connection_config(
 					get_post_type_object( $woocommerce->ticket_object ),
 					array(
-						'fromType'      => 'Event',
-						'toType'        => 'Product',
-						'fromFieldName' => 'wooTickets',
+						'fromType'       => 'Event',
+						'toType'         => 'Product',
+						'fromFieldName'  => 'wooTickets',
+						'connectionArgs' => Products::get_connection_args(),
+						'resolveNode'    => function( $id, $args, $context, $info ) {
+							return Factory::resolve_crud_object( $id, $context );
+						},
+						'resolve'        => function ( $source, $args, $context, $info ) {
+							return Factory::resolve_product_connection( $source, $args, $context, $info );
+						},
 					)
 				)
 			);

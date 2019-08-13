@@ -39,31 +39,19 @@ class Ticket_Connection_Resolver {
 			// @codingStandardsIgnoreLine
 			switch ( $info->fieldName ) {
 				case 'rsvpTickets':
-					$event_key       = $rsvp::ATTENDEE_EVENT_KEY;
 					$connection_type = 'rsvp_tickets';
 					break;
 				case 'paypalTickets':
-					$event_key       = $paypal::ATTENDEE_EVENT_KEY;
 					$connection_type = 'paypal_tickets';
 					break;
 				default:
 					break;
 			}
-
-			if ( $event_key ) {
-				if ( empty( $query_args['meta_query'] ) ) {
-					$query_args['meta_query'] = array(); // WPCS: slow query OK.
-				}
-				$query_args['meta_query'][] = array(
-					'key'     => $event_key,
-					'value'   => $source->ID,
-					'compare' => '=',
-				);
-			}
 		}
 
 		if ( $connection_type ) {
-			$query_args = apply_filters(
+			$query_args['post_parent'] = $source->ID;
+			$query_args                = apply_filters(
 				"graphql_{$connection_type}_connection_query_args",
 				$query_args,
 				$source,
@@ -95,14 +83,7 @@ class Ticket_Connection_Resolver {
 		if ( true === is_object( $source ) ) {
 			// @codingStandardsIgnoreLine
 			if ( 'wooTickets' === $info->fieldName ) {
-				if ( empty( $query_args['meta_query'] ) ) {
-					$query_args['meta_query'] = array(); // WPCS: slow query OK.
-				}
-				$query_args['meta_query'][] = array(
-					'key'     => $woocommerce::ATTENDEE_EVENT_KEY,
-					'value'   => $source->ID,
-					'compare' => '=',
-				);
+				$query_args['post_parent'] = $source->ID;
 			}
 		}
 
