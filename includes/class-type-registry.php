@@ -24,12 +24,29 @@ class Type_Registry {
 	 * Registers TEC types, connection, and mutations to GraphQL schema
 	 */
 	public static function graphql_register_types() {
-		// Object fields.
+		// TEC Object fields.
 		\WPGraphQL\Extensions\QL_Events\Type\WPObject\Event_Type::register_fields();
 		\WPGraphQL\Extensions\QL_Events\Type\WPObject\Organizer_Type::register_fields();
 		\WPGraphQL\Extensions\QL_Events\Type\WPObject\Venue_Type::register_fields();
 
-		// Connections.
+		// TEC Connections.
 		\WPGraphQL\Extensions\QL_Events\Connection\Organizers::register_connections();
+
+		// Register type fields if Event Tickets in installed and loaded.
+		if ( TEC_EVENT_TICKETS_LOADED ) {
+			\WPGraphQL\Extensions\QL_Events\Type\WPObject\PayPalAttendee_Type::register_fields();
+			\WPGraphQL\Extensions\QL_Events\Type\WPObject\PayPalOrder_Type::register_fields();
+			\WPGraphQL\Extensions\QL_Events\Type\WPObject\PayPalTicket_Type::register_fields();
+			\WPGraphQL\Extensions\QL_Events\Type\WPObject\RSVPAttendee_Type::register_fields();
+			\WPGraphQL\Extensions\QL_Events\Type\WPObject\RSVPTicket_Type::register_fields();
+
+			// Event Tickets Connections.
+			\WPGraphQL\Extensions\QL_Events\Connection\Tickets::register_connections();
+		}
+
+		// Register type fields if Event Tickets Plus in installed and loaded.
+		if ( TEC_EVENT_TICKETS_PLUS_LOADED ) {
+			\WPGraphQL\Extensions\QL_Events\Type\WPObject\WooAttendee_Type::register_fields();
+		}
 	}
 }

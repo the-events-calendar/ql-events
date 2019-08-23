@@ -18,12 +18,10 @@ use WPGraphQL\Connection\PostObjects;
  */
 class Organizers extends PostObjects {
 	/**
-	 * Registers the various connections from other Types to Organizer
+	 * Registers the various connections from other Types to Organizers
 	 */
 	public static function register_connections() {
-		/**
-		 * From Product to MediaItem
-		 */
+		// From Event to Organizers.
 		register_graphql_connection(
 			self::get_connection_config(
 				get_post_type_object( Main::ORGANIZER_POST_TYPE ),

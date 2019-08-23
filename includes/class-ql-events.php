@@ -29,6 +29,7 @@ if ( ! class_exists( 'QL_Events' ) ) :
 		public static function instance() {
 			if ( ! isset( self::$instance ) && ! ( is_a( self::$instance, __CLASS__ ) ) ) {
 				self::$instance = new self();
+				self::$instance->constants();
 				self::$instance->includes();
 				self::$instance->actions();
 				self::$instance->filters();
@@ -101,6 +102,18 @@ if ( ! class_exists( 'QL_Events' ) ) :
 		public function __wakeup() {
 			// De-serializing instances of the class is forbidden.
 			_doing_it_wrong( __FUNCTION__, esc_html__( 'De-serializing instances of the QL_Events class is not allowed', 'ql-events' ), '0.0.1' );
+		}
+
+		/**
+		 * Defines constants used throughout the schema.
+		 *
+		 * @access private
+		 * @since 0.0.1
+		 * @return void
+		 */
+		private function constants() {
+			define( 'TEC_EVENT_TICKETS_LOADED', class_exists( '\Tribe__Tickets__Main' ) );
+			define( 'TEC_EVENT_TICKETS_PLUS_LOADED', class_exists( '\Tribe__Tickets_Plus__Main' ) );
 		}
 
 		/**
