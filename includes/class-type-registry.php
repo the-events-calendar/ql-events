@@ -33,7 +33,7 @@ class Type_Registry {
 		\WPGraphQL\Extensions\QL_Events\Connection\Organizers::register_connections();
 
 		// Register type fields if Event Tickets in installed and loaded.
-		if ( TEC_EVENT_TICKETS_LOADED ) {
+		if ( \QL_Events::is_ticket_events_loaded() ) {
 			\WPGraphQL\Extensions\QL_Events\Type\WPObject\PayPalAttendee_Type::register_fields();
 			\WPGraphQL\Extensions\QL_Events\Type\WPObject\PayPalOrder_Type::register_fields();
 			\WPGraphQL\Extensions\QL_Events\Type\WPObject\PayPalTicket_Type::register_fields();
@@ -45,7 +45,7 @@ class Type_Registry {
 		}
 
 		// Register type fields if Event Tickets Plus in installed and loaded.
-		if ( TEC_EVENT_TICKETS_PLUS_LOADED ) {
+		if ( \QL_Events::is_ticket_events_plus_loaded() ) {
 			\WPGraphQL\Extensions\QL_Events\Type\WPObject\WooAttendee_Type::register_fields();
 		}
 	}

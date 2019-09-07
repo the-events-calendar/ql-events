@@ -65,9 +65,6 @@ function ql_events_dependencies_not_ready() {
 	if ( ! class_exists( '\Tribe__Events__Main' ) ) {
 		$deps[] = 'The Events Calendar';
 	}
-	if ( ! class_exists( '\Tribe__Tickets__Main' ) ) {
-		$deps[] = 'Ticket Events';
-	}
 
 	return $deps;
 }
