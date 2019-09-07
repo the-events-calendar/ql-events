@@ -113,7 +113,14 @@ if ( ! class_exists( 'QL_Events' ) ) :
 		 */
 		private function constants() {
 			define( 'TEC_EVENT_TICKETS_LOADED', class_exists( '\Tribe__Tickets__Main' ) );
-			define( 'TEC_EVENT_TICKETS_PLUS_LOADED', class_exists( '\Tribe__Tickets_Plus__Main' ) );
+
+			if ( function_exists( 'tribe_check_plugin' ) ) {
+				$tickets_plus_can_run = TEC_EVENT_TICKETS_LOADED
+					&& class_exists( 'Tribe__Tickets_Plus__Main' )
+					&& tribe_check_plugin( 'Tribe__Tickets_Plus__Main' );
+
+				define( 'TEC_EVENT_TICKETS_PLUS_LOADED', apply_filters( 'tribe_event_tickets_plus_can_run', $tickets_plus_can_run ) );
+			}
 		}
 
 		/**
