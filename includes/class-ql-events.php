@@ -24,10 +24,13 @@ if ( ! class_exists( 'QL_Events' ) ) :
 		private static $instance;
 
 		/**
-		 * WP_GraphQL_WooCommerce Constructor
+		 * QL_Events Constructor
 		 */
 		public static function instance() {
 			if ( ! isset( self::$instance ) && ! ( is_a( self::$instance, __CLASS__ ) ) ) {
+				if ( ! function_exists( 'is_plugin_active' ) ) {
+					require_once ABSPATH . 'wp-admin/includes/plugin.php';
+				}
 				self::$instance = new self();
 				self::$instance->constants();
 				self::$instance->includes();
@@ -38,7 +41,7 @@ if ( ! class_exists( 'QL_Events' ) ) :
 			/**
 			 * Fire off init action
 			 *
-			 * @param WPGraphQLWooCommerce $instance The instance of the QL_Events class
+			 * @param QL_Events $instance The instance of the QL_Events class
 			 */
 			do_action( 'ql_events_init', self::$instance );
 
@@ -79,6 +82,35 @@ if ( ! class_exists( 'QL_Events' ) ) :
 		}
 
 		/**
+		 * Returns if Ticket Events Plus is installed and activate
+		 *
+		 * @return bool
+		 */
+		public static function is_ticket_events_loaded() {
+			return class_exists( '\Tribe__Tickets__Main' );
+		}
+
+		/**
+		 * Returns if Ticket Events Plus is installed and activate
+		 *
+		 * @return bool
+		 */
+		public static function is_ticket_events_plus_loaded() {
+			$activated = function_exists( 'tribe_check_plugin' );
+			if ( $activated ) {
+				$tickets_plus_can_run = self::is_ticket_events_loaded()
+					&& class_exists( 'Tribe__Tickets_Plus__Main' )
+					&& tribe_check_plugin( 'Tribe__Tickets_Plus__Main' )
+					&& class_exists( 'Tribe__Events__Tickets__Woo__Main' )
+					&& class_exists( 'Tribe__Events__Tickets__EDD__Main' );
+
+				return apply_filters( 'tribe_event_tickets_plus_can_run', $tickets_plus_can_run );
+			}
+
+			return false;
+		}
+
+		/**
 		 * Throw error on object clone.
 		 * The whole idea of the singleton design pattern is that there is a single object
 		 * therefore, we don't want the object to be cloned.
@@ -112,15 +144,7 @@ if ( ! class_exists( 'QL_Events' ) ) :
 		 * @return void
 		 */
 		private function constants() {
-			define( 'TEC_EVENT_TICKETS_LOADED', class_exists( '\Tribe__Tickets__Main' ) );
 
-			if ( function_exists( 'tribe_check_plugin' ) ) {
-				$tickets_plus_can_run = TEC_EVENT_TICKETS_LOADED
-					&& class_exists( 'Tribe__Tickets_Plus__Main' )
-					&& tribe_check_plugin( 'Tribe__Tickets_Plus__Main' );
-
-				define( 'TEC_EVENT_TICKETS_PLUS_LOADED', apply_filters( 'tribe_event_tickets_plus_can_run', $tickets_plus_can_run ) );
-			}
 		}
 
 		/**

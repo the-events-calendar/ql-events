@@ -93,7 +93,7 @@ class PayPalAttendee_Type {
 							return ! empty( $name ) ? $name : null;
 						},
 					),
-					'status'             => array(
+					'attendeeStatus'     => array(
 						'type'        => 'String',
 						'description' => __( 'Attendee\'s PayPal status', 'ql-events' ),
 						'resolve'     => function( $source, array $args, AppContext $context ) {

@@ -28,7 +28,7 @@ class Core_Schema_Filters {
 			5
 		);
 
-		if ( TEC_EVENT_TICKETS_LOADED ) {
+		if ( \QL_Events::is_ticket_events_loaded() ) {
 			add_filter(
 				'graphql_post_object_connection_query_args',
 				array( __CLASS__, 'ticket_connection_query_args' ),
@@ -37,7 +37,7 @@ class Core_Schema_Filters {
 			);
 		}
 
-		if ( TEC_EVENT_TICKETS_PLUS_LOADED ) {
+		if ( \QL_Events::is_ticket_events_plus_loaded() ) {
 			add_filter(
 				'graphql_post_object_connection_query_args',
 				array( __CLASS__, 'ticket_plus_connection_query_args' ),
@@ -74,7 +74,7 @@ class Core_Schema_Filters {
 			$args['graphql_plural_name'] = 'Venues';
 		}
 
-		if ( TEC_EVENT_TICKETS_LOADED ) {
+		if ( \QL_Events::is_ticket_events_loaded() ) {
 			$ticket_types = array(
 				'RSVP'   => tribe( 'tickets.rsvp' ),
 				'PayPal' => tribe( 'tickets.commerce.paypal' ),
@@ -102,7 +102,7 @@ class Core_Schema_Filters {
 			}
 		}
 
-		if ( TEC_EVENT_TICKETS_PLUS_LOADED ) {
+		if ( \QL_Events::is_ticket_events_plus_loaded() ) {
 			$wootickets = tribe( 'tickets-plus.commerce.woo' );
 			if ( $instance::ATTENDEE_OBJECT === $post_type ) {
 				$args['show_in_graphql']     = true;
