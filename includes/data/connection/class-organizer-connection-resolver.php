@@ -1,6 +1,6 @@
 <?php
 /**
- * Connection resolver - Organizer
+ * Connection resolver - Organizers
  *
  * Filters connections to Organizer types
  *

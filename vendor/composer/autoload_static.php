@@ -23,10 +23,12 @@ class ComposerStaticInitbe877364d45ac961bba01ffe749c79f4
     public static $classMap = array (
         'QL_Events' => __DIR__ . '/../..' . '/includes/class-ql-events.php',
         'WPGraphQL\\Extensions\\QL_Events\\Connection\\Attendees' => __DIR__ . '/../..' . '/includes/connection/class-attendees.php',
+        'WPGraphQL\\Extensions\\QL_Events\\Connection\\Events' => __DIR__ . '/../..' . '/includes/connection/class-events.php',
         'WPGraphQL\\Extensions\\QL_Events\\Connection\\Organizers' => __DIR__ . '/../..' . '/includes/connection/class-organizers.php',
         'WPGraphQL\\Extensions\\QL_Events\\Connection\\Tickets' => __DIR__ . '/../..' . '/includes/connection/class-tickets.php',
         'WPGraphQL\\Extensions\\QL_Events\\Core_Schema_Filters' => __DIR__ . '/../..' . '/includes/class-core-schema-filters.php',
         'WPGraphQL\\Extensions\\QL_Events\\Data\\Connection\\Attendee_Connection_Resolver' => __DIR__ . '/../..' . '/includes/data/connection/class-attendee-connection-resolver.php',
+        'WPGraphQL\\Extensions\\QL_Events\\Data\\Connection\\Event_Connection_Resolver' => __DIR__ . '/../..' . '/includes/data/connection/class-event-connection-resolver.php',
         'WPGraphQL\\Extensions\\QL_Events\\Data\\Connection\\Organizer_Connection_Resolver' => __DIR__ . '/../..' . '/includes/data/connection/class-organizer-connection-resolver.php',
         'WPGraphQL\\Extensions\\QL_Events\\Data\\Connection\\Ticket_Connection_Resolver' => __DIR__ . '/../..' . '/includes/data/connection/class-ticket-connection-resolver.php',
         'WPGraphQL\\Extensions\\QL_Events\\Data\\Factory' => __DIR__ . '/../..' . '/includes/data/class-factory.php',

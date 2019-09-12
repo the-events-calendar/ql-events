@@ -56,7 +56,7 @@ class Attendee_Connection_Resolver {
 		}
 
 		$query_args = apply_filters(
-			'graphql_' . Main::ORGANIZER_POST_TYPE . '_connection_query_args',
+			'graphql_rsvp_attendee_connection_query_args',
 			$query_args,
 			$source,
 			$args,
