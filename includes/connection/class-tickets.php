@@ -25,7 +25,7 @@ class Tickets extends PostObjects {
 	public static function register_connections() {
 		$rsvp = RSVP::get_instance();
 
-		if ( TEC_EVENT_TICKETS_LOADED ) {
+		if ( \QL_Events::is_ticket_events_loaded() ) {
 			// From Event to RSVPTickets.
 			$rsvp = tribe( 'tickets.rsvp' );
 			register_graphql_connection(
@@ -52,7 +52,7 @@ class Tickets extends PostObjects {
 			);
 		}
 
-		if ( TEC_EVENT_TICKETS_PLUS_LOADED ) {
+		if ( \QL_Events::is_ticket_events_plus_loaded() ) {
 			// From Event to WooTicket.
 			$woocommerce = tribe( 'tickets-plus.commerce.woo' );
 			register_graphql_connection(

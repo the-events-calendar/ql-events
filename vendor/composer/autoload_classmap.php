@@ -8,10 +8,12 @@ $baseDir = dirname($vendorDir);
 return array(
     'QL_Events' => $baseDir . '/includes/class-ql-events.php',
     'WPGraphQL\\Extensions\\QL_Events\\Connection\\Attendees' => $baseDir . '/includes/connection/class-attendees.php',
+    'WPGraphQL\\Extensions\\QL_Events\\Connection\\Events' => $baseDir . '/includes/connection/class-events.php',
     'WPGraphQL\\Extensions\\QL_Events\\Connection\\Organizers' => $baseDir . '/includes/connection/class-organizers.php',
     'WPGraphQL\\Extensions\\QL_Events\\Connection\\Tickets' => $baseDir . '/includes/connection/class-tickets.php',
     'WPGraphQL\\Extensions\\QL_Events\\Core_Schema_Filters' => $baseDir . '/includes/class-core-schema-filters.php',
     'WPGraphQL\\Extensions\\QL_Events\\Data\\Connection\\Attendee_Connection_Resolver' => $baseDir . '/includes/data/connection/class-attendee-connection-resolver.php',
+    'WPGraphQL\\Extensions\\QL_Events\\Data\\Connection\\Event_Connection_Resolver' => $baseDir . '/includes/data/connection/class-event-connection-resolver.php',
     'WPGraphQL\\Extensions\\QL_Events\\Data\\Connection\\Organizer_Connection_Resolver' => $baseDir . '/includes/data/connection/class-organizer-connection-resolver.php',
     'WPGraphQL\\Extensions\\QL_Events\\Data\\Connection\\Ticket_Connection_Resolver' => $baseDir . '/includes/data/connection/class-ticket-connection-resolver.php',
     'WPGraphQL\\Extensions\\QL_Events\\Data\\Factory' => $baseDir . '/includes/data/class-factory.php',

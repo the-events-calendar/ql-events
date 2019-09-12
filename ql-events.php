@@ -59,10 +59,10 @@ function ql_events_constants() {
  */
 function ql_events_dependencies_not_ready() {
 	$deps = [];
-	if ( ! class_exists( '\WPGraphQL' ) ) {
+	if ( ! class_exists( 'WPGraphQL' ) ) {
 		$deps[] = 'WPGraphQL';
 	}
-	if ( ! class_exists( '\Tribe__Events__Main' ) ) {
+	if ( ! class_exists( 'Tribe__Events__Main' ) ) {
 		$deps[] = 'The Events Calendar';
 	}
 
