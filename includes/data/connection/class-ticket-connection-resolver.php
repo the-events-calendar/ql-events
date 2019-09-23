@@ -77,13 +77,22 @@ class Ticket_Connection_Resolver {
 	 * @return mixed
 	 */
 	public static function get_ticket_plus_args( $query_args, $source, $args, $context, $info ) {
-		$woocommerce = tribe( 'tickets-plus.commerce.woo' );
-
 		// Determine where we're at in the Graph and adjust the query context appropriately.
-		if ( true === is_object( $source ) ) {
+		if ( $source instanceof Post ) {
 			// @codingStandardsIgnoreLine
 			if ( 'wooTickets' === $info->fieldName ) {
-				$query_args['post_parent'] = $source->ID;
+				$woocommerce = tribe( 'tickets-plus.commerce.woo' );
+
+				if ( ! empty( $args['meta_query'] ) ) {
+					$query_args['meta_query'] = array(); // WPCS: slow query ok.
+				}
+				$query_args['meta_query'][] = array(
+					'key'   => $woocommerce->event_key,
+					'value' => $source->ID,
+					'type'  => 'NUMERIC',
+				);
+
+				unset( $query_args['perm'] );
 			}
 		}
 

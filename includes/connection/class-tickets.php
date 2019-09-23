@@ -23,8 +23,6 @@ class Tickets extends PostObjects {
 	 * Registers the various connections from other Types to Tickets
 	 */
 	public static function register_connections() {
-		$rsvp = RSVP::get_instance();
-
 		if ( \QL_Events::is_ticket_events_loaded() ) {
 			// From Event to RSVPTickets.
 			$rsvp = tribe( 'tickets.rsvp' );
@@ -47,28 +45,6 @@ class Tickets extends PostObjects {
 						'fromType'      => 'Event',
 						'toType'        => 'PayPalTicket',
 						'fromFieldName' => 'paypalTickets',
-					)
-				)
-			);
-		}
-
-		if ( \QL_Events::is_ticket_events_plus_loaded() ) {
-			// From Event to WooTicket.
-			$woocommerce = tribe( 'tickets-plus.commerce.woo' );
-			register_graphql_connection(
-				self::get_connection_config(
-					get_post_type_object( $woocommerce->ticket_object ),
-					array(
-						'fromType'       => 'Event',
-						'toType'         => 'Product',
-						'fromFieldName'  => 'wooTickets',
-						'connectionArgs' => Products::get_connection_args(),
-						'resolveNode'    => function( $id, $args, $context, $info ) {
-							return Factory::resolve_crud_object( $id, $context );
-						},
-						'resolve'        => function ( $source, $args, $context, $info ) {
-							return Factory::resolve_product_connection( $source, $args, $context, $info );
-						},
 					)
 				)
 			);

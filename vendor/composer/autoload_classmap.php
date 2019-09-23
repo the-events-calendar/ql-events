@@ -11,6 +11,7 @@ return array(
     'WPGraphQL\\Extensions\\QL_Events\\Connection\\Events' => $baseDir . '/includes/connection/class-events.php',
     'WPGraphQL\\Extensions\\QL_Events\\Connection\\Organizers' => $baseDir . '/includes/connection/class-organizers.php',
     'WPGraphQL\\Extensions\\QL_Events\\Connection\\Tickets' => $baseDir . '/includes/connection/class-tickets.php',
+    'WPGraphQL\\Extensions\\QL_Events\\Connection\\Tickets_Plus' => $baseDir . '/includes/connection/class-tickets-plus.php',
     'WPGraphQL\\Extensions\\QL_Events\\Core_Schema_Filters' => $baseDir . '/includes/class-core-schema-filters.php',
     'WPGraphQL\\Extensions\\QL_Events\\Data\\Connection\\Attendee_Connection_Resolver' => $baseDir . '/includes/data/connection/class-attendee-connection-resolver.php',
     'WPGraphQL\\Extensions\\QL_Events\\Data\\Connection\\Event_Connection_Resolver' => $baseDir . '/includes/data/connection/class-event-connection-resolver.php',

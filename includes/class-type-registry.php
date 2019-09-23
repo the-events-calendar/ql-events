@@ -44,9 +44,11 @@ class Type_Registry {
 			\WPGraphQL\Extensions\QL_Events\Connection\Tickets::register_connections();
 		}
 
-		// Register type fields if Event Tickets Plus in installed and loaded.
 		if ( \QL_Events::is_ticket_events_plus_loaded() ) {
 			\WPGraphQL\Extensions\QL_Events\Type\WPObject\WooAttendee_Type::register_fields();
+
+			// Event Tickets Plus Connections.
+			\WPGraphQL\Extensions\QL_Events\Connection\Tickets_Plus::register_connections();
 		}
 	}
 }

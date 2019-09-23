@@ -26,6 +26,7 @@ class ComposerStaticInitbe877364d45ac961bba01ffe749c79f4
         'WPGraphQL\\Extensions\\QL_Events\\Connection\\Events' => __DIR__ . '/../..' . '/includes/connection/class-events.php',
         'WPGraphQL\\Extensions\\QL_Events\\Connection\\Organizers' => __DIR__ . '/../..' . '/includes/connection/class-organizers.php',
         'WPGraphQL\\Extensions\\QL_Events\\Connection\\Tickets' => __DIR__ . '/../..' . '/includes/connection/class-tickets.php',
+        'WPGraphQL\\Extensions\\QL_Events\\Connection\\Tickets_Plus' => __DIR__ . '/../..' . '/includes/connection/class-tickets-plus.php',
         'WPGraphQL\\Extensions\\QL_Events\\Core_Schema_Filters' => __DIR__ . '/../..' . '/includes/class-core-schema-filters.php',
         'WPGraphQL\\Extensions\\QL_Events\\Data\\Connection\\Attendee_Connection_Resolver' => __DIR__ . '/../..' . '/includes/data/connection/class-attendee-connection-resolver.php',
         'WPGraphQL\\Extensions\\QL_Events\\Data\\Connection\\Event_Connection_Resolver' => __DIR__ . '/../..' . '/includes/data/connection/class-event-connection-resolver.php',

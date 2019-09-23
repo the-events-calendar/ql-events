@@ -100,9 +100,7 @@ if ( ! class_exists( 'QL_Events' ) ) :
 			if ( $activated ) {
 				$tickets_plus_can_run = self::is_ticket_events_loaded()
 					&& class_exists( 'Tribe__Tickets_Plus__Main' )
-					&& tribe_check_plugin( 'Tribe__Tickets_Plus__Main' )
-					&& class_exists( 'Tribe__Events__Tickets__Woo__Main' )
-					&& class_exists( 'Tribe__Events__Tickets__EDD__Main' );
+					&& tribe_check_plugin( 'Tribe__Tickets_Plus__Main' );
 
 				return apply_filters( 'tribe_event_tickets_plus_can_run', $tickets_plus_can_run );
 			}
