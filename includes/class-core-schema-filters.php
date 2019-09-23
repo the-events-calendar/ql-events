@@ -70,7 +70,7 @@ class Core_Schema_Filters {
 
 		if ( \QL_Events::is_ticket_events_plus_loaded() ) {
 			add_filter(
-				'graphql_post_object_connection_query_args',
+				'graphql_product_connection_query_args',
 				array( __CLASS__, 'ticket_plus_connection_query_args' ),
 				10,
 				5
@@ -134,8 +134,7 @@ class Core_Schema_Filters {
 		}
 
 		if ( \QL_Events::is_ticket_events_plus_loaded() ) {
-			$wootickets = tribe( 'tickets-plus.commerce.woo' );
-			if ( $instance::ATTENDEE_OBJECT === $post_type ) {
+			if ( 'tribe_wooticket' === $post_type ) {
 				$args['show_in_graphql']     = true;
 				$args['graphql_single_name'] = 'WooAttendee';
 				$args['graphql_plural_name'] = 'WooAttendees';
