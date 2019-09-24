@@ -109,4 +109,32 @@ class Ticket_Connection_Resolver {
 
 		return $query_args;
 	}
+
+	/**
+	 * Prepares default product connection catalog visibility for this "wooTicket" connection.
+	 *
+	 * @param array       $default_visibility  Default catalog visibility tax query.
+	 * @param array       $query_args          The args that will be passed to the WP_Query.
+	 * @param mixed       $source              The source that's passed down the GraphQL queries.
+	 * @param array       $args                The inputArgs on the field.
+	 * @param AppContext  $context             The AppContext passed down the GraphQL tree.
+	 * @param ResolveInfo $info                The ResolveInfo passed down the GraphQL tree.
+	 *
+	 * @return mixed
+	 */
+	public static function get_ticket_plus_default_visibility( $default_visibility, $query_args, $source, $args, $context, $info ) {
+		if ( $source instanceof Post ) {
+			// @codingStandardsIgnoreLine
+			if ( 'wooTickets' === $info->fieldName ) {
+				$default_visibility = array(
+					'taxonomy' => 'product_visibility',
+					'field'    => 'slug',
+					'terms'    => array( 'exclude-from-catalog', 'exclude-from-search' ),
+					'operator' => 'IN',
+				);
+			}
+		}
+
+		return $default_visibility;
+	}
 }
