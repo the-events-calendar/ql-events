@@ -75,6 +75,13 @@ class Core_Schema_Filters {
 				10,
 				5
 			);
+
+			add_filter(
+				'graphql_product_connection_catalog_visibility',
+				array( __CLASS__, 'wooticket_default_visibility' ),
+				10,
+				6
+			);
 		}
 	}
 
@@ -242,5 +249,22 @@ class Core_Schema_Filters {
 	 */
 	public static function ticket_plus_connection_query_args( $query_args, $source, $args, $context, $info ) {
 		return \WPGraphQL\Extensions\QL_Events\Data\Connection\Ticket_Connection_Resolver::get_ticket_plus_args( $query_args, $source, $args, $context, $info );
+	}
+
+	/**
+	 * Filter PostObjectConnectionResolver's query_args and adds args to used when querying
+	 * Ticket Events Plus' "Ticket" CPTs
+	 *
+	 * @param array       $default_visibility  Default catalog visibility tax query.
+	 * @param array       $query_args - WP_Query args.
+	 * @param mixed       $source     - Connection parent resolver.
+	 * @param array       $args       - Connection arguments.
+	 * @param AppContext  $context    - AppContext object.
+	 * @param ResolveInfo $info       - ResolveInfo object.
+	 *
+	 * @return mixed
+	 */
+	public static function wooticket_default_visibility( $default_visibility, $query_args, $source, $args, $context, $info ) {
+		return \WPGraphQL\Extensions\QL_Events\Data\Connection\Ticket_Connection_Resolver::get_ticket_plus_default_visibility( $default_visibility, $query_args, $source, $args, $context, $info );
 	}
 }
