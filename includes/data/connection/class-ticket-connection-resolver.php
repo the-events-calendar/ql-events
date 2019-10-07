@@ -96,16 +96,14 @@ class Ticket_Connection_Resolver {
 			}
 		}
 
-		if ( $connection_type ) {
-			$query_args = apply_filters(
-				'graphql_wootickets_connection_query_args',
-				$query_args,
-				$source,
-				$args,
-				$context,
-				$info
-			);
-		}
+		$query_args = apply_filters(
+			'graphql_wootickets_connection_query_args',
+			$query_args,
+			$source,
+			$args,
+			$context,
+			$info
+		);
 
 		return $query_args;
 	}
