@@ -10,6 +10,7 @@
 
 namespace WPGraphQL\Extensions\QL_Events\Type\WPObject;
 
+use Tribe__Events__JSON_LD__Event as JSON_LD;
 use WPGraphQL\AppContext;
 use WPGraphQL\Data\DataSource;
 
@@ -174,6 +175,15 @@ class Event_Type {
 					'resolve'     => function( $source ) {
 						$value = get_post_meta( $source->ID, '_tribe_feature', true );
 						return ! is_null( $value ) ? $value : null;
+					},
+				),
+				'linkedData'       => array(
+					'type'        => 'EventLinkedData',
+					'description' => __( 'Event JSON-LD object', 'ql-events' ),
+					'resolve'     => function( $source ) {
+						$instance = JSON_LD::instance();
+						$data     = $instance->get_data( $source->ID );
+						return ! empty( $data[ $source->ID ] ) ? $data[ $source->ID ] : null;
 					},
 				),
 			)

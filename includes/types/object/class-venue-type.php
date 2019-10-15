@@ -10,6 +10,7 @@
 
 namespace WPGraphQL\Extensions\QL_Events\Type\WPObject;
 
+use Tribe__Events__JSON_LD__Venue as JSON_LD;
 use WPGraphQL\AppContext;
 
 /**
@@ -109,6 +110,15 @@ class Venue_Type {
 					'resolve'     => function( $source ) {
 						$value = get_post_meta( $source->ID, '_VenueShowMapLink', true );
 						return ! is_null( $value ) ? $value : false;
+					},
+				),
+				'linkedData'    => array(
+					'type'        => 'VenueLinkedData',
+					'description' => __( 'Venue JSON-LD object', 'ql-events' ),
+					'resolve'     => function( $source ) {
+						$instance = JSON_LD::instance();
+						$data     = $instance->get_data( $source->ID );
+						return ! empty( $data[ $source->ID ] ) ? $data[ $source->ID ] : null;
 					},
 				),
 			)

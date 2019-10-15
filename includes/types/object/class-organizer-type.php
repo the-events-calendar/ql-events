@@ -10,6 +10,7 @@
 
 namespace WPGraphQL\Extensions\QL_Events\Type\WPObject;
 
+use Tribe__Events__JSON_LD__Organizer as JSON_LD;
 use WPGraphQL\AppContext;
 
 /**
@@ -23,7 +24,7 @@ class Organizer_Type {
 		register_graphql_fields(
 			'Organizer',
 			array(
-				'email'   => array(
+				'email'      => array(
 					'type'        => 'String',
 					'description' => __( 'Organizer email', 'ql-events' ),
 					'resolve'     => function( $source ) {
@@ -31,7 +32,7 @@ class Organizer_Type {
 						return ! empty( $value ) ? $value : null;
 					},
 				),
-				'website' => array(
+				'website'    => array(
 					'type'        => 'String',
 					'description' => __( 'Organizer website', 'ql-events' ),
 					'resolve'     => function( $source ) {
@@ -39,12 +40,21 @@ class Organizer_Type {
 						return ! empty( $value ) ? $value : null;
 					},
 				),
-				'phone'   => array(
+				'phone'      => array(
 					'type'        => 'String',
 					'description' => __( 'Organizer phone number', 'ql-events' ),
 					'resolve'     => function( $source ) {
 						$value = get_post_meta( $source->ID, '_OrganizerPhone', true );
 						return ! empty( $value ) ? $value : null;
+					},
+				),
+				'linkedData' => array(
+					'type'        => 'OrganizerLinkedData',
+					'description' => __( 'Organizer JSON-LD object', 'ql-events' ),
+					'resolve'     => function( $source ) {
+						$instance = JSON_LD::instance();
+						$data     = $instance->get_data( $source->ID );
+						return ! empty( $data[ $source->ID ] ) ? $data[ $source->ID ] : null;
 					},
 				),
 			)
