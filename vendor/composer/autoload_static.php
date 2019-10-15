@@ -34,8 +34,10 @@ class ComposerStaticInitbe877364d45ac961bba01ffe749c79f4
         'WPGraphQL\\Extensions\\QL_Events\\Data\\Connection\\Ticket_Connection_Resolver' => __DIR__ . '/../..' . '/includes/data/connection/class-ticket-connection-resolver.php',
         'WPGraphQL\\Extensions\\QL_Events\\Data\\Factory' => __DIR__ . '/../..' . '/includes/data/class-factory.php',
         'WPGraphQL\\Extensions\\QL_Events\\Type\\WPObject\\Attendee' => __DIR__ . '/../..' . '/includes/types/object/common/trait-attendee.php',
+        'WPGraphQL\\Extensions\\QL_Events\\Type\\WPObject\\Event_Linked_Data_Type' => __DIR__ . '/../..' . '/includes/types/object/class-event-linked-data-type.php',
         'WPGraphQL\\Extensions\\QL_Events\\Type\\WPObject\\Event_Type' => __DIR__ . '/../..' . '/includes/types/object/class-event-type.php',
         'WPGraphQL\\Extensions\\QL_Events\\Type\\WPObject\\Order' => __DIR__ . '/../..' . '/includes/types/object/common/trait-order.php',
+        'WPGraphQL\\Extensions\\QL_Events\\Type\\WPObject\\Organizer_Linked_Data_Type' => __DIR__ . '/../..' . '/includes/types/object/class-organizer-linked-data-type.php',
         'WPGraphQL\\Extensions\\QL_Events\\Type\\WPObject\\Organizer_Type' => __DIR__ . '/../..' . '/includes/types/object/class-organizer-type.php',
         'WPGraphQL\\Extensions\\QL_Events\\Type\\WPObject\\PayPalAttendee_Type' => __DIR__ . '/../..' . '/includes/types/object/class-paypalattendee-type.php',
         'WPGraphQL\\Extensions\\QL_Events\\Type\\WPObject\\PayPalOrder_Type' => __DIR__ . '/../..' . '/includes/types/object/class-paypalorder-type.php',
@@ -43,9 +45,12 @@ class ComposerStaticInitbe877364d45ac961bba01ffe749c79f4
         'WPGraphQL\\Extensions\\QL_Events\\Type\\WPObject\\RSVPAttendee_Type' => __DIR__ . '/../..' . '/includes/types/object/class-rsvpattendee-type.php',
         'WPGraphQL\\Extensions\\QL_Events\\Type\\WPObject\\RSVPTicket_Type' => __DIR__ . '/../..' . '/includes/types/object/class-rsvpticket-type.php',
         'WPGraphQL\\Extensions\\QL_Events\\Type\\WPObject\\Ticket' => __DIR__ . '/../..' . '/includes/types/object/common/trait-ticket.php',
+        'WPGraphQL\\Extensions\\QL_Events\\Type\\WPObject\\Ticket_Linked_Data_Type' => __DIR__ . '/../..' . '/includes/types/object/class-ticket-linked-data-type.php',
         'WPGraphQL\\Extensions\\QL_Events\\Type\\WPObject\\Ticket_Type' => __DIR__ . '/../..' . '/includes/types/object/class-ticket-type.php',
+        'WPGraphQL\\Extensions\\QL_Events\\Type\\WPObject\\Venue_Linked_Data_Type' => __DIR__ . '/../..' . '/includes/types/object/class-venue-linked-data-type.php',
         'WPGraphQL\\Extensions\\QL_Events\\Type\\WPObject\\Venue_Type' => __DIR__ . '/../..' . '/includes/types/object/class-venue-type.php',
         'WPGraphQL\\Extensions\\QL_Events\\Type\\WPObject\\WooAttendee_Type' => __DIR__ . '/../..' . '/includes/types/object/class-wooattendee-type.php',
+        'WPGraphQL\\Extensions\\QL_Events\\Type\\WPUnion\\Linked_Data_Union' => __DIR__ . '/../..' . '/includes/types/union/class-linked-data-union.php',
         'WPGraphQL\\Extensions\\QL_Events\\Type_Registry' => __DIR__ . '/../..' . '/includes/class-type-registry.php',
     );
 
