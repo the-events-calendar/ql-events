@@ -85,6 +85,28 @@ class Event_Connection_Resolver {
 			$query_args['meta_query'][] = self::date_query_input_to_meta_query( $args['endDateQuery'], '_EventEndDate' );
 		}
 
+		if ( ! empty( $args['venuesIn'] ) ) {
+			if ( ! isset( $query_args['meta_query'] ) ) {
+				$query_args['meta_query'] = array(); // WPCS: slow query ok.
+			}
+			$query_args['meta_query'][] = array(
+				'key'     => '_EventVenueID',
+				'value'   => $args['venuesIn'],
+				'compare' => 'IN',
+			);
+		}
+
+		if ( ! empty( $args['venuesNotIn'] ) ) {
+			if ( ! isset( $query_args['meta_query'] ) ) {
+				$query_args['meta_query'] = array(); // WPCS: slow query ok.
+			}
+			$query_args['meta_query'][] = array(
+				'key'     => '_EventVenueID',
+				'value'   => $args['venuesNotIn'],
+				'compare' => 'NOT IN',
+			);
+		}
+
 		return $query_args;
 	}
 

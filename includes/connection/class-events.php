@@ -10,6 +10,7 @@
 
 namespace WPGraphQL\Extensions\QL_Events\Connection;
 
+use WPGraphQL\Types;
 use WPGraphQL\TypeRegistry;
 
 /**
@@ -21,6 +22,14 @@ class Events {
 	 */
 	public static function where_args() {
 		return array(
+			'venuesIn'         => array(
+				'type'        => Types::list_of( TypeRegistry::get_type( 'Int' ) ),
+				'description' => __( 'Filter the connection based on event venue ID', 'ql-events' ),
+			),
+			'venuesNotIn'         => array(
+				'type'        => Types::list_of( TypeRegistry::get_type( 'Int' ) ),
+				'description' => __( 'Filter the connection based on event venue ID', 'ql-events' ),
+			),
 			'startDateQuery' => array(
 				'type'        => TypeRegistry::get_type( 'DateQueryInput' ),
 				'description' => __( 'Filter the connection based on event start dates', 'ql-events' ),
