@@ -4,16 +4,16 @@
  *
  * Registers connections to Ticket
  *
- * @package WPGraphQL\Extensions\QL_Events\Connection
+ * @package WPGraphQL\QL_Events\Connection
  * @since   0.0.1
  */
 
-namespace WPGraphQL\Extensions\QL_Events\Connection;
+namespace WPGraphQL\QL_Events\Connection;
 
 use Tribe__Tickets__RSVP as RSVP;
 use WPGraphQL\Connection\PostObjects;
-use WPGraphQL\Extensions\WooCommerce\Connection\Products;
-use WPGraphQL\Extensions\WooCommerce\Data\Factory;
+use WPGraphQL\WooCommerce\Connection\Products;
+use WPGraphQL\WooCommerce\Data\Factory;
 
 /**
  * Class - Tickets

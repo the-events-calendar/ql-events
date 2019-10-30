@@ -8,7 +8,7 @@
  * Text Domain: ql-events
  * Domain Path: /languages
  *
- * @package     WPGraphQL\Extensions\QLEvents
+ * @package     WPGraphQL\QL_Events
  * @author      kidunot89
  */
 

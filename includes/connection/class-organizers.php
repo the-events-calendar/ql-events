@@ -4,11 +4,11 @@
  *
  * Registers connections to Organizer
  *
- * @package WPGraphQL\Extensions\QL_Events\Connection
+ * @package WPGraphQL\QL_Events\Connection
  * @since   0.0.1
  */
 
-namespace WPGraphQL\Extensions\QL_Events\Connection;
+namespace WPGraphQL\QL_Events\Connection;
 
 use Tribe__Events__Main as Main;
 use WPGraphQL\Connection\PostObjects;

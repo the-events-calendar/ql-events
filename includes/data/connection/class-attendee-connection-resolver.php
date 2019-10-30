@@ -4,11 +4,11 @@
  *
  * Filters connections to Attendee type
  *
- * @package WPGraphQL\Extensions\QL_Events\Data\Connection
+ * @package WPGraphQL\QL_Events\Data\Connection
  * @since 0.0.1
  */
 
-namespace WPGraphQL\Extensions\QL_Events\Data\Connection;
+namespace WPGraphQL\QL_Events\Data\Connection;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use Tribe__Events__Main as Main;

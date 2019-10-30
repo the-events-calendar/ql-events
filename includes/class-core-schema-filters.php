@@ -2,11 +2,11 @@
 /**
  * Adds filters that modify core schema.
  *
- * @package \WPGraphQL\Extensions\QL_Events
+ * @package \WPGraphQL\QL_Events
  * @since   0.0.1
  */
 
-namespace WPGraphQL\Extensions\QL_Events;
+namespace WPGraphQL\QL_Events;
 
 use Tribe__Events__Main as Main;
 
@@ -47,14 +47,20 @@ class Core_Schema_Filters {
 
 		add_filter(
 			'graphql_post_object_connection_query_args',
-			array( __CLASS__, 'event_connection_query_args' ),
+			array(
+				'\WPGraphQL\QL_Events\Data\Connection\Event_Connection_Resolver',
+				'get_query_args',
+			),
 			10,
 			5
 		);
 
 		add_filter(
 			'graphql_post_object_connection_query_args',
-			array( __CLASS__, 'organizer_connection_query_args' ),
+			array(
+				'\WPGraphQL\QL_Events\Data\Connection\Organizer_Connection_Resolver',
+				'get_query_args',
+			),
 			10,
 			5
 		);
@@ -62,7 +68,10 @@ class Core_Schema_Filters {
 		if ( \QL_Events::is_ticket_events_loaded() ) {
 			add_filter(
 				'graphql_post_object_connection_query_args',
-				array( __CLASS__, 'ticket_connection_query_args' ),
+				array(
+					'\WPGraphQL\QL_Events\Data\Connection\Ticket_Connection_Resolver',
+					'get_ticket_args',
+				),
 				10,
 				5
 			);
@@ -71,14 +80,20 @@ class Core_Schema_Filters {
 		if ( \QL_Events::is_ticket_events_plus_loaded() ) {
 			add_filter(
 				'graphql_product_connection_query_args',
-				array( __CLASS__, 'ticket_plus_connection_query_args' ),
+				array(
+					'\WPGraphQL\QL_Events\Data\Connection\Ticket_Connection_Resolver',
+					'get_ticket_plus_args',
+				),
 				10,
 				5
 			);
 
 			add_filter(
 				'graphql_product_connection_catalog_visibility',
-				array( __CLASS__, 'wooticket_default_visibility' ),
+				array(
+					'\WPGraphQL\QL_Events\Data\Connection\Ticket_Connection_Resolver',
+					'get_ticket_plus_default_visibility',
+				),
 				10,
 				6
 			);
@@ -181,90 +196,9 @@ class Core_Schema_Filters {
 		if ( self::ends_with( $type_name, 'ToEventConnectionWhereArgs' ) ) {
 			$fields = array_merge(
 				$fields,
-				\WPGraphQL\Extensions\QL_Events\Connection\Events::where_args()
+				\WPGraphQL\QL_Events\Connection\Events::where_args()
 			);
 		}
 		return $fields;
-	}
-
-	/**
-	 * Filters PostObjectConnectionResolver's query_args and adds args to used when querying
-	 * TEC's "Event" CPT
-	 *
-	 * @param array       $query_args - WP_Query args.
-	 * @param mixed       $source     - Connection parent resolver.
-	 * @param array       $args       - Connection arguments.
-	 * @param AppContext  $context    - AppContext object.
-	 * @param ResolveInfo $info       - ResolveInfo object.
-	 *
-	 * @return mixed
-	 */
-	public static function event_connection_query_args( $query_args, $source, $args, $context, $info ) {
-		return \WPGraphQL\Extensions\QL_Events\Data\Connection\Event_Connection_Resolver::get_query_args( $query_args, $source, $args, $context, $info );
-	}
-
-	/**
-	 * Filters PostObjectConnectionResolver's query_args and adds args to used when querying
-	 * TEC's "Organizer" CPT
-	 *
-	 * @param array       $query_args - WP_Query args.
-	 * @param mixed       $source     - Connection parent resolver.
-	 * @param array       $args       - Connection arguments.
-	 * @param AppContext  $context    - AppContext object.
-	 * @param ResolveInfo $info       - ResolveInfo object.
-	 *
-	 * @return mixed
-	 */
-	public static function organizer_connection_query_args( $query_args, $source, $args, $context, $info ) {
-		return \WPGraphQL\Extensions\QL_Events\Data\Connection\Organizer_Connection_Resolver::get_query_args( $query_args, $source, $args, $context, $info );
-	}
-
-	/**
-	 * Filter PostObjectConnectionResolver's query_args and adds args to used when querying
-	 * Ticket Events' "Ticket" CPTs
-	 *
-	 * @param array       $query_args - WP_Query args.
-	 * @param mixed       $source     - Connection parent resolver.
-	 * @param array       $args       - Connection arguments.
-	 * @param AppContext  $context    - AppContext object.
-	 * @param ResolveInfo $info       - ResolveInfo object.
-	 *
-	 * @return mixed
-	 */
-	public static function ticket_connection_query_args( $query_args, $source, $args, $context, $info ) {
-		return \WPGraphQL\Extensions\QL_Events\Data\Connection\Ticket_Connection_Resolver::get_ticket_args( $query_args, $source, $args, $context, $info );
-	}
-
-	/**
-	 * Filter PostObjectConnectionResolver's query_args and adds args to used when querying
-	 * Ticket Events Plus' "Ticket" CPTs
-	 *
-	 * @param array       $query_args - WP_Query args.
-	 * @param mixed       $source     - Connection parent resolver.
-	 * @param array       $args       - Connection arguments.
-	 * @param AppContext  $context    - AppContext object.
-	 * @param ResolveInfo $info       - ResolveInfo object.
-	 *
-	 * @return mixed
-	 */
-	public static function ticket_plus_connection_query_args( $query_args, $source, $args, $context, $info ) {
-		return \WPGraphQL\Extensions\QL_Events\Data\Connection\Ticket_Connection_Resolver::get_ticket_plus_args( $query_args, $source, $args, $context, $info );
-	}
-
-	/**
-	 * Filter PostObjectConnectionResolver's query_args and adds args to used when querying
-	 * Ticket Events Plus' "Ticket" CPTs
-	 *
-	 * @param array       $default_visibility  Default catalog visibility tax query.
-	 * @param array       $query_args - WP_Query args.
-	 * @param mixed       $source     - Connection parent resolver.
-	 * @param array       $args       - Connection arguments.
-	 * @param AppContext  $context    - AppContext object.
-	 * @param ResolveInfo $info       - ResolveInfo object.
-	 *
-	 * @return mixed
-	 */
-	public static function wooticket_default_visibility( $default_visibility, $query_args, $source, $args, $context, $info ) {
-		return \WPGraphQL\Extensions\QL_Events\Data\Connection\Ticket_Connection_Resolver::get_ticket_plus_default_visibility( $default_visibility, $query_args, $source, $args, $context, $info );
 	}
 }
