@@ -2,11 +2,11 @@
 /**
  * Defines common fields for Ticket Events' Ticket types
  *
- * @package \WPGraphQL\Extensions\QL_Events\Type\WPObject
+ * @package \WPGraphQL\QL_Events\Type\WPObject
  * @since   0.0.1
  */
 
-namespace WPGraphQL\Extensions\QL_Events\Type\WPObject;
+namespace WPGraphQL\QL_Events\Type\WPObject;
 
 use WPGraphQL\AppContext;
 use WPGraphQL\Data\DataSource;

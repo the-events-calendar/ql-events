@@ -4,11 +4,11 @@
  *
  * Resolves ticket linked data
  *
- * @package \WPGraphQL\Extensions\QL_Events\Type\WPObject
+ * @package \WPGraphQL\QL_Events\Type\WPObject
  * @since   0.0.1
  */
 
-namespace WPGraphQL\Extensions\QL_Events\Type\WPObject;
+namespace WPGraphQL\QL_Events\Type\WPObject;
 
 /**
  * Class Ticket_Linked_Data

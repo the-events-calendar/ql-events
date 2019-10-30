@@ -4,11 +4,11 @@
  *
  * This class serves as a factory for all the resolvers of queries and mutations.
  *
- * @package WPGraphQL\Extensions\QL_Events\Data
+ * @package WPGraphQL\QL_Events\Data
  * @since   0.0.1
  */
 
-namespace WPGraphQL\Extensions\QL_Events\Data;
+namespace WPGraphQL\QL_Events\Data;
 
 /**
  * Class Factory

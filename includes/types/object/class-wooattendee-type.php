@@ -4,15 +4,15 @@
  *
  * Registers "WooAttendee" WPObject type fields
  *
- * @package \WPGraphQL\Extensions\QL_Events\Type\WPObject
+ * @package \WPGraphQL\QL_Events\Type\WPObject
  * @since   0.0.1
  */
 
-namespace WPGraphQL\Extensions\QL_Events\Type\WPObject;
+namespace WPGraphQL\QL_Events\Type\WPObject;
 
 use WPGraphQL\AppContext;
 use WPGraphQL\Data\DataSource;
-use WPGraphQL\Extensions\WooCommerce\Data\Factory;
+use WPGraphQL\WooCommerce\Data\Factory;
 
 /**
  * Class - WooAttendee_Type

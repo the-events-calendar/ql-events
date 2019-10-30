@@ -2,7 +2,7 @@
 /**
  * QL_Events
  *
- * @package WPGraphQL\Extensions\QL_Events
+ * @package WPGraphQL\QL_Events
  * @since 0.0.1
  */
 
@@ -16,9 +16,9 @@ if ( ! class_exists( 'QL_Events' ) ) :
 	final class QL_Events {
 
 		/**
-		 * Stores the instance of the WPGraphQL\Extensions\QL_Events class
+		 * Stores the instance of the WPGraphQL\QL_Events class
 		 *
-		 * @var QL_Events The one true WPGraphQL\Extensions\QL_Events
+		 * @var QL_Events The one true WPGraphQL\QL_Events
 		 * @access private
 		 */
 		private static $instance;
@@ -34,8 +34,7 @@ if ( ! class_exists( 'QL_Events' ) ) :
 				self::$instance = new self();
 				self::$instance->constants();
 				self::$instance->includes();
-				self::$instance->actions();
-				self::$instance->filters();
+				self::$instance->setup();
 			}
 
 			/**
@@ -166,23 +165,15 @@ if ( ! class_exists( 'QL_Events' ) ) :
 		}
 
 		/**
-		 * Sets up actions to run at certain spots throughout WordPress and the WPGraphQL execution cycle
+		 * Sets up QL Events schema.
 		 */
-		private function actions() {
-			/**
-			 * Setup actions
-			 */
-			\WPGraphQL\Extensions\QL_Events\Type_Registry::add_actions();
-		}
+		private function setup() {
+			// WPGraphQL core filters.
+			\WPGraphQL\QL_Events\Core_Schema_Filters::add_filters();
 
-		/**
-		 * Sets up filters to run at certain spots throughout WordPress and the WPGraphQL execution cycle
-		 */
-		private function filters() {
-			/**
-			 * Setup filters
-			 */
-			\WPGraphQL\Extensions\QL_Events\Core_Schema_Filters::add_filters();
+			// Initialize QL Events type registry.
+			$registry = new \WPGraphQL\QL_Events\Type_Registry();
+			add_action( 'graphql_register_types', array( $registry, 'init' ), 10, 1 );
 		}
 	}
 endif;

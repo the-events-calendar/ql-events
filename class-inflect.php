@@ -7,7 +7,7 @@
  *
  * @author @tbrianjones
  * @link https://gist.github.com/tbrianjones/ba0460cc1d55f357e00b
- * @package WPGraphQL\Extensions\WooCommerce
+ * @package WPGraphQL\QL_Events
  * @since 0.0.4
  */
 

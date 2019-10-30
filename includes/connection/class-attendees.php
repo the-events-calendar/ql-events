@@ -4,11 +4,11 @@
  *
  * Registers connections to Attendee
  *
- * @package WPGraphQL\Extensions\QL_Events\Connection
+ * @package WPGraphQL\QL_Events\Connection
  * @since   0.0.1
  */
 
-namespace WPGraphQL\Extensions\QL_Events\Connection;
+namespace WPGraphQL\QL_Events\Connection;
 
 use Tribe__Tickets__RSVP as RSVP;
 use WPGraphQL\Connection\PostObjects;
