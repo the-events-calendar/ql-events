@@ -173,7 +173,7 @@ class Event_Type {
 					'type'        => 'Boolean',
 					'description' => __( 'Is event featured?', 'ql-events' ),
 					'resolve'     => function( $source ) {
-						$value = get_post_meta( $source->ID, '_tribe_feature', true );
+						$value = get_post_meta( $source->ID, '_tribe_featured', true );
 						return ! is_null( $value ) ? $value : null;
 					},
 				),
