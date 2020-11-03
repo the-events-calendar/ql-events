@@ -32,13 +32,13 @@ class Organizer_Linked_Data_Type {
 					'name'        => array(
 						'type'    => 'String',
 						'resolve' => function( $source ) {
-							return ! empty( $source->name ) ? $source->name : null;
+							return ! empty( $source->name ) ? strip_tags( html_entity_decode( $source->name ) ) : null;
 						},
 					),
 					'description' => array(
 						'type'    => 'String',
 						'resolve' => function( $source ) {
-							return ! empty( $source->description ) ? $source->description : null;
+							return ! empty( $source->description ) ? strip_tags( html_entity_decode( $source->description ) ) : null;
 						},
 					),
 					'url'         => array(
