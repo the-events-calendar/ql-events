@@ -43,9 +43,9 @@ class Event_Connection_Resolver {
 		/**
 		 * Merge the input_fields with the default query_args
 		 */
-		if ( ! empty( $input_fields ) ) {
-			$query_args = array_merge( $query_args, $input_fields );
-		}
+		// if ( ! empty( $input_fields ) ) {
+		// 	$query_args = array_merge( $query_args, $input_fields );
+		// }
 
 		return apply_filters(
 			'graphql_' . Main::POSTTYPE . '_connection_query_args',
@@ -118,7 +118,7 @@ class Event_Connection_Resolver {
 	 *
 	 * @return array
 	 */
-	private static function date_query_input_to_meta_query( $date_query_input, $meta_key ) {
+	public static function date_query_input_to_meta_query( $date_query_input, $meta_key ) {
 		// Create date string.
 		$year   = isset( $date_query_input['year'] );
 		$month  = isset( $date_query_input['month'] );

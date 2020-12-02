@@ -22,6 +22,11 @@ class Event_Type {
 	 * Registers "Event" type fields.
 	 */
 	public static function register_fields() {
+		self::register_core_fields();
+		self::register_pro_fields();
+	}
+
+	public static function register_core_fields() {
 		register_graphql_fields(
 			'Event',
 			array(
@@ -185,6 +190,84 @@ class Event_Type {
 						$data     = $instance->get_data( $source->ID );
 						return ! empty( $data[ $source->ID ] ) ? $data[ $source->ID ] : null;
 					},
+				),
+			)
+		);
+	}
+
+	public static function register_pro_fields() {
+		register_graphql_fields(
+			'Event',
+			array(
+				'recurring'        => array(
+					'type'        => 'Boolean',
+					'description' => __( 'Is this a recurring event?', 'ql-events' ),
+					'resolve'     => function( $source ) {
+						if ( ! is_callable( '\tribe_is_recurring_event' ) ) {
+							return null;
+						}
+
+						return tribe_is_recurring_event( $source->ID );
+					},
+				),
+				'startDates'       => array(
+					'type'        => array( 'list_of' => 'String' ),
+					'args'        => array(
+						'filter' => array( 'type' => 'DateQueryInput' ),
+					),
+					'description' => __( 'Recurrence events start dates', 'ql-events' ),
+					'resolve'     => function( $source, array $args ) {
+						if ( ! is_callable( '\tribe_get_recurrence_start_dates' ) ) {
+							return null;
+						}
+
+						$dates = tribe_get_recurrence_start_dates( $source->ID );
+
+						if ( ! empty( $args['filter'] ) ) {
+							$query = \WPGraphQL\QL_Events\Data\Connection\Event_Connection_Resolver::date_query_input_to_meta_query(
+								$args['filter'],
+								''
+							);
+							$dates = array_filter(
+								$dates,
+								function( $date ) use ( $query ) {
+									$left_date  = strtotime( $date );
+									$right_date = strtotime( $query['value'] );
+
+									$compare = $query['compare'];
+									switch( $compare ) {
+										case '=':
+											return $left_date === $right_date;
+										case '>':
+											return $left_date > $right_date;
+										case '<':
+											return $left_date < $right_date;
+									}
+								},
+							);
+						}
+
+						return $dates;
+					}
+				),
+				'recurrenceText'    => array(
+					'type'        => 'String',
+					'args'        => array(
+						'format' => array( 'type' => 'PostObjectFieldFormatEnum' )
+					),
+					'description' => __( 'Recurrence text', 'ql-events' ),
+					'resolve'     => function( $source, array $args ) {
+						if ( ! is_callable( '\tribe_get_recurrence_text' ) ) {
+							return null;
+						}
+
+						$text = tribe_get_recurrence_text( $source->ID );
+						if ( ! empty( $args['format'] ) && 'raw' === $args['format'] ) {
+							$text = strip_tags( html_entity_decode( $text ) );
+						}
+
+						return $text;
+					}
 				),
 			)
 		);
