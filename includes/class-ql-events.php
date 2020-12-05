@@ -128,6 +128,15 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		}
 
 		/**
+		 * Returns if Virtual Events is installed and activated.
+		 *
+		 * @return bool
+		 */
+		public static function is_virtual_events_loaded() {
+			return class_exists( 'Tribe\Events\Virtual\Plugin' );
+		}
+
+		/**
 		 * Throw error on object clone.
 		 * The whole idea of the singleton design pattern is that there is a single object
 		 * therefore, we don't want the object to be cloned.

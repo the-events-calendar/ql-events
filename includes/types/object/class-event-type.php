@@ -26,6 +26,7 @@ class Event_Type {
 
 		// TODO: Add TEC pro installation/activation check here.
 		self::register_pro_fields();
+		self::register_virtual_fields();
 	}
 
 	/**
@@ -283,5 +284,114 @@ class Event_Type {
 				],
 			]
 		);
+	}
+
+	public static function register_virtual_fields() {
+		if( \QL_Events::is_virtual_events_loaded() ){
+
+			register_graphql_fields(
+				'Event',
+				array(
+					'isVirtual' => array(
+						'type' => 'Boolean',
+						'description' => __( 'Is this a virtual event?', 'ql-events'),
+						'resolve' => function( $source ) {
+							$value = tribe_get_event( $source->ID)->virtual;
+							return ! is_null( $value ) ? $value : null;
+						}
+					),
+					'virtualUrl' => array(
+						'type' => 'String',
+						'description' => __( "The event's virtual URL.", 'ql-events'),
+						'resolve' => function( $source ) {
+							$value = tribe_get_event( $source->ID)->virtual_url;
+							return ! is_null( $value ) ? $value : null;
+						}
+					),
+					'virtualEmbedVideo' => array(
+						'type' => 'Boolean',
+						'description' => __( "Whether to show an event's video embed.", 'ql-events'),
+						'resolve' => function( $source ) {
+							$value = tribe_get_event( $source->ID)->virtual_embed_video;
+							return ! is_null( $value ) ? $value : null;
+						}
+					),
+					'virtualLinkedButton' => array(
+						'type' => 'Boolean',
+						'description' => __( "Whether to show an event's linked button", 'ql-events'),
+						'resolve' => function( $source ) {
+							$value = tribe_get_event( $source->ID)->virtual_linked_button;
+							return ! is_null( $value ) ? $value : null;
+						}
+					),
+					'virtualLinkedButtonText' => array(
+						'type' => 'String',
+						'description' => __( "The virtual linked button text. Defaults to 'Watch'. ", 'ql-events'),
+						'resolve' => function( $source ) {
+							$value = tribe_get_event( $source->ID)->virtual_linked_button_text;
+							return ! is_null( $value ) ? $value : null;
+						}
+					),
+					'virtualShowEmbedAt' => array(
+						'type' => 'String',
+						'description' => __( 'The time to start displaying the video embed', 'ql-events'),
+						'resolve' => function( $source ) {
+							$value = tribe_get_event( $source->ID)->virtual_show_embed_at;
+							return ! is_null( $value ) ? $value : null;
+						}
+					),
+					'virtualShowEmbedTo' => array(
+						'type' => [
+							'list_of' => 'String',
+						],
+						'description' => __( 'The user type (logged in or all) to display the video embed to.', 'ql-events'),
+						'resolve' => function( $source ) {
+							$value = tribe_get_event( $source->ID)->virtual_show_embed_to;
+							return ! is_null( $value ) ? $value : null;
+						}
+					),
+					'virtualShowLeadUp' => array(
+						'type' => 'Number',
+						'description' => __( 'The lead-up for the event embed/link button in minutes.', 'ql-events'),
+						'resolve' => function( $source ) {
+							$value = tribe_get_event( $source->ID)->virtual_show_lead_up;
+							return ! is_null( $value ) ? $value : null;
+						}
+					),
+					'virtualIsLinkable' => array(
+						'type' => 'Boolean',
+						'description' => __( 'Whether the event has a URL to show (link/embed).', 'ql-events'),
+						'resolve' => function( $source ) {
+							$value = tribe_get_event( $source->ID)->virtual_is_linkable;
+							return ! is_null( $value ) ? $value : null;
+						}
+					),
+					'virtualIsImmediate' => array(
+						'type' => 'Boolean',
+						'description' => __( 'Is the event set to show the embed immediately?', 'ql-events'),
+						'resolve' => function( $source ) {
+							$value = tribe_get_event( $source->ID)->virtual_is_immediate;
+							return ! is_null( $value ) ? $value : null;
+						}
+					),
+					'virtualShouldShowEmbed' => array(
+						'type' => 'Boolean',
+						'description' => __( 'Is the event ready to show the embed now?', 'ql-events'),
+						'resolve' => function( $source ) {
+							$value = tribe_get_event( $source->ID)->virtual_should_show_embed;
+							return ! is_null( $value ) ? $value : null;
+						}
+					),
+					'virtualShouldShowLink' => array(
+						'type' => 'Boolean',
+						'description' => __( 'Is the event ready to show the link now?', 'ql-events'),
+						'resolve' => function( $source ) {
+							$value = tribe_get_event( $source->ID)->virtual_should_show_link;
+							return ! is_null( $value ) ? $value : null;
+						}
+					),
+				)
+			);
+		}
 	}
 }
