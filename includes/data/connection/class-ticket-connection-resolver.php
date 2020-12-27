@@ -45,6 +45,7 @@ class Ticket_Connection_Resolver {
 					$connection_type = 'paypal_tickets';
 					break;
 				default:
+					$connection_type = false;
 					break;
 			}
 		}
