@@ -118,7 +118,7 @@ class Venue_Type {
 					'resolve'     => function( $source ) {
 						$coordinates = tribe_get_coordinates( $source->ID);
 						
-						return ! empty( $coordinates ) ? $coordinates['lat'] : false;
+						return ! empty( $coordinates['lat'] ) ? $coordinates['lat'] : false;
 					},
 				),
 				'longitude'   => array(
@@ -127,7 +127,7 @@ class Venue_Type {
 					'resolve'     => function( $source ) {
 						$coordinates = tribe_get_coordinates( $source->ID);
 						
-						return ! empty( $coordinates ) ? $coordinates['lng'] : false;
+						return ! empty( $coordinates['lng'] ) ? $coordinates['lng'] : false;
 					},
 				),
 				'linkedData'    => array(
