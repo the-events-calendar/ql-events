@@ -289,7 +289,7 @@ class Event_Type {
 					array(
 						'type'        => 'String',
 						'description' => $field['label'],
-						'resolve'     => function ( $source, $field ) {
+						'resolve'     => function ( $source ) use( $field ) {
 							get_post_meta( $source->ID, $field['name'], true);
 						}
 					)
