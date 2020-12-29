@@ -271,5 +271,30 @@ class Event_Type {
 				),
 			)
 		);
+
+		
+		/**
+		 * Register custom meta fields.
+		 */ 
+		$custom_fields = tribe_get_option( 'custom-fields');
+
+		if ( is_array( $custom_fields ) ) {
+			foreach ( $custom_fields as $field) {
+				// Use label as graphQL key, instead of _ecp_custom_{#}.
+				$key = lcfirst( str_replace( ' ', '', ucwords( $field['label'] ) ) );
+
+				register_graphql_field(
+					'Event', 
+					$key,
+					array(
+						'type'        => 'String',
+						'description' => $field['label'],
+						'resolve'     => function ( $source, $field ) {
+							get_post_meta( $source->ID, $field['name'], true);
+						}
+					)
+				);
+			}
+		}
 	}
 }
