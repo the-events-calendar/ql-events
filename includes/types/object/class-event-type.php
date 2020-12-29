@@ -281,7 +281,7 @@ class Event_Type {
 		if ( is_array( $custom_fields ) ) {
 			foreach ( $custom_fields as $field) {
 				// Use label as graphQL key, instead of _ecp_custom_{#}.
-				$key = lcfirst( str_replace( ' ', '', ucwords( $field['label'] ) ) );
+				$key = 'custom' . ( str_replace( ' ', '', ucwords( $field['label'] ) ) );
 
 				register_graphql_field(
 					'Event', 
