@@ -41,7 +41,7 @@ class RSVPAttendee_Type {
 	}
 
 	/**
-	 * Registers "Attendee" type fields.
+	 * Registers "RSVPAttendee" type fields.
 	 */
 	public static function register_fields() {
 		register_graphql_fields(

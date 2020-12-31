@@ -39,6 +39,8 @@ class Type_Registry {
 
 			// Event Tickets Connections.
 			\WPGraphQL\QL_Events\Connection\Tickets::register_connections();
+			\WPGraphQL\QL_Events\Connection\RSVPAttendees::register_connections();
+			\WPGraphQL\QL_Events\Connection\PayPalAttendees::register_connections();
 		}
 
 		if ( \QL_Events::is_ticket_events_plus_loaded() ) {
@@ -47,6 +49,8 @@ class Type_Registry {
 
 			// Event Tickets Plus Connections.
 			\WPGraphQL\QL_Events\Connection\Tickets_Plus::register_connections();
+			\WPGraphQL\QL_Events\Connection\WooAttendees::register_connections();
+
 		}
 	}
 }

@@ -75,6 +75,33 @@ class Core_Schema_Filters {
 				10,
 				5
 			);
+
+			add_filter(
+				'graphql_post_object_connection_query_args',
+				array(
+					'\WPGraphQL\QL_Events\Data\Connection\RSVPAttendee_Connection_Resolver',
+					'get_query_args',
+				),
+				10,
+				5
+			);
+
+			add_filter(
+				'graphql_post_object_connection_query_args',
+				array(
+					'\WPGraphQL\QL_Events\Data\Connection\PayPalAttendee_Connection_Resolver',
+					'get_query_args',
+				),
+				10,
+				5
+			);
+
+			add_filter(
+			'graphql_input_fields',
+			array( __CLASS__, 'attendees_where_args' ),
+			10,
+			2
+		);
 		}
 
 		if ( \QL_Events::is_ticket_events_plus_loaded() ) {
@@ -96,6 +123,23 @@ class Core_Schema_Filters {
 				),
 				10,
 				6
+			);
+
+			add_filter(
+				'graphql_post_object_connection_query_args',
+				array(
+					'\WPGraphQL\QL_Events\Data\Connection\WooAttendee_Connection_Resolver',
+					'get_query_args',
+				),
+				10,
+				5
+			);
+
+			add_filter(
+				'graphql_input_fields',
+				array( __CLASS__, 'ticket_plus_attendees_where_args' ),
+				10,
+				2
 			);
 		}
 	}
@@ -197,6 +241,49 @@ class Core_Schema_Filters {
 			$fields = array_merge(
 				$fields,
 				\WPGraphQL\QL_Events\Connection\Events::where_args()
+			);
+		}
+		return $fields;
+	}
+
+	/**
+	 * Adds "where" arguments to Attendees connections
+	 *
+	 * @param array  $fields     Attendees where args.
+	 * @param string $type_name  Connection "where" input type name.
+	 *
+	 * @return array
+	 */
+	public static function attendees_where_args( $fields = array(), $type_name ) {
+		if ( self::ends_with( $type_name, 'RSVPAttendeeConnectionWhereArgs' ) ) {
+			$fields = array_merge(
+				$fields,
+				\WPGraphQL\QL_Events\Connection\RSVPAttendees::where_args()
+			);
+		}
+
+			if ( self::ends_with( $type_name, 'PayPalAttendeeConnectionWhereArgs' ) ) {
+			$fields = array_merge(
+				$fields,
+				\WPGraphQL\QL_Events\Connection\PayPalAttendees::where_args()
+			);
+		}
+		return $fields;
+	}
+
+	/**
+	 * Adds "where" arguments to WooAttendee connections
+	 *
+	 * @param array  $fields     WooAttendee where args.
+	 * @param string $type_name  Connection "where" input type name.
+	 *
+	 * @return array
+	 */
+	public static function ticket_plus_attendees_where_args( $fields = array(), $type_name ) {
+		if ( self::ends_with( $type_name, 'WooAttendeeConnectionWhereArgs' ) ) {
+			$fields = array_merge(
+				$fields,
+				\WPGraphQL\QL_Events\Connection\WooAttendees::where_args()
 			);
 		}
 		return $fields;
