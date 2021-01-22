@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: QL Events
- * Description: Adds Woocommerce Functionality to WPGraphQL schema.
+ * Description: Adds The Events Calendar Functionality to WPGraphQL schema.
  * Version: 0.0.1
  * Author: kidunot89
  * Author URI: https://axistaylor.com
