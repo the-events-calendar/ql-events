@@ -2,8 +2,8 @@
 [![Build Status](https://travis-ci.org/simplur/ql-events.svg?branch=develop)](https://travis-ci.org/simplur/ql-events) [![Coverage Status](https://coveralls.io/repos/github/simplur/ql-events/badge.svg?branch=develop)](https://coveralls.io/github/simplur/ql-events?branch=develop)
 
 ## Quick Install
-1. Install & activate [The Events Calendar/The Events Calendar Prop](https://woocommerce.com/)
-  - (Optional) Install & activate [Ticket Events/Ticket Events Pro](https://woocommerce.com/)
+1. Install & activate [The Events Calendar/The Events Calendar Pro](https://theeventscalendar.com/)
+  - (Optional) Install & activate [Ticket Events/Ticket Events Plus](https://theeventscalendar.com/products/wordpress-event-tickets/)
 2. Install & activate [WPGraphQL](https://www.wpgraphql.com/)
   - (Optional) Install & activate [WPGraphQL-JWT-Authentication](https://github.com/wp-graphql/wp-graphql-jwt-authentication) to add a `login` mutation that returns a JSON Web Token.
 3. Clone or download the zip of this repository into your WordPress plugin directory & activate the **QL Events** plugin
