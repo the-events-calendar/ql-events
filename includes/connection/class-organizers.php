@@ -34,11 +34,11 @@ class Organizers extends PostObjects {
 					'fromType'      => 'Event',
 					'toType'        => 'Organizer',
 					'fromFieldName' => 'organizers',
-					'resolve'       => function( $source, array $args, AppContext $context, ResolveInfo $info ){
-						$organizer_ids = tribe_get_organizer_ids($source->ID);
+					'resolve'       => function( $source, array $args, AppContext $context, ResolveInfo $info ) {
+						$organizer_ids = tribe_get_organizer_ids( $source->ID );
 						$resolver = new PostObjectConnectionResolver( $source, $args, $context, $info, Main::ORGANIZER_POST_TYPE );
 
-						return !empty($organizer_ids) ? $resolver->get_connection() : null;
+						return ! empty( $organizer_ids ) ? $resolver->get_connection() : null;
 					}
 				)
 			)
