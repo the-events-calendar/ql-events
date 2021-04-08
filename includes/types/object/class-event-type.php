@@ -243,7 +243,7 @@ class Event_Type {
 										case '<':
 											return $left_date < $right_date;
 									}
-								},
+								}
 							);
 						}
 
