@@ -112,6 +112,24 @@ class Venue_Type {
 						return ! is_null( $value ) ? $value : false;
 					},
 				),
+				'latitude'   => array(
+					'type'        => 'String',
+					'description' => __( 'Venue latitude', 'ql-events' ),
+					'resolve'     => function( $source ) {
+						$coordinates = tribe_get_coordinates( $source->ID);
+						
+						return ! empty( $coordinates['lat'] ) ? $coordinates['lat'] : false;
+					},
+				),
+				'longitude'   => array(
+					'type'        => 'String',
+					'description' => __( 'Venue longitude', 'ql-events' ),
+					'resolve'     => function( $source ) {
+						$coordinates = tribe_get_coordinates( $source->ID);
+						
+						return ! empty( $coordinates['lng'] ) ? $coordinates['lng'] : false;
+					},
+				),
 				'linkedData'    => array(
 					'type'        => 'VenueLinkedData',
 					'description' => __( 'Venue JSON-LD object', 'ql-events' ),
