@@ -97,16 +97,16 @@ class WooAttendee_Connection_Resolver {
 	 */
 
 	private static function sanitize_input_fields( $args ){
-		$query_args = array();
+		$query_args = [];
 
 
-		if ( !empty( $args['eventsIn'])){
-			$query_args['meta_query'] = array(); // WPCS: slow query ok.
-			$query_args['meta_query'][] = array(
+		if ( ! empty( $args['eventsIn'] ) ) {
+			$query_args['meta_query'] = []; // WPCS: slow query ok.
+			$query_args['meta_query'][] = [
 				'key'     => WOO::ATTENDEE_EVENT_KEY,
 				'value'   => $args['eventsIn'],
 				'compare' => 'IN',
-			);
+			];
 		}
 
 		return $query_args;
