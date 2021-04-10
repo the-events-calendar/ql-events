@@ -66,8 +66,6 @@ class WooAttendee_Connection_Resolver {
 					}
 					break;
 			}
-			// @codingStandardsIgnoreLine
-			
 		}
 
 		$query_args = apply_filters(
