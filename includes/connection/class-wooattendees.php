@@ -25,11 +25,11 @@ class WooAttendees extends PostObjects {
 		register_graphql_connection(
 			self::get_connection_config(
 				get_post_type_object( WOO::ATTENDEE_OBJECT ),
-				array(
+				[
 					'fromType'      => 'Event',
 					'toType'        => 'WooAttendee',
 					'fromFieldName' => 'wooAttendees',
-				)
+				]
 			)
 		);
 	}
