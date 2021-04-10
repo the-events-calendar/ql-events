@@ -35,11 +35,11 @@ class WooAttendees extends PostObjects {
 	}
 
 	public static function where_args() {
-		return array(
-			'eventsIn' => array(
-				'type' => array( 'list_of' => 'ID'),
-				'description' => __( 'Filter the connection based on event Id'),
-			)
-		);
+		return [
+			'eventsIn' => [
+				'type' => [ 'list_of' => 'ID' ],
+				'description' => __( 'Filter the connection based on event Id', 'ql-events' ),
+			]
+		];
 	}
 }
