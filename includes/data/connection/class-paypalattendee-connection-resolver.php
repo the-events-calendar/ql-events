@@ -55,7 +55,7 @@ class PayPalAttendee_Connection_Resolver {
 					// @codingStandardsIgnoreLine
 					if ( 'payPalAttendees' === $info->fieldName ) {
 						if ( ! isset( $query_args['meta_query'] ) ) {
-							$query_args['meta_query'] = array(); // WPCS: slow query ok.
+							$query_args['meta_query'] = []; // WPCS: slow query ok.
 						}
 						$query_args['meta_query'][] = array(
 							'key'     => PAYPAL::ATTENDEE_EVENT_KEY,
