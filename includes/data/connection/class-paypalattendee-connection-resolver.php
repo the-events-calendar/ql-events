@@ -57,11 +57,11 @@ class PayPalAttendee_Connection_Resolver {
 						if ( ! isset( $query_args['meta_query'] ) ) {
 							$query_args['meta_query'] = []; // WPCS: slow query ok.
 						}
-						$query_args['meta_query'][] = array(
+						$query_args['meta_query'][] = [
 							'key'     => PAYPAL::ATTENDEE_EVENT_KEY,
 							'value'   => $source->ID,
 							'compare' => '=',
-						);
+						];
 					}
 					break;
 			}
