@@ -56,13 +56,13 @@ class WooAttendee_Connection_Resolver {
 					// @codingStandardsIgnoreLine
 					if ( 'wooAttendees' === $info->fieldName ) {
 						if ( ! isset( $query_args['meta_query'] ) ) {
-							$query_args['meta_query'] = array(); // WPCS: slow query ok.
+							$query_args['meta_query'] = []; // WPCS: slow query ok.
 						}
-						$query_args['meta_query'][] = array(
+						$query_args['meta_query'][] = [
 							'key'     => WOO::ATTENDEE_EVENT_KEY,
 							'value'   => $source->ID,
 							'compare' => '=',
-						);
+						];
 					}
 					break;
 			}
