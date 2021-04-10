@@ -262,7 +262,7 @@ class Core_Schema_Filters {
 			);
 		}
 
-			if ( self::ends_with( $type_name, 'PayPalAttendeeConnectionWhereArgs' ) ) {
+		if ( self::ends_with( $type_name, 'PayPalAttendeeConnectionWhereArgs' ) ) {
 			$fields = array_merge(
 				$fields,
 				\WPGraphQL\QL_Events\Connection\PayPalAttendees::where_args()
