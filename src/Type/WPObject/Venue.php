@@ -1,0 +1,91 @@
+<?php
+/**
+ * GraphQL Object Type - Venue
+ *
+ * @package WPGraphQL\TEC\Type\Object
+ * @since 0.0.1
+ */
+
+namespace WPGraphQL\TEC\Type\WPObject;
+
+/**
+ * Class - Venue
+ */
+class Venue {
+
+	/**
+	 * Name of the type.
+	 *
+	 * @var string Type name.
+	 */
+	public static $type = 'Venue';
+	/**
+	 * {@inheritDoc}
+	 */
+	public static function register_fields() : void {
+		self::register_core_fields();
+	}
+
+	/**
+	 * Register the fields used by TEC Core plugin.
+	 */
+	public static function register_core_fields() : void {
+		register_graphql_fields(
+			self::$type,
+			[
+				'address'       => [
+					'type'        => 'String',
+					'description' => __( 'The venue street address.', 'wp-graphql-tec' ),
+				],
+				'city'          => [
+					'type'        => 'String',
+					'description' => __( 'The venue city.', 'wp-graphql-tec' ),
+				],
+				'coordinates'   => [
+					'type'        => VenueCoordinates::$type,
+					'description' => __( 'The venue coordinates.', 'wp-graphql-tec' ),
+				],
+				'country'       => [
+					'type'        => 'String',
+					'description' => __( 'The venue country.', 'wp-graphql-tec' ),
+				],
+				'phone'         => [
+					'type'        => 'String',
+					'description' => __( 'The venue phone number.', 'wp-graphql-tec' ),
+				],
+				'province'      => [
+					'type'        => 'String',
+					'description' => __( 'The venue province.', 'wp-graphql-tec' ),
+				],
+				'mapLink'       => [
+					'type'        => 'String',
+					'description' => __( 'The external link to the venue map directions.', 'wp-graphql-tec' ),
+				],
+				'showMap'       => [
+					'type'        => 'Boolean',
+					'description' => __( 'Whether to display the event map.', 'wp-graphql-tec' ),
+				],
+				'showMapLink'   => [
+					'type'        => 'Boolean',
+					'description' => __( 'Whether to display a link to the Map.', 'wp-graphql-tec' ),
+				],
+				'stateProvince' => [
+					'type'        => 'String',
+					'description' => __( 'The venue state or province.', 'wp-graphql-tec' ),
+				],
+				'state'         => [
+					'type'        => 'String',
+					'description' => __( 'The venue state.', 'wp-graphql-tec' ),
+				],
+				'website'       => [
+					'type'        => 'String',
+					'description' => __( 'The venue website.', 'wp-graphql-tec' ),
+				],
+				'zip'           => [
+					'type'        => 'String',
+					'description' => __( 'The venue zip code.', 'wp-graphql-tec' ),
+				],
+			]
+		);
+	}
+}
