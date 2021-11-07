@@ -14,4 +14,5 @@ parameters:
 			- ../the-events-calendar/
 		ignoreErrors:
 			- '#^Function apply_filters(_ref_array)? invoked with ([1-9]|1[0-2]) parameters, 2 required\.$#'
+			- '#^Parameter \#2 \$default of function tribe_get_option expects string, false given\.$#'
 			- '#^Parameter \#2 \$callback of function remove_action expects callable\(\): mixed, array\(mixed, #'

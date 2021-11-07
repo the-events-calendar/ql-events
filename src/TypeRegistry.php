@@ -24,10 +24,14 @@ class TypeRegistry {
 	public function init( GraphQLRegistry $type_registry ) : void {
 		// Enums.
 		Enum\CurrencyPositionEnum::register_type();
+		Enum\EnabledViewsEnum::register_type();
+		Enum\EventsTemplateEnum::register_type();
+		Enum\TimezoneModeEnum::register_type();
 		// Types.
-		WPObject\VenueCoordinates::register_type();
 		WPObject\EventLinkedData::register_type();
 		WPObject\OrganizerLinkedData::register_type();
+		WPObject\TecSettings::register_type();
+		WPObject\VenueCoordinates::register_type();
 		WPObject\VenueLinkedData::register_type();
 
 		// Object Fields.
