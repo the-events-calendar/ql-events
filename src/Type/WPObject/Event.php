@@ -10,7 +10,6 @@
 
 namespace WPGraphQL\TEC\Type\WPObject;
 
-use WPGraphQL\TEC\Interfaces\Hookable;
 use WPGraphQL\TEC\Type\Enum\CurrencyPositionEnum;
 
 /**
@@ -93,6 +92,10 @@ class Event {
 				'isSticky'         => [
 					'type'        => 'Boolean',
 					'description' => __( 'Whether the event is sticky in Month view.', 'wp-graphql-tec' ),
+				],
+				'linkedData'       => [
+					'type'        => EventLinkedData::$type,
+					'description' => __( 'The JsonLD data for the event.', 'wp-graphql-tec' ),
 				],
 				'origin'           => [
 					'type'        => 'String',

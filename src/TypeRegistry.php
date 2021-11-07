@@ -26,6 +26,9 @@ class TypeRegistry {
 		Enum\CurrencyPositionEnum::register_type();
 		// Types.
 		WPObject\VenueCoordinates::register_type();
+		WPObject\EventLinkedData::register_type();
+		WPObject\OrganizerLinkedData::register_type();
+		WPObject\VenueLinkedData::register_type();
 
 		// Object Fields.
 		WPObject\Venue::register_fields();

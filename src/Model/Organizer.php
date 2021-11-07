@@ -31,18 +31,21 @@ class Organizer extends Post {
 			parent::init();
 
 			$fields = [
-				'email'   => function() : ?string {
+				'email'      => function() : ?string {
 					return tribe_get_organizer_email( $this->data->ID ) ?: null;
 				},
-				// Email is registed in the Object Type, since it requires an arg to resolve.
-
-				'id'      => function() : ?string {
+				'id'         => function() : ?string {
 					return ! empty( $this->data->ID ) ? Relay::toGlobalId( 'tribe_organizer', (string) $this->data->ID ) : null;
 				},
-				'phone'   => function() : ?string {
+				'linkedData' => function() {
+					// TEC delivers this as an array with the eventId as the key.
+					$value = tribe( 'tec.json-ld.organizer' )->get_data( $this->data->ID )[ $this->data->ID ];
+					return $value ?: null;
+				},
+				'phone'      => function() : ?string {
 					return tribe_get_organizer_phone( $this->data->ID ) ?: null;
 				},
-				'website' => function() : ?string {
+				'website'    => function() : ?string {
 					return tribe_get_organizer_website_url( $this->data->ID ) ?: null;
 				},
 			];

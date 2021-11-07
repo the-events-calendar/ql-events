@@ -10,8 +10,7 @@ For the above reasons, it was easier to start from scratch and borrow old code t
 ## Features
 
 - [x] Full query support for Events, Venues, Organizers, and Event Categories, using TEC's ORM. This includes all TEC supported where args on connections.
-- [x] All fields for Events, Venues, Organizers, and Event Categories.
-- [ ] JsonLD data for objects.
+- [x] All fields for Events, Venues, Organizers, and Event Categories, including JSON-LD data.
 - [ ] TEC Settings
 - [ ] Create, Update, and delete mutations
 - [ ] Extensions: Events Calendar Pro, Event Tickets, Event Tickets Plus, Events, Community Events, Community Tickets, Virtual Events.

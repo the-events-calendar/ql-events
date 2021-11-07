@@ -49,6 +49,14 @@ class Venue {
 					'type'        => 'String',
 					'description' => __( 'The venue country.', 'wp-graphql-tec' ),
 				],
+				'linkedData'    => [
+					'type'        => VenueLinkedData::$type,
+					'description' => __( 'The JsonLD data for the organizer.', 'wp-graphql-tec' ),
+				],
+				'mapLink'       => [
+					'type'        => 'String',
+					'description' => __( 'The external link to the venue map directions.', 'wp-graphql-tec' ),
+				],
 				'phone'         => [
 					'type'        => 'String',
 					'description' => __( 'The venue phone number.', 'wp-graphql-tec' ),
@@ -56,10 +64,6 @@ class Venue {
 				'province'      => [
 					'type'        => 'String',
 					'description' => __( 'The venue province.', 'wp-graphql-tec' ),
-				],
-				'mapLink'       => [
-					'type'        => 'String',
-					'description' => __( 'The external link to the venue map directions.', 'wp-graphql-tec' ),
 				],
 				'showMap'       => [
 					'type'        => 'Boolean',
@@ -69,13 +73,13 @@ class Venue {
 					'type'        => 'Boolean',
 					'description' => __( 'Whether to display a link to the Map.', 'wp-graphql-tec' ),
 				],
-				'stateProvince' => [
-					'type'        => 'String',
-					'description' => __( 'The venue state or province.', 'wp-graphql-tec' ),
-				],
 				'state'         => [
 					'type'        => 'String',
 					'description' => __( 'The venue state.', 'wp-graphql-tec' ),
+				],
+				'stateProvince' => [
+					'type'        => 'String',
+					'description' => __( 'The venue state or province.', 'wp-graphql-tec' ),
 				],
 				'website'       => [
 					'type'        => 'String',

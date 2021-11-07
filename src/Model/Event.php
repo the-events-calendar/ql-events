@@ -67,12 +67,12 @@ class Event extends Post {
 
 					return $value ?: null;
 				},
-				'currencySymbol'   => function() : ?string {
-					$value = tribe_get_event_meta( $this->data->ID, '_EventCurrencySymbol', true );
-					return $value ?: null;
-				},
 				'currencyPosition' => function() : ?string {
 					$value = tribe_get_event_meta( $this->data->ID, '_EventCurrencyPosition', true );
+					return $value ?: null;
+				},
+				'currencySymbol'   => function() : ?string {
+					$value = tribe_get_event_meta( $this->data->ID, '_EventCurrencySymbol', true );
 					return $value ?: null;
 				},
 				'duration'         => function() : ?int {
@@ -101,11 +101,16 @@ class Event extends Post {
 				'isFeatured'       => function() : ?bool {
 					return tribe( 'tec.featured_events' )->is_featured( $this->data->ID );
 				},
+				'isMultiday'       => function() : bool {
+					return tribe_event_is_multiday( $this->data->ID );
+				},
 				'isSticky'         => function() : bool {
 					return -1 === $this->data->menu_order;
 				},
-				'isMultiday'       => function() : bool {
-					return tribe_event_is_multiday( $this->data->ID );
+				'linkedData'       => function() {
+					// TEC delivers this as an array with the eventId as the key.
+					$value = tribe( 'tec.json-ld.event' )->get_data( $this->data->ID )[ $this->data->ID ];
+					return $value ?: null;
 				},
 				'organizerIds'     => function() : ?array {
 					$organizer_ids = tribe_get_organizer_ids( $this->data->ID ) ?: null;

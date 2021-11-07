@@ -47,6 +47,11 @@ class Venue extends Post {
 				'id'            => function() : ?string {
 					return ! empty( $this->data->ID ) ? Relay::toGlobalId( 'tribe_venue', (string) $this->data->ID ) : null;
 				},
+				'linkedData'    => function() {
+					// TEC delivers this as an array with the eventId as the key.
+					$value = tribe( 'tec.json-ld.venue' )->get_data( $this->data->ID )[ $this->data->ID ];
+					return $value ?: null;
+				},
 				'mapLink'       => function() : ?string {
 					return tribe_get_map_link( (string) $this->data->ID ) ?: null;
 				},

@@ -33,7 +33,7 @@ class Organizer {
 		register_graphql_fields(
 			self::$type,
 			[
-				'email'   => [
+				'email'      => [
 					'type'        => 'String',
 					'args'        => [
 						'antispambot' => [
@@ -47,11 +47,15 @@ class Organizer {
 						return tribe_get_organizer_email( $source->ID, $antispambot ) ?: null;
 					},
 				],
-				'phone'   => [
+				'linkedData' => [
+					'type'        => OrganizerLinkedData::$type,
+					'description' => __( 'The JsonLD data for the organizer.', 'wp-graphql-tec' ),
+				],
+				'phone'      => [
 					'type'        => 'String',
 					'description' => __( 'The organizer phone number.', 'wp-graphql-tec' ),
 				],
-				'website' => [
+				'website'    => [
 					'type'        => 'String',
 					'description' => __( 'The organizer website.', 'wp-graphql-tec' ),
 				],
