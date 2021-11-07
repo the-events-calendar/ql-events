@@ -9,13 +9,13 @@ class Organizer extends \WP_UnitTest_Factory_For_Post {
 	function create_object( $args ) {
 		$args['post_type'] = Main::ORGANIZER_POST_TYPE;
 
-		$title = 'Organizer' . uniqid();
+		$title    = 'Organizer' . uniqid();
 		$lc_title = strtolower( $title );
 
 		$defaults = [
 			'meta_input' => [
 				'_OrganizerPhone'   => $lc_title . ' phone',
-				'_OrganizerWebsite' => 'http://' . str_slug( $lc_title ) . '.com',
+				'_OrganizerWebsite' => 'http://' . \Illuminate\Support\Str::slug( $lc_title ) . '.com',
 				'_OrganizerEmail'   => $lc_title . ' .email',
 			],
 		];

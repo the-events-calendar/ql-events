@@ -3,10 +3,10 @@
  * A utility class to allow building event meta information for testing purposes
  * with a readable syntax.
  *
- * @package WPPGraphQL\TEC\Test\Factories
+ * @package WPGraphQL\TEC\Test\Factories
  */
 
-namespace WPPGraphQL\TEC\Test\Factories;
+namespace WPGraphQL\TEC\Test\Factories;
 
 /**
  * Class Fluent_Event
@@ -38,7 +38,6 @@ class Fluent_Event {
 
 	/**
 	 * The factory this builder should use to create.
-	 *
 	 *
 	 * @var mixed
 	 */
@@ -95,20 +94,26 @@ class Fluent_Event {
 		$end->add( new \DateInterval( "PT{$this->duration}S" ) );
 		$utc = new \DateTimeZone( 'UTC' );
 
-		$meta_input = array_merge( $overrides['meta_input'] ?? [], [
-			'_EventStartDAte'    => $start->format( 'Y-m-d H:i:s' ),
-			'_EventEndDate'      => $end->format( 'Y-m-d H:i:s' ),
-			'_EventStartDateUTC' => $start->setTimezone( $utc )->format( 'Y-m-d H:i:s' ),
-			'_EventEndDateUTC'   => $end->setTimezone( $utc )->format( 'Y-m-d H:i:s' ),
-			'_EventDuration'     => $this->duration,
-			'_EventTimezone'     => $this->timezone,
-		] );
+		$meta_input = array_merge(
+			$overrides['meta_input'] ?? [],
+			[
+				'_EventStartDAte'    => $start->format( 'Y-m-d H:i:s' ),
+				'_EventEndDate'      => $end->format( 'Y-m-d H:i:s' ),
+				'_EventStartDateUTC' => $start->setTimezone( $utc )->format( 'Y-m-d H:i:s' ),
+				'_EventEndDateUTC'   => $end->setTimezone( $utc )->format( 'Y-m-d H:i:s' ),
+				'_EventDuration'     => $this->duration,
+				'_EventTimezone'     => $this->timezone,
+			]
+		);
 
 		unset( $overrides['meta_input'] );
 
-		$overrides = array_merge( $overrides, [
-			'meta_input' => $meta_input,
-		] );
+		$overrides = array_merge(
+			$overrides,
+			[
+				'meta_input' => $meta_input,
+			]
+		);
 
 		return $this->factory->create( $overrides );
 	}

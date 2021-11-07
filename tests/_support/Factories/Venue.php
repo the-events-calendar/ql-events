@@ -42,7 +42,7 @@ class Venue extends \WP_UnitTest_Factory_For_Post {
 	function create_object( $args ) {
 		$args['post_type'] = Main::VENUE_POST_TYPE;
 
-		$title = 'Venue' . uniqid();
+		$title    = 'Venue' . uniqid();
 		$lc_title = strtolower( $title );
 
 		$defaults = [
@@ -56,7 +56,7 @@ class Venue extends \WP_UnitTest_Factory_For_Post {
 				'_VenueState'         => $lc_title . ' state',
 				'_VenueZip'           => $lc_title . ' zip',
 				'_VenuePhone'         => $lc_title . ' phone',
-				'_VenueURL'           => 'http://' . str_slug( $lc_title ) . '.com',
+				'_VenueURL'           => 'http://' . \Illuminate\Support\Str::slug( $lc_title ) . '.com',
 				'_VenueStateProvince' => $lc_title . ' state_province',
 			],
 		];
