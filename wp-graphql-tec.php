@@ -58,8 +58,9 @@ function tec_graphql_dependencies_not_ready() : array {
 	if ( ! class_exists( '\WPGraphQL' ) ) {
 		$deps[] = 'WPGraphQL';
 	}
-	if ( ! class_exists( 'Tribe__Events__Main' ) ) {
-		$deps[] = 'The Events Calendar';
+
+	if( ! class_exists( 'Tribe__Events__Main') && ! class_exists( 'Tribe__Tickets__Main') ){
+		$deps[] = 'The Events Calendar or Event Tickets';
 	}
 
 	return $deps;

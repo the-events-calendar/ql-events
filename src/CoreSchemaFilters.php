@@ -8,12 +8,8 @@
 
 namespace WPGraphQL\TEC;
 
-use Tribe__Events__Main as Main;
 use WPGraphQL\AppContext;
-use WPGraphQL\TEC\Data\Factory;
 use WPGraphQL\TEC\Data\Loader\EventLoader;
-use WPGraphQL\TEC\Data\Loader\OrganizerLoader;
-use WPGraphQL\TEC\Data\Loader\VenueLoader;
 use WPGraphQL\TEC\Interfaces\Hookable;
 
 /**
@@ -50,18 +46,18 @@ class CoreSchemaFilters implements Hookable {
 	 */
 	public static function register_post_types( array $args, string $post_type ): array {
 		switch ( $post_type ) {
-			case Main::POSTTYPE:
+			case 'tribe_events':
 				$args['show_in_graphql']     = true;
 				$args['graphql_single_name'] = 'Event';
 				$args['graphql_plural_name'] = 'Events';
 				break;
-			case Main::ORGANIZER_POST_TYPE:
+			case 'tribe_organizer':
 				$args['show_in_graphql']     = true;
 				$args['graphql_single_name'] = 'Organizer';
 				$args['graphql_plural_name'] = 'Organizers';
 
 				break;
-			case Main::VENUE_POST_TYPE:
+			case 'tribe_venue':
 				$args['show_in_graphql']     = true;
 				$args['graphql_single_name'] = 'Venue';
 				$args['graphql_plural_name'] = 'Venues';
@@ -77,7 +73,7 @@ class CoreSchemaFilters implements Hookable {
 	 * @param string $taxonomy - taxonomy slug.
 	 */
 	public static function register_taxonomies( array $args, string $taxonomy ) : array {
-		if ( Main::TAXONOMY === $taxonomy ) {
+		if ( 'tribe_events_cat' === $taxonomy ) {
 			$args['show_in_graphql']     = true;
 			$args['graphql_single_name'] = 'EventCategory';
 			$args['graphql_plural_name'] = 'EventCategories';

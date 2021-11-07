@@ -176,11 +176,13 @@ setup_plugin() {
 	# Activate WPGraphQL
 	wp plugin activate wp-graphql
 
-	# Install TEC
+	# Install TEC Plugins
 	wp plugin install the-events-calendar
+	wp plugin install event-tickets
 
 	# Activate TEC
 	wp plugin activate the-events-calendar
+	wp plugin activate event-tickets
 
 	# activate the plugin
 	wp plugin activate wp-graphql-tec
