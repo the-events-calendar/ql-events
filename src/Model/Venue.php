@@ -38,11 +38,11 @@ class Venue extends Post {
 				'coordinates'   => function() : ?array {
 					return tribe_get_coordinates( $this->data->ID ) ?: null;
 				},
-				'country'       => function() : ?string {
-					return tribe_get_country( $this->data->ID ) ?: null;
-				},
 				'city'          => function() : ?string {
 					return tribe_get_city( $this->data->ID ) ?: null;
+				},
+				'country'       => function() : ?string {
+					return tribe_get_country( $this->data->ID ) ?: null;
 				},
 				'id'            => function() : ?string {
 					return ! empty( $this->data->ID ) ? Relay::toGlobalId( 'tribe_venue', (string) $this->data->ID ) : null;

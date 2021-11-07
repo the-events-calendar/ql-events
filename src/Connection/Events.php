@@ -65,16 +65,4 @@ class Events {
 			]
 		);
 	}
-
-	/**
-	 * Gets the connection args for the Root Query Connection.
-	 *
-	 * @return array
-	 */
-	public static function get_connection_args() : array {
-		return array_merge(
-			PostObjects::get_connection_args(),
-			[]
-		);
-	}
 }

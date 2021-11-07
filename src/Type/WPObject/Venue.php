@@ -41,10 +41,15 @@ class Venue {
 					'type'        => 'String',
 					'description' => __( 'The venue city.', 'wp-graphql-tec' ),
 				],
+				// @todo Enable for TEC Pro.
+				// phpcs:disable
+				/* 
 				'coordinates'   => [
 					'type'        => VenueCoordinates::$type,
 					'description' => __( 'The venue coordinates.', 'wp-graphql-tec' ),
 				],
+				*/
+				// phpcs:enable
 				'country'       => [
 					'type'        => 'String',
 					'description' => __( 'The venue country.', 'wp-graphql-tec' ),

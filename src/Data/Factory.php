@@ -15,7 +15,6 @@ use GraphQL\Error\UserError;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQLRelay\Relay;
 use WP_Post;
-use WP_Term;
 use WPGraphQL\AppContext;
 use WPGraphQL\Model\Model as GraphQLModel;
 use WPGraphQL\TEC\Data\Connection\EventConnectionResolver;

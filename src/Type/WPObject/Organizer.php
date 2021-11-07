@@ -38,7 +38,7 @@ class Organizer {
 					'args'        => [
 						'antispambot' => [
 							'type'        => 'Boolean',
-							'description' => __( 'Whether the email should pass through the `antispambot` function or not.', 'wp-graphql-tec' ),
+							'description' => __( 'Whether the email should pass through the `antispambot` function or not. Defaults to `true`.', 'wp-graphql-tec' ),
 						],
 					],
 					'description' => __( 'The organizer email address.', 'wp-graphql-tec' ),
