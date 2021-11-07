@@ -13,6 +13,7 @@ namespace WPGraphQL\TEC\Data\Loader;
 use GraphQL\Error\UserError;
 use WPGraphQL\Data\Loader\AbstractDataLoader;
 use WPGraphQL\TEC\Model\Event;
+use WP_Query;
 
 /**
  * Class - EventLoader
@@ -69,12 +70,23 @@ class EventLoader extends AbstractDataLoader {
 			return $keys;
 		}
 
+		$args = [
+			'post_types'          => [ 'tribe_events', 'revision' ],
+			'post_status'         => 'any',
+			'posts_per_page'      => count( $keys ),
+			'post__in'            => $keys,
+			'orderby'             => 'post__in',
+			'no_found_rows'       => true,
+			'split_the_query'     => false,
+			'ignore_sticky_posts' => true,
+		];
+
 		/**
 		 * Ensure that WP_Query doesn't first ask for IDs since we already have them.
 		 */
 		add_filter(
 			'split_the_query',
-			function ( $split, \WP_Query $query ) {
+			function ( $split, WP_Query $query ) {
 				if ( false === $query->get( 'split_the_query' ) ) {
 					return false;
 				}
@@ -93,15 +105,7 @@ class EventLoader extends AbstractDataLoader {
 		 * to the count of the keys provided. The query must also return results
 		 * in the same order the keys were provided in.
 		 */
-		tribe_events()
-			->where( 'post_status', 'any' )
-			->where( 'posts_per_page', count( $keys ) )
-			->where( 'post__in', $keys )
-			->where( 'orderby', 'post__in' )
-			->where( 'no_found_rows', true )
-			->where( 'split_the_query', false )
-			->where( 'ignore_sticky_posts', 'true' )
-			->all();
+		new WP_Query( $args );
 
 		$loaded_posts = [];
 		foreach ( $keys as $key ) {
@@ -120,7 +124,7 @@ class EventLoader extends AbstractDataLoader {
 				/* translators: invalid post-type error message */
 				throw new UserError( sprintf( __( '%s is not a valid Event post type', 'wp-graphql-tec' ), $post_type ) );
 			}
-			$loaded_posts[ $key ] = tribe_get_event( $key );
+			$loaded_posts[ $key ] = get_post( (int) $key );
 		}
 
 		return $loaded_posts;

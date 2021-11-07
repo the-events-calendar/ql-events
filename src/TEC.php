@@ -148,7 +148,7 @@ if ( ! class_exists( 'WPGraphQL_TEC' ) ) :
 
 			// Initialize QL Events type registry.
 			$registry = new TypeRegistry();
-			add_action( get_graphql_register_action(), [ $registry, 'init' ], 10, 1 );
+			add_action( 'graphql_register_initial_types', [ $registry, 'init' ], 5, 1 );
 		}
 	}
 

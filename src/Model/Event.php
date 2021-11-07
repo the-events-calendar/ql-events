@@ -76,7 +76,7 @@ class Event extends Post {
 					return $value ?: null;
 				},
 				'duration'         => function() : ?int {
-					return isset( $this->data->duration) ? ( $this->data->duration ?: null ) : null;
+					return isset( $this->data->duration ) ? ( $this->data->duration ?: null ) : null;
 				},
 				'endDate'          => function() : ?string {
 					return tribe_get_end_date( $this->data->ID, true, DateUtils::DBDATETIMEFORMAT ) ?? null;
@@ -108,7 +108,8 @@ class Event extends Post {
 					return tribe_event_is_multiday( $this->data->ID );
 				},
 				'organizerIds'     => function() : ?array {
-					return tribe_get_organizer_ids( $this->data->ID ) ?: null;
+					$organizer_ids = tribe_get_organizer_ids( $this->data->ID ) ?: null;
+					return $organizer_ids;
 				},
 				'origin'           => function() : ?string {
 					$value = tribe_get_event_meta( $this->data->ID, '_EventOrigin', true );

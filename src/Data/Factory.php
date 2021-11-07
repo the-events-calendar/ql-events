@@ -15,18 +15,15 @@ use GraphQL\Error\UserError;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQLRelay\Relay;
 use WP_Post;
+use WP_Term;
 use WPGraphQL\AppContext;
-use WPGraphQL\Model\Model;
-use WPGraphQL\Registry\TypeRegistry;
+use WPGraphQL\Model\Model as GraphQLModel;
 use WPGraphQL\TEC\Data\Connection\EventConnectionResolver;
 use WPGraphQL\TEC\Data\Connection\OrganizerConnectionResolver;
 use WPGraphQL\TEC\Data\Connection\VenueConnectionResolver;
-use WPGraphQL\TEC\Model\Event;
-use WPGraphQL\TEC\Model\Organizer;
-use WPGraphQL\TEC\Model\Venue;
+use WPGraphQL\TEC\Model;
 use WPGraphQL\TEC\Utils\Utils;
-use WPGraphQL\Type\WPObjectType;
-
+use WPGraphQL\TEC\Type\WPObject;
 
 /**
  * Class - Factory
@@ -44,11 +41,12 @@ class Factory {
 		if ( empty( $id ) ) {
 			return null;
 		}
-		$event_id = absint( $id );
+
+		$context->get_loader( 'tribe_events' )->buffer( [ $id ] );
 
 		return new Deferred(
-			function () use ( $event_id, $context ) {
-				return $context->get_loader( 'tribe_events' )->load( $event_id );
+			function () use ( $id, $context ) {
+				return $context->get_loader( 'tribe_events' )->load( $id );
 			}
 		);
 	}
@@ -64,11 +62,12 @@ class Factory {
 		if ( empty( $id ) ) {
 			return null;
 		}
-		$organizer_id = absint( $id );
+
+		$context->get_loader( 'post' )->buffer( [ $id ] );
 
 		return new Deferred(
-			function () use ( $organizer_id, $context ) {
-				return $context->get_loader( 'tribe_organizer' )->load( $organizer_id );
+			function () use ( $id, $context ) {
+				return $context->get_loader( 'post' )->load( $id );
 			}
 		);
 	}
@@ -83,11 +82,12 @@ class Factory {
 		if ( empty( $id ) ) {
 			return null;
 		}
-		$venue_id = absint( $id );
+
+		$context->get_loader( 'post' )->buffer( [ $id ] );
 
 		return new Deferred(
-			function () use ( $venue_id, $context ) {
-				return $context->get_loader( 'tribe_venue' )->load( $venue_id );
+			function () use ( $id, $context ) {
+				return $context->get_loader( 'post' )->load( $id );
 			}
 		);
 	}
@@ -102,7 +102,6 @@ class Factory {
 	 * @return Deferred
 	 */
 	public static function resolve_events_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
-		error_log('resolving');
 		return ( new EventConnectionResolver( $source, $args, $context, $info ) )->get_connection();
 	}
 
@@ -143,14 +142,14 @@ class Factory {
 	 */
 	public static function resolve_node_type( $type, $node ) {
 		switch ( true ) {
-			case is_a( $node, Event::class ):
-				$type = Event::class;
+			case is_a( $node, Model\Event::class ):
+				$type = Model\Event::class;
 				break;
-			case is_a( $node, Organizer::class ):
-				$type = Organizer::class;
+			case is_a( $node, Model\Organizer::class ):
+				$type = Model\Organizer::class;
 				break;
-			case is_a( $node, Venue::class ):
-				$type = Venue::class;
+			case is_a( $node, Model\Venue::class ):
+				$type = Model\Venue::class;
 				break;
 		}
 
@@ -162,19 +161,19 @@ class Factory {
 	 *
 	 * @param null  $model  Possible model instance to be loader.
 	 * @param mixed $entry  Data source.
-	 * @return Model|null
+	 * @return GraphQLModel|null
 	 */
 	public static function set_models_for_dataloaders( $model, $entry ) {
 		if ( is_a( $entry, WP_Post::class ) ) {
 			switch ( $entry->post_type ) {
 				case 'tribe_events':
-					$model = new Event( $entry );
+					$model = new Model\Event( $entry );
 					break;
 				case 'tribe_organizer':
-					$model = new Organizer( $entry );
+					$model = new Model\Organizer( $entry );
 					break;
 				case 'tribe_venue':
-					$model = new Venue( $entry );
+					$model = new Model\Venue( $entry );
 					break;
 			}
 		}
@@ -189,7 +188,7 @@ class Factory {
 	 */
 	public static function register_post_resolvers( array $config ) : array {
 		$post_type = Utils::graphql_type_to_post_type( $config['name'] );
-		if ( is_null( $post_type ) ) {
+		if ( is_null( $post_type ) || 'tribe_events' !== $post_type ) {
 			return $config;
 		}
 
@@ -206,23 +205,28 @@ class Factory {
 	 * @param array $config .
 	 */
 	public static function register_connection_resolvers( array $config ) : array {
-		if ( ! isset( $config['connection_config']['toType'] ) || ! in_array( $config['connection_config']['toType'], array_keys( Utils::get_registered_post_types() ), true ) ) {
+		// Return early if not RootQuery or EventsCategory.
+		if ( ! in_array( $config['fromType'], [ 'RootQuery', 'EventCategory' ], true ) ) {
 			return $config;
 		}
 
-		$type_name = lcfirst( $config['connection_config']['fromFieldName'] );
-
-		$config['connection_config']['resolve'] = function( $source, array $args, AppContext $context, $info ) use ( $type_name ) : array {
-			$const = call_user_func( [ __CLASS__, 'resolve_events_connection' ], $source, $args, $context, $info );
-			return $const;
-		};
-
+		switch ( $config['toType'] ) {
+			case WPObject\Event::$type:
+				$config = EventHelper::get_connection_config( $config );
+				break;
+			case WPObject\Organizer::$type:
+				$config = OrganizerHelper::get_connection_config( $config );
+				break;
+			case WPObject\Venue::$type:
+				$config = VenueHelper::get_connection_config( $config );
+				break;
+		}
 
 		return $config;
 	}
 
 	/**
-	 * Replaces the resolver function
+	 * Replaces the post resolver function
 	 *
 	 * @param string     $post_type .
 	 * @param mixed      $source .
@@ -233,8 +237,8 @@ class Factory {
 	 * @throws UserError If no ID.
 	 */
 	public static function resolve( string $post_type, $source, array $args, AppContext $context ) {
-			$idType  = $args['idType'] ?? 'global_id';
-			$post_id = null;
+		$idType  = $args['idType'] ?? 'global_id';
+		$post_id = null;
 
 		switch ( $idType ) {
 			case 'slug':

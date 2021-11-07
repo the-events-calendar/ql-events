@@ -34,7 +34,6 @@ class Events {
 	 * Registers the various connections from other Types to Events.
 	 */
 	public static function register_connections() : void {
-		// From organizers.
 		register_graphql_connection(
 			[
 				'fromType'      => Organizer::$type,
@@ -43,7 +42,7 @@ class Events {
 				'resolve'       => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
 					$resolver = new EventConnectionResolver( $source, $args, $context, $info );
 
-					$resolver->set_query_arg( 'organizer', $source->database_id );
+					$resolver->set_query_arg( 'organizer', $source->ID );
 
 					return $resolver->get_connection();
 				},
@@ -59,7 +58,7 @@ class Events {
 				'resolve'       => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
 					$resolver = new EventConnectionResolver( $source, $args, $context, $info );
 
-					$resolver->set_query_arg( 'venue', $source->database_id );
+					$resolver->set_query_arg( 'venue', $source->ID );
 
 					return $resolver->get_connection();
 				},

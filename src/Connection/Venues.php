@@ -13,6 +13,7 @@ namespace WPGraphQL\TEC\Connection;
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Connection\PostObjects;
+use WPGraphQL\Data\Connection\PostObjectConnectionResolver;
 use WPGraphQL\TEC\Data\Connection\VenueConnectionResolver;
 use WPGraphQL\TEC\Type\WPObject\Event;
 use WPGraphQL\TEC\Type\WPObject\Venue;
@@ -26,7 +27,7 @@ class Venues extends PostObjects {
 	 *
 	 * @var string
 	 */
-	public static string $from_field_name = 'venues';
+	public static string $from_field_name = 'venue';
 
 	/**
 	 * Registers the various connections from other Types to Venues.
@@ -38,10 +39,11 @@ class Venues extends PostObjects {
 				'fromType'      => Event::$type,
 				'toType'        => Venue::$type,
 				'fromFieldName' => self::$from_field_name,
+				'oneToOne'      => true,
 				'resolve'       => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
-					$resolver = new VenueConnectionResolver( $source, $args, $context, $info );
+					$resolver = new PostObjectConnectionResolver( $source, $args, $context, $info );
 
-					$resolver->set_query_arg( 'post__in', $source->venueId );
+					$resolver->set_query_arg( 'post__in', [ $source->venueId ] );
 
 					return $resolver->one_to_one()->get_connection();
 				},

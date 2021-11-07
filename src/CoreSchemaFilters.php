@@ -38,12 +38,8 @@ class CoreSchemaFilters implements Hookable {
 		// Add node resolvers.
 		add_filter( 'graphql_resolve_node_type', [ 'WPGraphQL\TEC\Data\Factory', 'resolve_node_type' ], 10, 4 );
 
-		add_filter(
-			'graphql_wp_object_type_config',
-			[ __CLASS__, 'set_existing_resolvers' ],
-			99,
-			1
-		);
+		add_filter( 'graphql_wp_object_type_config', [ 'WPGraphQL\TEC\Data\Factory', 'register_post_resolvers' ], );
+		add_filter( 'graphql_wp_connection_type_config', [ 'WPGraphQL\TEC\Data\Factory', 'register_connection_resolvers' ], );
 	}
 
 	/**
@@ -58,55 +54,18 @@ class CoreSchemaFilters implements Hookable {
 				$args['show_in_graphql']     = true;
 				$args['graphql_single_name'] = 'Event';
 				$args['graphql_plural_name'] = 'Events';
-
 				break;
 			case Main::ORGANIZER_POST_TYPE:
 				$args['show_in_graphql']     = true;
 				$args['graphql_single_name'] = 'Organizer';
 				$args['graphql_plural_name'] = 'Organizers';
+
 				break;
 			case Main::VENUE_POST_TYPE:
 				$args['show_in_graphql']     = true;
 				$args['graphql_single_name'] = 'Venue';
 				$args['graphql_plural_name'] = 'Venues';
 		}
-
-		/* phpcs:ignore
-		if ( TEC::is_ticket_events_loaded() ) {
-		$ticket_types = [
-			'RSVP'   => tribe( 'tickets.rsvp' ),
-			'PayPal' => tribe( 'tickets.commerce.paypal' ),
-		];
-
-		foreach ( $ticket_types as $key => $instance ) {
-			if ( $instance::ATTENDEE_OBJECT === $post_type ) {
-				$args['show_in_graphql']     = true;
-				$args['graphql_single_name'] = "{$key}Attendee";
-				$args['graphql_plural_name'] = "{$key}Attendees";
-			}
-
-			if ( $instance->ticket_object === $post_type ) {
-				$args['show_in_graphql']     = true;
-				$args['graphql_single_name'] = "{$key}Ticket";
-				$args['graphql_plural_name'] = "{$key}Tickets";
-			}
-
-			if ( $instance::ORDER_OBJECT === $post_type
-				&& $instance::ORDER_OBJECT !== $instance::ATTENDEE_OBJECT ) {
-				$args['show_in_graphql']     = true;
-				$args['graphql_single_name'] = "{$key}Order";
-				$args['graphql_plural_name'] = "{$key}Orders";
-			}
-		}
-		}
-		if ( TEC::is_ticket_events_plus_loaded() ) {
-		if ( 'tribe_wooticket' === $post_type ) {
-			$args['show_in_graphql']     = true;
-			$args['graphql_single_name'] = 'WooAttendee';
-			$args['graphql_plural_name'] = 'WooAttendees';
-		}
-		}
-		*/
 
 		return $args;
 	}
@@ -134,27 +93,9 @@ class CoreSchemaFilters implements Hookable {
 	 * @param AppContext $context - AppContext instance.
 	 */
 	public static function register_data_loaders( array $loaders, AppContext $context ) : array {
-		$event_loader               = new EventLoader( $context );
-		$loaders['tribe_events']    = &$event_loader;
-		$venue_loader               = new VenueLoader( $context );
-		$loaders['tribe_venue']     = &$venue_loader;
-		$organizer_loader           = new OrganizerLoader( $context );
-		$loaders['tribe_organizer'] = &$organizer_loader;
+		$event_loader            = new EventLoader( $context );
+		$loaders['tribe_events'] = &$event_loader;
 
 		return $loaders;
 	}
-
-	/**
-	 * Filters the existing configurations to register new resolvers.
-	 *
-	 * @param array $config
-	 * @return array
-	 */
-	public static function set_existing_resolvers( array $config ) : array {
-		$config = Factory::register_post_resolvers( $config);
-		$config = Factory::register_connection_resolvers( $config );
-
-		return $config;
-	}
-
 }

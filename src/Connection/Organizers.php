@@ -12,8 +12,7 @@ namespace WPGraphQL\TEC\Connection;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
-use WPGraphQL\Connection\PostObjects;
-use WPGraphQL\TEC\Data\Connection\OrganizerConnectionResolver;
+use WPGraphQL\Data\Connection\PostObjectConnectionResolver;
 use WPGraphQL\TEC\Type\WPObject\Event;
 use WPGraphQL\TEC\Type\WPObject\Organizer;
 
@@ -39,8 +38,10 @@ class Organizers {
 				'toType'        => Organizer::$type,
 				'fromFieldName' => self::$from_field_name,
 				'resolve'       => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
-					$resolver = new OrganizerConnectionResolver( $source, $args, $context, $info );
-
+					if ( empty( $source->organizerIds ) ) {
+						return null;
+					}
+					$resolver = new PostObjectConnectionResolver( $source, $args, $context, $info );
 					$resolver->set_query_arg( 'post__in', $source->organizerIds );
 
 					return $resolver->get_connection();
