@@ -26,7 +26,10 @@ class TypeRegistry {
 		Enum\CurrencyPositionEnum::register_type();
 		Enum\EnabledViewsEnum::register_type();
 		Enum\EventsTemplateEnum::register_type();
+		Enum\PaypalCurrencyCodeOptionsEnum::register_type();
+		Enum\StockHandlingOptionsEnum::register_type();
 		Enum\TimezoneModeEnum::register_type();
+		Enum\TicketFormLocationOptionsEnum::register_type();
 		// Types.
 		WPObject\EventLinkedData::register_type();
 		WPObject\OrganizerLinkedData::register_type();

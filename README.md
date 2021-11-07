@@ -25,11 +25,20 @@ public function __construct( array $config, TypeRegistry $type_registry ) {
 	$this->validate_config( $config );
 ```
 
-## Features
+## Progress
 
+### The Events Calendar
 - [x] Full query support for Events, Venues, Organizers, and Event Categories, using TEC's ORM. This includes all TEC supported where args on connections.
 - [x] All fields for Events, Venues, Organizers, and Event Categories, including JSON-LD data.
 - [x] TEC Settings
 - [ ] Create, Update, and delete mutations
-- [ ] Extensions: Events Calendar Pro, Event Tickets, Event Tickets Plus, Events, Community Events, Community Tickets, Virtual Events.
-- [*] Unit tests (only works with the above PR)
+
+### Event Tickets
+- [x] TEC Settings
+- [ ] Attendee type ( fields, model, resolver, connections)
+- [ ] Ticket type ( fields, model, resolver, connections)
+- [ ] Order type ( fields, model, resolver, connections)
+- [ ] Create, Update, Delete, and RSVP/Purchase mutations
+
+### Future
+- [ ] Extensions: Events Calendar Pro, Event Tickets Plus, Community Events, Community Tickets, Virtual Events.
