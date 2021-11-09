@@ -49,20 +49,6 @@ if ( ! class_exists( 'WPGraphQL_TEC' ) ) :
 		}
 
 		/**
-		 * Returns The Events Calendar and core extensions post-types registered to the schema.
-		 */
-		public static function get_post_types() : array {
-			return apply_filters(
-				'graphql_tec_post_types',
-				[
-					'tribe_events',
-					'tribe_venue',
-					'tribe_organizer',
-				]
-			);
-		}
-
-		/**
 		 * Returns The Events Calendar and core extensions taxonomies registered to the schema.
 		 */
 		public static function get_taxonomies() : array {
@@ -92,28 +78,6 @@ if ( ! class_exists( 'WPGraphQL_TEC' ) ) :
 		 * Returns true if Event Tickets Plus is activated.
 		 */
 		public static function is_etp_loaded() : bool {
-			if ( ! function_exists( 'tribe_check_plugin' ) ) {
-				return false;
-			}
-
-			$classes_exist  = class_exists( 'Tribe__Tickets__Main' ) && class_exists( 'Tribe__Tickets_Plus__Main' );
-			$plugins_check  = tribe_check_plugin( 'Tribe__Tickets_Plus__Main' );
-			$plugin_can_run = $classes_exist && $plugins_check;
-
-			/**
-			 * Filter whether the plugin can run.
-			 *
-			 * @since 4.10
-			 *
-			 * @param boolean $plugin_can_run Whether the plugin can run.
-			 */
-			return apply_filters( 'tribe_event_tickets_plus_can_run', $plugin_can_run );
-		}
-
-		/**
-		 * Returns if Ticket Events Plus is installed and activate.
-		 */
-		public static function is_ticket_events_plus_loaded() : bool {
 			$activated = function_exists( 'tribe_check_plugin' );
 			if ( $activated ) {
 				$tickets_plus_can_run = self::is_et_loaded()
@@ -125,7 +89,6 @@ if ( ! class_exists( 'WPGraphQL_TEC' ) ) :
 
 			return false;
 		}
-
 
 		/**
 		 * Throw error on object clone.

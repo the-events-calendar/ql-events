@@ -12,13 +12,20 @@ namespace WPGraphQL\TEC\Type\WPObject;
  * Class - Organizer
  */
 class Organizer {
-
 	/**
 	 * Name of the type.
 	 *
 	 * @var string Type name.
 	 */
 	public static $type = 'Organizer';
+
+	/**
+	 * The type used by WordPress.
+	 *
+	 * @var string
+	 */
+	public static $wp_type = 'tribe_organizer';
+
 	/**
 	 * {@inheritDoc}
 	 */

@@ -7,6 +7,7 @@
 
 namespace WPGraphQL\TEC\Utils;
 
+use WPGraphQL\TEC\TEC;
 use WPGraphQL\TEC\Type\WPObject;
 /**
  * Class - Utils
@@ -21,7 +22,7 @@ class Utils {
 	public static function post_type_to_graphql_type( string $type ) : ?string {
 		$registered_post_types = self::get_registered_post_types();
 
-		return (string) array_search( $type, $registered_post_types, true ) ?: null;
+		return $registered_post_types[ $type ] ?? null;
 	}
 
 	/**
@@ -33,21 +34,48 @@ class Utils {
 		$registered_post_types = self::get_registered_post_types();
 		$type                  = ucfirst( $type );
 
-		return $registered_post_types[ $type ] ?? null;
+		return (string) array_search( $type, $registered_post_types, true ) ?: null;
 	}
 
 	/**
-	 * Returns an array key-value pair of registed TEC Object Types and their corresponding postType.
+	 * Returns an array key-value pair of registered post type and their corresponding GraphQL object type.
 	 *
-	 * Example: `[ 'Event' => 'tribe_events' ]
+	 * Example: `[ 'tribe_events' => 'Event' ]
 	 *
 	 * @return array
 	 */
 	public static function get_registered_post_types() : array {
+		$post_types = array_merge(
+			TEC::is_tec_loaded() ? self::get_tec_types() : [],
+			TEC::is_et_loaded() ? self::get_et_types() : [],
+		);
+
+		return apply_filters( 'graphql_tec_post_types', $post_types );
+	}
+
+	/**
+	 * Returns an array key-value pair of registered The Events Calendar post types and their corresponding GraphQL object type.
+	 *
+	 * Example: `[ 'tribe_events' => 'Event' ]
+	 */
+	public static function get_tec_types() : array {
 		return [
-			WPObject\Event::$type     => 'tribe_events',
-			WPObject\Organizer::$type => 'tribe_organizer',
-			WPObject\Venue::$type     => 'tribe_venue',
+			WPObject\Event::$wp_type     => WPObject\Event::$type,
+			WPObject\Organizer::$wp_type => WPObject\Organizer::$type,
+			WPObject\Venue::$wp_type     => WPObject\Venue::$type,
+		];
+	}
+
+	/**
+	 * Returns an array key-value pair of registered Event Ticket post types and their corresponding GraphQL object type.
+	 *
+	 * Example: `[ 'tribe_events' => 'Event' ]
+	 */
+	public static function get_et_types() : array {
+		return [
+			'tec_tc_ticket'      => 'TcTicket',
+			'tribe_rsvp_tickets' => 'RsvpTicket',
+			'tribe_tpp_tickets'  => 'PayPalTicket',
 		];
 	}
 
@@ -59,7 +87,7 @@ class Utils {
 	public static function is_tec_post_type( string $post_type ) : ?bool {
 		$registered_post_types = self::get_registered_post_types();
 
-		return in_array( $post_type, $registered_post_types, true );
+		return in_array( $post_type, array_keys( $registered_post_types ), true );
 	}
 
 	/**

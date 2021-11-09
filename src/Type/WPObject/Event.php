@@ -24,6 +24,13 @@ class Event {
 	public static $type = 'Event';
 
 	/**
+	 * The type used by WordPress.
+	 *
+	 * @var string
+	 */
+	public static $wp_type = 'tribe_events';
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public static function register_fields() : void {

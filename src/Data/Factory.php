@@ -21,6 +21,8 @@ use WPGraphQL\TEC\Data\Connection\EventConnectionResolver;
 use WPGraphQL\TEC\Data\Connection\OrganizerConnectionResolver;
 use WPGraphQL\TEC\Data\Connection\VenueConnectionResolver;
 use WPGraphQL\TEC\Model;
+use WPGraphQL\TEC\Type\WPInterface\PurchasableTicket;
+use WPGraphQL\TEC\Type\WPInterface\Ticket;
 use WPGraphQL\TEC\Utils\Utils;
 use WPGraphQL\TEC\Type\WPObject;
 
@@ -46,6 +48,27 @@ class Factory {
 		return new Deferred(
 			function () use ( $id, $context ) {
 				return $context->get_loader( 'tribe_events' )->load( $id );
+			}
+		);
+	}
+
+	/**
+	 * Returns a ticket object.
+	 *
+	 * @param int        $id      Group ID.
+	 * @param AppContext $context AppContext object.
+	 * @return Deferred|null
+	 */
+	public static function resolve_ticket_object( $id, AppContext $context ) :?Deferred {
+		if ( empty( $id ) ) {
+			return null;
+		}
+
+		$context->get_loader( 'ticket' )->buffer( [ $id ] );
+
+		return new Deferred(
+			function () use ( $id, $context ) {
+				return $context->get_loader( 'ticket' )->load( $id );
 			}
 		);
 	}
@@ -187,13 +210,30 @@ class Factory {
 	 */
 	public static function register_post_resolvers( array $config ) : array {
 		$post_type = Utils::graphql_type_to_post_type( $config['name'] );
-		if ( is_null( $post_type ) || 'tribe_events' !== $post_type ) {
+
+		if ( is_null( $post_type ) ) {
 			return $config;
 		}
 
-		$config['resolve'] = function( $source, array $args, AppContext $context ) use ( $post_type ) {
-			return self::resolve( $post_type, $source, $args, $context );
-		};
+		switch ( $post_type ) {
+			case 'tribe_events':
+				$config['resolve'] = function( $source, array $args, AppContext $context ) use ( $post_type ) {
+					return self::resolve( $post_type, $source, $args, $context );
+				};
+				break;
+			case 'tribe_rsvp_tickets':
+				$config['interfaces'] = array_merge(
+					$config['interfaces'],
+					[
+						Ticket::$type,
+					]
+				);
+				break;
+			case 'tec_tc_ticket':
+			case 'tribe_tpp_tickets':
+				$config['interfaces'] = array_merge( $config['interfaces'], [ PurchasableTicket::$type ] );
+				break;
+		}
 
 		return $config;
 	}

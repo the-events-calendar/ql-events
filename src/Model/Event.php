@@ -92,9 +92,7 @@ class Event extends Post {
 					$value = tribe_get_event_meta( $this->data->ID, '_EventHideFromUpcoming', true );
 					return ! is_null( $value ) ? $value : null;
 				},
-				'id'               => function() : ?string {
-					return ! empty( $this->data->ID ) ? Relay::toGlobalId( 'tribe_events', (string) $this->data->ID ) : null;
-				},
+				'id'               => fn() : ?string => ! empty( $this->data->ID ) ? Relay::toGlobalId( $this->data->post_type, (string) $this->data->ID ) : null,
 				'isAllDay'         => function() : bool {
 					return tribe_event_is_all_day( $this->data->ID );
 				},

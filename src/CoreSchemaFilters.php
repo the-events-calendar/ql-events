@@ -10,6 +10,7 @@ namespace WPGraphQL\TEC;
 
 use WPGraphQL\AppContext;
 use WPGraphQL\TEC\Data\Loader\EventLoader;
+use WPGraphQL\TEC\Data\Loader\TicketLoader;
 use WPGraphQL\TEC\Interfaces\Hookable;
 
 /**
@@ -61,6 +62,22 @@ class CoreSchemaFilters implements Hookable {
 				$args['show_in_graphql']     = true;
 				$args['graphql_single_name'] = 'Venue';
 				$args['graphql_plural_name'] = 'Venues';
+				break;
+			case 'tec_tc_ticket':
+				$args['show_in_graphql']     = true;
+				$args['graphql_single_name'] = 'TcTicket';
+				$args['graphql_plural_name'] = 'TcTickets';
+				break;
+			case 'tribe_rsvp_tickets':
+				$args['show_in_graphql']     = true;
+				$args['graphql_single_name'] = 'RsvpTicket';
+				$args['graphql_plural_name'] = 'RsvpTickets';
+				break;
+			case 'tribe_tpp_tickets':
+				$args['show_in_graphql']     = true;
+				$args['graphql_single_name'] = 'PayPalTicket';
+				$args['graphql_plural_name'] = 'PayPalTickets';
+				break;
 		}
 
 		return $args;
@@ -91,6 +108,8 @@ class CoreSchemaFilters implements Hookable {
 	public static function register_data_loaders( array $loaders, AppContext $context ) : array {
 		$event_loader            = new EventLoader( $context );
 		$loaders['tribe_events'] = &$event_loader;
+		$ticket_loader           = new TicketLoader( $context );
+		$loaders['ticket']       = &$ticket_loader;
 
 		return $loaders;
 	}
