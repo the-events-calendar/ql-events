@@ -8,7 +8,8 @@
 namespace WPGraphQL\TEC\Utils;
 
 use WPGraphQL\TEC\TEC;
-use WPGraphQL\TEC\Type\WPObject;
+use WPGraphQL\TEC\Events\Type\WPObject as EventsObject;
+use WPGraphQL\TEC\Tickets\Type\WPObject as TicketsObject;
 /**
  * Class - Utils
  */
@@ -54,15 +55,29 @@ class Utils {
 	}
 
 	/**
+	 * Returns an array or registered taxonomy types and their corresponding GraphQL Object type
+	 *
+	 * @return array
+	 */
+	public static function get_registered_taxonomies() : array {
+		$taxonomy_types = array_merge(
+			TEC::is_tec_loaded() ? [ 'tribe_events_cat' => 'EventCategory' ] : [],
+			[]
+		);
+
+		return apply_filters( 'grapqhl_tec_taxonomy_types', $taxonomy_types );
+	}
+
+	/**
 	 * Returns an array key-value pair of registered The Events Calendar post types and their corresponding GraphQL object type.
 	 *
 	 * Example: `[ 'tribe_events' => 'Event' ]
 	 */
 	public static function get_tec_types() : array {
 		return [
-			WPObject\Event::$wp_type     => WPObject\Event::$type,
-			WPObject\Organizer::$wp_type => WPObject\Organizer::$type,
-			WPObject\Venue::$wp_type     => WPObject\Venue::$type,
+			EventsObject\Event::$wp_type     => EventsObject\Event::$type,
+			EventsObject\Organizer::$wp_type => EventsObject\Organizer::$type,
+			EventsObject\Venue::$wp_type     => EventsObject\Venue::$type,
 		];
 	}
 
@@ -73,9 +88,9 @@ class Utils {
 	 */
 	public static function get_et_types() : array {
 		return [
-			'tec_tc_ticket'      => 'TcTicket',
-			'tribe_rsvp_tickets' => 'RsvpTicket',
-			'tribe_tpp_tickets'  => 'PayPalTicket',
+			TicketsObject\RsvpTicket::$wp_type => TicketsObject\RsvpTicket::$type,
+			'tec_tc_ticket'                    => 'TcTicket',
+			'tribe_tpp_tickets'                => 'PayPalTicket',
 		];
 	}
 

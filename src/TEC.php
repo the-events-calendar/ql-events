@@ -8,7 +8,10 @@
 
 namespace WPGraphQL\TEC;
 
-if ( ! class_exists( 'WPGraphQL_TEC' ) ) :
+use WPGraphQL\TEC\Events\CoreSchemaFilters as EventsSchemaFilters;
+use WPGraphQL\TEC\Tickets\CoreSchemaFilters as TicketsSchemaFilters;
+
+if ( ! class_exists( 'WPGraphQL\TEC\TEC' ) ) :
 
 	/**
 	 * Class TEC
@@ -46,18 +49,6 @@ if ( ! class_exists( 'WPGraphQL_TEC' ) ) :
 			 * Return the TEC Instance
 			 */
 			return self::$instance;
-		}
-
-		/**
-		 * Returns The Events Calendar and core extensions taxonomies registered to the schema.
-		 */
-		public static function get_taxonomies() : array {
-			return apply_filters(
-				'register_ql_events_taxonomies',
-				[
-					'tribe_events_cat',
-				]
-			);
 		}
 
 		/**
@@ -116,13 +107,13 @@ if ( ! class_exists( 'WPGraphQL_TEC' ) ) :
 			_doing_it_wrong( __FUNCTION__, esc_html__( 'De-serializing instances of the QL_Events class is not allowed', 'wp-graphql-tec' ), '0.0.1' );
 		}
 
-				/**
-				 * Include required files.
-				 * Uses composer's autoload
-				 *
-				 * @access private
-				 * @since  0.0.1
-				 */
+		/**
+		 * Include required files.
+		 * Uses composer's autoload
+		 *
+		 * @access private
+		 * @since  0.0.1
+		 */
 		private function includes() : void {
 			/**
 			 * Autoload Required Classes
@@ -133,15 +124,20 @@ if ( ! class_exists( 'WPGraphQL_TEC' ) ) :
 		}
 
 		/**
-		 * Sets up QL Events schema.
+		 * Sets up TEC schema.
 		 */
 		private function setup() : void {
 			// WPGraphQL core filters.
-			CoreSchemaFilters::register_hooks();
+			if ( self::is_tec_loaded() ) {
+				EventsSchemaFilters::register_hooks();
+			}
 
-			// Initialize QL Events type registry.
-			$registry = new TypeRegistry();
-			add_action( 'graphql_register_initial_types', [ $registry, 'init' ], 5, 1 );
+			if ( self::is_et_loaded() ) {
+				TicketsSchemaFilters::register_hooks();
+			}
+
+			// Initialize TEC type registry.
+			add_action( get_graphql_register_action(), [ TypeRegistry::class, 'init' ] );
 		}
 	}
 
