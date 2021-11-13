@@ -36,7 +36,6 @@ class TicketLoader extends AbstractDataLoader {
 			return null;
 		}
 
-		error_log( print_r( $entry, true ) );
 		/**
 		 * If there's a Post Author connected to the post, we need to resolve the
 		 * user as it gets set in the globals via `setup_post_data()` and doing it this way

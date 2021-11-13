@@ -25,6 +25,7 @@ class TypeRegistry implements TypeRegistryInterface {
 	 */
 	public static function init( GraphQLRegistry $type_registry ) : void {
 		add_action( 'graphql_tec_register_et_enums', [ __CLASS__, 'register_enums' ] );
+		add_action( 'graphql_tec_register_et_inputs', [ __CLASS__, 'register_inputs' ] );
 		add_action( 'graphql_tec_register_et_interfaces', [ __CLASS__, 'register_interfaces' ] );
 		add_action( 'graphql_tec_register_et_objects', [ __CLASS__, 'register_objects' ] );
 		add_action( 'graphql_tec_register_et_fields', [ __CLASS__, 'register_fields' ] );
@@ -48,6 +49,18 @@ class TypeRegistry implements TypeRegistryInterface {
 		 * @param GraphQLRegistry $type_registry Instance of the WPGraphQL TypeRegistry.
 		 */
 		do_action( 'graphql_tec_after_register_et_enums', $type_registry );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public static function register_inputs( GraphQLRegistry $type_registry ) : void {
+		/**
+		 * Fires after TEC enums have been registered.
+		 *
+		 * @param GraphQLRegistry $type_registry Instance of the WPGraphQL TypeRegistry.
+		 */
+		do_action( 'graphql_tec_after_register_tec_inputs', $type_registry );
 	}
 
 	/**

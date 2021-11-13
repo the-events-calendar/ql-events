@@ -37,6 +37,7 @@ class TypeRegistry implements TypeRegistryInterface {
 		do_action( 'graphql_tec_before_register_types', $type_registry );
 
 		self::register_enums( $type_registry );
+		self::register_inputs( $type_registry );
 		self::register_interfaces( $type_registry );
 		self::register_objects( $type_registry );
 		self::register_fields( $type_registry );
@@ -92,6 +93,50 @@ class TypeRegistry implements TypeRegistryInterface {
 		 * @param GraphQLRegistry $type_registry Instance of the WPGraphQL TypeRegistry.
 		 */
 		do_action( 'graphql_tec_after_register_enums', $type_registry );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public static function register_inputs( GraphQLRegistry $type_registry ) : void {
+		/**
+		 * Fires before all Input types have been registered.
+		 *
+		 * @param GraphQLRegistry $type_registry Instance of the WPGraphQL TypeRegistry.
+		 */
+		do_action( 'graphql_tec_before_register_inputs', $type_registry );
+
+		/**
+		 * Hook to register common input types.
+		 *
+		 * @param GraphQLRegistry $type_registry Instance of the WPGraphQL TypeRegistry.
+		 */
+		do_action( 'graphql_tec_register_common_inputs', $type_registry );
+
+		if ( TEC::is_tec_loaded() ) {
+			/**
+			 * Hook to register TEC input types.
+			 *
+			 * @param GraphQLRegistry $type_registry Instance of the WPGraphQL TypeRegistry.
+			 */
+			do_action( 'graphql_tec_register_tec_inputs', $type_registry );
+		}
+
+		if ( TEC::is_et_loaded() ) {
+			/**
+			 * Hook to register ET input types.
+			 *
+			 * @param GraphQLRegistry $type_registry Instance of the WPGraphQL TypeRegistry.
+			 */
+			do_action( 'graphql_tec_register_et_inputs', $type_registry );
+		}
+
+		/**
+		 * Fires after all input types have been registered.
+		 *
+		 * @param GraphQLRegistry $type_registry Instance of the WPGraphQL TypeRegistry.
+		 */
+		do_action( 'graphql_tec_after_register_inputs', $type_registry );
 	}
 
 	/**

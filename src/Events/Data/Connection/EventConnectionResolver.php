@@ -195,14 +195,15 @@ class EventConnectionResolver extends AbstractConnectionResolver {
 		}
 
 		/**
-		 * Merge the input_fields with the default query_args
+		 * Build the query from the where args.
 		 */
-		if ( ! empty( $input_fields ) ) {
+		if ( ! empty( $this->args['where'] ) ) {
 			$query_args = array_merge( $query_args, $input_fields );
-			$query_args = tribe_events()
-				->by_args( $query_args )
-				->build_query()
-				->query_vars;
+			$query      = tribe_events()->by_args( $query_args );
+
+			// Some meta queries dont work with `by_args()`.
+			$query      = $this->filtered( $query, $this->args['where'] );
+			$query_args = $query->build_query()->query_vars;
 		}
 
 		/**
@@ -371,28 +372,14 @@ class EventConnectionResolver extends AbstractConnectionResolver {
 				'status'             => 'post_status',
 				'stati'              => 'post_status',
 				'dateQuery'          => 'date_query',
-				'cost'               => 'cost',
-				'costBetween'        => 'cost_between',
-				'costGreaterThan'    => 'cost_greater_than',
-				'costLessThan'       => 'cost_less_than',
-				'dateOverlaps'       => 'date_overlaps',
-				'endsAfter'          => 'ends_bfter',
-				'endsBefore'         => 'ends_before',
-				'endsBetween'        => 'ends_between',
-				'endsOnOrBefore'     => 'ends_on_or_before',
 				'isAllDay'           => 'all_day',
 				'isFeatured'         => 'featured',
 				'isHidden'           => 'hidden',
 				'isMultiday'         => 'multiday',
-				'onDate'             => 'on_date',
+				'isSticky'           => 'sticky',
 				'organizer'          => 'organizer',
 				'organizerId'        => 'organizer',
 				'organizerIn'        => 'organizer',
-				'runsBetween'        => 'runs_between',
-				'startsAfter'        => 'starts_after',
-				'startsBefore'       => 'starts_before',
-				'startsBetween'      => 'starts_between',
-				'startsOnOrAfter'    => 'starts_on_or_after',
 				'timezone'           => 'timezone',
 				'venue'              => 'venue',
 				'venueId'            => 'venue',
@@ -403,6 +390,30 @@ class EventConnectionResolver extends AbstractConnectionResolver {
 		if ( ! empty( $query_args['post_status'] ) ) {
 			$allowed_stati             = $this->sanitize_post_stati( $query_args['post_status'] );
 			$query_args['post_status'] = ! empty( $allowed_stati ) ? $allowed_stati : [ 'publish' ];
+		}
+
+		// Remove TEC filters we need to apply manually.
+		foreach ( $query_args as $key => $value ) {
+			if ( in_array(
+				$key,
+				[
+					'cost',
+					'endsAfter',
+					'endsBefore',
+					'endsBetween',
+					'endsOnOrBefore',
+					'eventDateOverlaps',
+					'runsBetween',
+					'startsAfter',
+					'startsBefore',
+					'startsBetween',
+					'startsOnDate',
+					'startsOnOrAfter',
+				],
+				true
+			) ) {
+				unset( $query_args[ $key ] );
+			}
 		}
 
 		/**
@@ -544,5 +555,78 @@ class EventConnectionResolver extends AbstractConnectionResolver {
 		 */
 	public function is_valid_offset( $offset ) {
 		return ! empty( get_post( absint( $offset ) ) );
+	}
+
+	/**
+	 * Returns the tribe_events() query with meta filters processed.
+	 *
+	 * This is necessary as these queries require multiple arguments not handled by tribe_events()->by_args().
+	 *
+	 * @param mixed $query .
+	 * @param array $where_args .
+	 *
+	 * @return mixed.
+	 */
+	public function filtered( $query, array $where_args ) {
+		$query_args = Utils::map_input(
+			$where_args,
+			[
+				'cost'              => 'cost',
+				'endsAfter'         => 'ends_after',
+				'endsBefore'        => 'ends_before',
+				'endsBetween'       => 'ends_between',
+				'endsOnOrBefore'    => 'ends_on_or_before',
+				'eventDateOverlaps' => 'date_overlaps',
+				'startsOnDate'      => 'on_date',
+				'runsBetween'       => 'runs_between',
+				'startsAfter'       => 'starts_after',
+				'startsBefore'      => 'starts_before',
+				'startsBetween'     => 'starts_between',
+				'startsOnOrAfter'   => 'starts_on_or_after',
+			]
+		);
+
+		foreach ( $query_args as $key => $value ) {
+			if ( empty( $value ) ) {
+				continue;
+			}
+
+			switch ( $key ) {
+				case 'cost':
+					$query->by(
+						$key,
+						$value['value'],
+						$value['operator'] ?? '=',
+						$value['symbol'] ?? null,
+					);
+					break;
+				case 'ends_after':
+				case 'ends_before':
+				case 'ends_on_or_before':
+				case 'starts_after':
+				case 'starts_before':
+				case 'on_date':
+				case 'starts_on_or_after':
+					$query->by(
+						$key,
+						$value['dateTime'],
+						$value['timezone'] ?? null,
+					);
+					break;
+				case 'ends_between':
+				case 'date_overlaps':
+				case 'runs_between':
+				case 'starts_between':
+					$query->by(
+						$key,
+						$value['startDateTime'],
+						$value['endDateTime'],
+						$value['timezone'] ?? null,
+					);
+					break;
+			}
+		}
+
+		return $query;
 	}
 }

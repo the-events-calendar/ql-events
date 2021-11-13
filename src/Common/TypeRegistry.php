@@ -11,6 +11,7 @@ namespace WPGraphQL\TEC\Common;
 use WPGraphQL\Registry\TypeRegistry as GraphQLRegistry;
 use WPGraphQL\TEC\Common\Connection;
 use WPGraphQL\TEC\Common\Type\Enum;
+use WPGraphQL\TEC\Common\Type\Input;
 use WPGraphQL\TEC\Common\Type\WPInterface;
 use WPGraphQL\TEC\Common\Type\WPObject;
 use WPGraphQL\TEC\Interfaces\TypeRegistryInterface;
@@ -25,6 +26,7 @@ class TypeRegistry implements TypeRegistryInterface {
 	 */
 	public static function init( GraphQLRegistry $type_registry ) : void {
 		add_action( 'graphql_tec_register_common_enums', [ __CLASS__, 'register_enums' ] );
+		add_action( 'graphql_tec_register_common_inputs', [ __CLASS__, 'register_inputs' ] );
 		add_action( 'graphql_tec_register_common_interfaces', [ __CLASS__, 'register_interfaces' ] );
 		add_action( 'graphql_tec_register_common_objects', [ __CLASS__, 'register_objects' ] );
 		add_action( 'graphql_tec_register_common_fields', [ __CLASS__, 'register_fields' ] );
@@ -43,6 +45,18 @@ class TypeRegistry implements TypeRegistryInterface {
 		 * @param GraphQLRegistry $type_registry Instance of the WPGraphQL TypeRegistry.
 		 */
 		do_action( 'graphql_tec_after_register_common_enums', $type_registry );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public static function register_inputs( GraphQLRegistry $type_registry ) : void {
+		/**
+		 * Fires after TEC enums have been registered.
+		 *
+		 * @param GraphQLRegistry $type_registry Instance of the WPGraphQL TypeRegistry.
+		 */
+		do_action( 'graphql_tec_after_register_tec_inputs', $type_registry );
 	}
 
 	/**

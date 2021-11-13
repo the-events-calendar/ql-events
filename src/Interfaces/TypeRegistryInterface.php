@@ -30,6 +30,13 @@ interface TypeRegistryInterface {
 	public static function register_enums( TypeRegistry $type_registry ) : void;
 
 	/**
+	 * Fires hooks responsible for registering Input types.
+	 *
+	 * @param TypeRegistry $type_registry .
+	 */
+	public static function register_inputs( TypeRegistry $type_registry ) : void;
+
+	/**
 	 * Fires hooks responsible for registering Interface types.
 	 *
 	 * @param TypeRegistry $type_registry .

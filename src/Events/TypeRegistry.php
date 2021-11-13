@@ -11,6 +11,7 @@ namespace WPGraphQL\TEC\Events;
 use WPGraphQL\Registry\TypeRegistry as GraphQLRegistry;
 use WPGraphQL\TEC\Events\Connection;
 use WPGraphQL\TEC\Events\Type\Enum;
+use WPGraphQL\TEC\Events\Type\Input;
 use WPGraphQL\TEC\Events\Type\WPInterface;
 use WPGraphQL\TEC\Events\Type\WPObject;
 use WPGraphQL\TEC\Interfaces\TypeRegistryInterface;
@@ -24,6 +25,7 @@ class TypeRegistry implements TypeRegistryInterface {
 	 */
 	public static function init( GraphQLRegistry $type_registry ) : void {
 		add_action( 'graphql_tec_register_tec_enums', [ __CLASS__, 'register_enums' ] );
+		add_action( 'graphql_tec_register_tec_inputs', [ __CLASS__, 'register_inputs' ] );
 		add_action( 'graphql_tec_register_tec_interfaces', [ __CLASS__, 'register_interfaces' ] );
 		add_action( 'graphql_tec_register_tec_objects', [ __CLASS__, 'register_objects' ] );
 		add_action( 'graphql_tec_register_tec_fields', [ __CLASS__, 'register_fields' ] );
@@ -34,6 +36,7 @@ class TypeRegistry implements TypeRegistryInterface {
 	 * {@inheritDoc}
 	 */
 	public static function register_enums( GraphQLRegistry $type_registry ) : void {
+		Enum\CostOperatorEnum::register_type();
 		Enum\CurrencyPositionEnum::register_type();
 		Enum\EnabledViewsEnum::register_type();
 		Enum\EventsTemplateEnum::register_type();
@@ -44,6 +47,22 @@ class TypeRegistry implements TypeRegistryInterface {
 		 * @param GraphQLRegistry $type_registry Instance of the WPGraphQL TypeRegistry.
 		 */
 		do_action( 'graphql_tec_after_register_tec_enums', $type_registry );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public static function register_inputs( GraphQLRegistry $type_registry ) : void {
+		Input\CostFilterInput::register_type();
+		Input\DateAndTimezoneInput::register_type();
+		Input\DateRangeAndTimezoneInput::register_type();
+
+		/**
+		 * Fires after TEC enums have been registered.
+		 *
+		 * @param GraphQLRegistry $type_registry Instance of the WPGraphQL TypeRegistry.
+		 */
+		do_action( 'graphql_tec_after_register_tec_inputs', $type_registry );
 	}
 
 	/**
