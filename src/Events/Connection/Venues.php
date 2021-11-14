@@ -43,7 +43,7 @@ class Venues extends PostObjects {
 				'resolve'       => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
 					$resolver = new PostObjectConnectionResolver( $source, $args, $context, $info );
 
-					$resolver->set_query_arg( 'post__in', [ $source->venueId ] );
+					$resolver->set_query_arg( 'p', $source->venueId );
 
 					return $resolver->one_to_one()->get_connection();
 				},

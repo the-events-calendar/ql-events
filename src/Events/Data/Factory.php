@@ -64,7 +64,6 @@ class Factory {
 		return ( new EventConnectionResolver( $source, $args, $context, $info ) )->get_connection();
 	}
 
-
 	/**
 	 * Wrapper for the OrganizerConnectionResolver class.
 	 *

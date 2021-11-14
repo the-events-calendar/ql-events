@@ -178,6 +178,10 @@ class EventHelper {
 	 * @param array $args The GraphQL query where args.
 	 */
 	public static function map_args( array $args ) : array {
+		if ( empty( $args['where'] ) ) {
+			return $args;
+		}
+
 		foreach ( $args['where'] as $key => &$value ) {
 			if ( empty( $value ) ) {
 				continue;
