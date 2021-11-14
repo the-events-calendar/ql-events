@@ -35,6 +35,16 @@ class RsvpTicket extends Ticket {
 			];
 
 			$this->fields = array_merge( $this->fields, $fields );
+
+			/**
+			 * Filters the model fields.
+			 *
+			 * Useful for adding fields to a model when an extension.
+			 *
+			 * @param array $fields The fields registered to the model.
+			 * @param __CLASS__ $model The current model.
+			 */
+			$this->fields = apply_filters( 'graphql_tec_rsvp_ticket_model_fields', $this->fields, $this );
 		}
 	}
 }

@@ -9,9 +9,12 @@
 namespace WPGraphQL\TEC\Tickets\Type\WPInterface;
 
 use GraphQL\Error\UserError;
+use GraphQL\Type\Definition\ResolveInfo;
 use GraphQLRelay\Relay;
 use WPGraphQL\AppContext;
 use WPGraphQL\Registry\TypeRegistry;
+use WPGraphQL\TEC\Events\Data\Connection\EventConnectionResolver;
+use WPGraphQL\TEC\Events\Type\WPObject\Event;
 use WPGraphQL\TEC\Tickets\Data\Factory;
 use WPGraphQL\TEC\Tickets\Type\Enum\StockModeEnum;
 use WPGraphQL\TEC\Tickets\Type\Enum\TicketIdTypeEnum;
@@ -40,6 +43,19 @@ class Ticket {
 			[
 				'description' => __( 'Ticket object', 'wp-graphql-tec' ),
 				'interfaces'  => [ 'Node', 'ContentNode', 'UniformResourceIdentifiable', 'DatabaseIdentifier', 'NodeWithTitle', 'NodeWithFeaturedImage' ],
+				'connections' => [
+					'event' => [
+						'toType'   => NodeWithTicket::$type,
+						'oneToOne' => true,
+						'resolve'  => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
+							$args['where']['post__in'] = [ $source->eventId ];
+
+							$resolver = new EventConnectionResolver( $source, $args, $context, $info );
+
+							return $resolver->one_to_one()->get_connection();
+						},
+					],
+				],
 				'fields'      => self::get_fields( $type_registry ),
 				'resolveType' => function ( $value ) use ( &$type_registry ) {
 					$possible_types = Utils::get_et_types();

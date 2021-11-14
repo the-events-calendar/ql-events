@@ -27,8 +27,17 @@ class CoreSchemaFilters implements Hookable {
 		// Add data-loaders to AppContext.
 		add_filter( 'graphql_data_loaders', [ __CLASS__, 'register_data_loaders' ], 10, 2 );
 
+		add_filter( 'graphql_dataloader_pre_get_model', [ Factory::class, 'set_models_for_dataloaders' ], 10, 2 );
+
+		// Add node resolvers.
+		add_filter( 'graphql_resolve_node_type', [ Factory::class, 'resolve_node_type' ], 10, 4 );
+
 		// Overwrite default GraphQL configs.
 		add_filter( 'graphql_wp_object_type_config', [ Factory::class, 'set_object_type_config' ] );
+		add_filter( 'graphql_wp_connection_type_config', [ Factory::class, 'set_connection_type_config' ], );
+
+		// Extend models.
+		add_filter( 'graphql_tec_event_model_fields', [ Factory::class, 'add_fields_to_event_model' ], 10, 2 );
 	}
 
 	/**

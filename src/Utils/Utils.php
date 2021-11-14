@@ -95,6 +95,26 @@ class Utils {
 	}
 
 	/**
+	 * Gets the name of the TEC Ticket provider for given type.
+	 *
+	 * @param string $type Either post type (e.g. 'tribe_rsvp_tickets) or model type (e.g. 'RsvpTicket' ).
+	 */
+	public static function get_et_provider_for_type( string $type ) : string {
+		switch ( $type ) {
+			case 'tribe_rsvp_tickets':
+			case 'RsvpTicket':
+				return 'rsvp';
+			case 'tribe_tpp_tickes':
+			case 'PayPalTicket':
+				return 'tribe-commerce';
+			case 'tec_tc_ticket':
+			case 'TcTicket':
+				return 'tickets-connerce';
+		}
+		return 'default';
+	}
+
+	/**
 	 * Helper function to check if the post type is a TEC type.
 	 *
 	 * @param string $post_type the post type name.
@@ -103,6 +123,20 @@ class Utils {
 		$registered_post_types = self::get_registered_post_types();
 
 		return in_array( $post_type, array_keys( $registered_post_types ), true );
+	}
+
+	/**
+	 * Gets an array of post types that can have tickets.
+	 */
+	public static function get_enabled_post_types_for_tickets() : array {
+			// Remove Event post type if its not registered.
+			$types = tribe_get_option( 'ticket-enabled-post-types' ) ?? [];
+
+		if ( ! TEC::is_tec_loaded() ) {
+			$types = array_diff( $types, [ 'tribe_events' ] );
+		}
+
+		return $types;
 	}
 
 	/**

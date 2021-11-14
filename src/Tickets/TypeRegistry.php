@@ -12,6 +12,7 @@ use WPGraphQL\Registry\TypeRegistry as GraphQLRegistry;
 use WPGraphQL\TEC\Interfaces\TypeRegistryInterface;
 use WPGraphQL\TEC\Tickets\Connection;
 use WPGraphQL\TEC\Tickets\Type\Enum;
+use WPGraphQL\TEC\Tickets\Type\Input;
 use WPGraphQL\TEC\Tickets\Type\WPInterface;
 use WPGraphQL\TEC\Tickets\Type\WPObject;
 
@@ -55,6 +56,8 @@ class TypeRegistry implements TypeRegistryInterface {
 	 * {@inheritDoc}
 	 */
 	public static function register_inputs( GraphQLRegistry $type_registry ) : void {
+		Input\IntRangeInput::register_type();
+
 		/**
 		 * Fires after TEC enums have been registered.
 		 *
@@ -69,6 +72,7 @@ class TypeRegistry implements TypeRegistryInterface {
 	public static function register_interfaces( GraphQLRegistry $type_registry ) : void {
 		WPInterface\Ticket::register_interface( $type_registry );
 		WPInterface\PurchasableTicket::register_interface( $type_registry );
+		WPInterface\NodeWithTicket::register_interface( $type_registry );
 
 		/**
 		 * Fires after ET interfaces have been registered.
@@ -109,6 +113,8 @@ class TypeRegistry implements TypeRegistryInterface {
 	 * {@inheritDoc}
 	 */
 	public static function register_connections( GraphQLRegistry $type_registry ) : void {
+		Connection\Tickets::register_connections();
+
 		/**
 		 * Fires after ET connections have been registered.
 		 *

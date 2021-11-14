@@ -71,6 +71,16 @@ class Ticket extends Post {
 		}
 	}
 
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function setup() {
+		remove_action( 'the_post', [ tribe( \Tribe\Events\Views\V2\Hooks::class ), 'manage_sensitive_info' ] );
+
+		parent::setup();
+	}
+
 	/**
 	 * Initializes the Ticket object.
 	 */
@@ -79,31 +89,56 @@ class Ticket extends Post {
 			// Grab exceprt for future use.
 			parent::init();
 			$fields = [
-				'capacity'        => fn() : ?int => $this->ticket_data->capacity ?: null,
-				'description'     => fn() : ?string => $this->ticket_data->description ?: null,
-				'endDate'         => fn() : ?string => $this->ticket_data->end_date ?: null,
-				'endTime'         => fn() : ?string => $this->ticket_data->end_time ?: null,
-				'eventId'         => fn() : ?int => $this->ticket_data->get_event_id(),
-				'iac'             => fn() : ?string => $this->ticket_data->iac ?: null,
-				'id'              => fn() : ?string => ! empty( $this->data->ID ) ? Relay::toGlobalId( $this->data->post_type, (string) $this->data->ID ) : null,
-				'isManagingStock' => fn() : bool => $this->ticket_data->manage_stock(),
-				'price'           => fn() : ?float => $this->ticket_data->price ?? null,
-				'provider'        => fn() => $this->provider,
-				'providerClass'   => fn() : ?string => $this->ticket_data->provider_class ?? null,
-				'showDescription' => fn() : bool => (bool) $this->ticket_data->show_description,
-				'quantitySold'    => fn() : int => $this->ticket_data->qty_sold(),
-				'startDate'       => fn() : ?string => $this->ticket_data->start_date ?: null,
-				'startTime'       => fn() : ?string => $this->ticket_data->start_time ?: null,
-				'stock'           => function() : ?int {
+				'capacity'                => fn() : ?int => $this->ticket_data->capacity ?: null,
+				'description'             => fn() : ?string => $this->ticket_data->description ?: null,
+				'endDate'                 => fn() : ?string => $this->ticket_data->end_date ?: null,
+				'endTime'                 => fn() : ?string => $this->ticket_data->end_time ?: null,
+				'eventId'                 => fn() : ?int => $this->ticket_data->get_event_id(),
+				'iac'                     => fn() : ?string => $this->ticket_data->iac ?: null,
+				'id'                      => fn() : ?string => ! empty( $this->data->ID ) ? Relay::toGlobalId( $this->data->post_type, (string) $this->data->ID ) : null,
+				'isManagingStock'         => fn() : bool => $this->ticket_data->manage_stock(),
+				'featuredImageId'         => function() : ?string {
+					$image_id = get_post_meta( $this->data->ID, '_tribe_ticket_header', true );
+					if ( empty( $image_id ) ) {
+						return null;
+					}
+					return Relay::toGlobalId( $this->data->post_type, $image_id );
+				},
+				'featuredImageDatabaseId' => function() : ?int {
+					$image_id = get_post_meta( $this->data->ID, '_tribe_ticket_header', true );
+					if ( empty( $image_id ) ) {
+						return null;
+					}
+					return (int) $image_id;
+				},
+				'price'                   => fn() : ?float => $this->ticket_data->price ?? null,
+				'provider'                => fn() => $this->provider,
+				'providerClass'           => fn() : ?string => $this->ticket_data->provider_class ?? null,
+				'showDescription'         => fn() : bool => (bool) $this->ticket_data->show_description,
+				'quantitySold'            => fn() : int => $this->ticket_data->qty_sold(),
+				'startDate'               => fn() : ?string => $this->ticket_data->start_date ?: null,
+				'startTime'               => fn() : ?string => $this->ticket_data->start_time ?: null,
+				'stock'                   => function() : ?int {
 					$value = $this->ticket_data->stock();
 					// Unlimited/unmanaged stock is an empty string.
 					return '' !== $value ? (int) $value : null;
 				},
-				'stockMode'       => fn() : ?string => $this->ticket_data->global_stock_mode() ?: null,
-				'type'            => fn() : string => $this->data->post_type,
+				'stockMessage'            => fn() : string => tribe_tickets_get_ticket_stock_message( $this->ticket_data ),
+				'stockMode'               => fn() : ?string => $this->ticket_data->global_stock_mode() ?: null,
+				'type'                    => fn() : string => $this->data->post_type,
 			];
 
 			$this->fields = array_merge( $this->fields, $fields );
+
+			/**
+			 * Filters the model fields.
+			 *
+			 * Useful for adding fields to a model when an extension.
+			 *
+			 * @param array $fields The fields registered to the model.
+			 * @param __CLASS__ $model The current model.
+			 */
+			$this->fields = apply_filters( 'graphql_tec_ticket_model_fields', $this->fields, $this );
 		}
 	}
 }

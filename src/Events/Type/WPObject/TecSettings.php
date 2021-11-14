@@ -78,7 +78,7 @@ class TecSettings {
 				'disableSearchBar'           => [
 					'type'       => 'Boolean',
 					'descripton' => __( 'Whether to use classic header instead.', 'wp-graphql-tec' ),
-					'resolve'    => fn() => tribe_get_option( 'tribeDisableTribeBar', false ),
+					'resolve'    => fn() => (bool) tribe_get_option( 'tribeDisableTribeBar' ),
 				],
 				'eventsTemplate'             => [
 					'type'       => EventsTemplateEnum::$type,

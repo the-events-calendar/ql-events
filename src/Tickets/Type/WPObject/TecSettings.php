@@ -12,6 +12,7 @@ use WPGraphQL\TEC\TEC;
 use WPGraphQL\TEC\Tickets\Type\Enum\PaypalCurrencyCodeOptionsEnum;
 use WPGraphQL\TEC\Tickets\Type\Enum\StockHandlingOptionsEnum;
 use WPGraphQL\TEC\Tickets\Type\Enum\TicketFormLocationOptionsEnum;
+use WPGraphQL\TEC\Utils\Utils;
 
 /**
  * Class - TecSettings
@@ -123,12 +124,7 @@ class TecSettings {
 						'type'        => [ 'list_of' => 'ContentTypeEnum' ],
 						'description' => __( 'The post types that can have tickets.', 'wp-graphql-tec' ),
 						'resolve'     => function() {
-							$types = tribe_get_option( 'ticket-enabled-post-types' ) ?? [];
-
-							// Remove Event post type if its not registered.
-							if ( ! TEC::is_tec_loaded() ) {
-								$types = array_diff( $types, [ 'tribe_events' ] );
-							}
+							$types = Utils::get_enabled_post_types_for_tickets();
 							return $types ?: null;
 						},
 					],
