@@ -105,11 +105,6 @@ class Event extends Post {
 				'isSticky'         => function() : bool {
 					return -1 === $this->data->menu_order;
 				},
-				'linkedData'       => function() {
-					// TEC delivers this as an array with the eventId as the key.
-					$value = tribe( 'tec.json-ld.event' )->get_data( $this->data->ID )[ $this->data->ID ];
-					return $value ?: null;
-				},
 				'organizerIds'     => function() : ?array {
 					$organizer_ids = tribe_get_organizer_ids( $this->data->ID ) ?: null;
 					return $organizer_ids;

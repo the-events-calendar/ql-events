@@ -7,6 +7,8 @@
 
 namespace WPGraphQL\TEC\Events\Type\WPObject;
 
+use WPGraphQL\TEC\Common\Type\WPObject\EventLinkedData;
+
 /**
  * Class - OrganizerLinkedData
  */
@@ -81,6 +83,18 @@ class OrganizerLinkedData {
 							return ! empty( $source->url ) ? $source->url : null;
 						},
 					],
+				],
+			]
+		);
+
+		register_graphql_fields(
+			EventLinkedData::$type,
+			[
+				'organizer' => [
+					'type'    => self::$type,
+					'resolve' => function( $source ) {
+						return $source->organizer;
+					},
 				],
 			]
 		);

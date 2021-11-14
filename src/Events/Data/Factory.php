@@ -12,9 +12,11 @@ namespace WPGraphQL\TEC\Events\Data;
 
 use GraphQL\Deferred;
 use GraphQL\Type\Definition\ResolveInfo;
+use GraphQLRelay\Node\Node;
 use WP_Post;
 use WPGraphQL\AppContext;
 use WPGraphQL\Model\Model as GraphQLModel;
+use WPGraphQL\TEC\Common\Type\WPInterface\NodeWithJsonLd;
 use WPGraphQL\TEC\Events\Data\Connection\EventConnectionResolver;
 use WPGraphQL\TEC\Events\Data\Connection\OrganizerConnectionResolver;
 use WPGraphQL\TEC\Events\Data\Connection\VenueConnectionResolver;
@@ -152,6 +154,8 @@ class Factory {
 		}
 
 		if ( 'tribe_events' === $post_type ) {
+			$config['interfaces'] = array_merge( $config['interfaces'] ?? [], [ NodeWithJsonLd::$type ] );
+
 			$config['resolve'] = function( $source, array $args, AppContext $context ) use ( $post_type ) {
 				return self::resolve( $post_type, $source, $args, $context );
 			};

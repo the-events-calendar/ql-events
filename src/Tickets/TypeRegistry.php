@@ -86,6 +86,7 @@ class TypeRegistry implements TypeRegistryInterface {
 	 * {@inheritDoc}
 	 */
 	public static function register_objects( GraphQLRegistry $type_registry ) : void {
+		WPObject\OffersLinkedData::register_type();
 		/**
 		 * Fires after ET objects have been registered.
 		 *

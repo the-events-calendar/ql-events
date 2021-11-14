@@ -63,6 +63,7 @@ class TypeRegistry implements TypeRegistryInterface {
 	 * {@inheritDoc}
 	 */
 	public static function register_interfaces( GraphQLRegistry $type_registry ) : void {
+		WPInterface\NodeWithJsonLd::register_interface( $type_registry );
 		/**
 		 * Fires after common interfaces have been registered.
 		 *
@@ -75,6 +76,7 @@ class TypeRegistry implements TypeRegistryInterface {
 	 * {@inheritDoc}
 	 */
 	public static function register_objects( GraphQLRegistry $type_registry ) : void {
+		WPObject\EventLinkedData::register_type();
 		WPObject\TecSettings::register_type();
 
 		/**

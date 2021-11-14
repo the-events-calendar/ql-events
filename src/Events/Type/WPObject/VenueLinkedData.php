@@ -7,6 +7,8 @@
 
 namespace WPGraphQL\TEC\Events\Type\WPObject;
 
+use WPGraphQL\TEC\Common\Type\WPObject\EventLinkedData;
+
 /**
  * Class - VenueLinkedData
  */
@@ -161,6 +163,18 @@ class VenueLinkedData {
 							return ! empty( $source->url ) ? $source->url : null;
 						},
 					],
+				],
+			]
+		);
+
+		register_graphql_fields(
+			EventLinkedData::$type,
+			[
+				'location' => [
+					'type'    => self::$type,
+					'resolve' => function( $source ) {
+						return $source->location;
+					},
 				],
 			]
 		);

@@ -21,6 +21,7 @@ use WPGraphQL\Model\Post;
 use WPGraphQL\TEC\Tickets\Data\Connection\TicketConnectionResolver;
 use WPGraphQL\TEC\Tickets\Model;
 use WPGraphQL\TEC\Tickets\Type\WPInterface;
+use WPGraphQL\TEC\Common\Type\WPInterface as CommonInterface;
 use WPGraphQL\TEC\Tickets\Type\WPObject;
 use WPGraphQL\TEC\Traits\PostTypeResolverMethod;
 use WPGraphQL\TEC\Utils\Utils;
@@ -90,7 +91,7 @@ class Factory {
 				$config['interfaces'] = array_merge( $config['interfaces'], [ WPInterface\PurchasableTicket::$type ] );
 				break;
 			case in_array( $post_type, $post_types_with_tickets, true ):
-				$config['interfaces'] = array_merge( $config['interfaces'], [ WPInterface\NodeWithTicket::$type ] );
+				$config['interfaces'] = array_merge( $config['interfaces'], [ WPInterface\NodeWithTicket::$type, CommonInterface\NodeWithJsonLd::$type ] );
 				break;
 		}
 		return $config;
