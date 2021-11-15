@@ -8,9 +8,11 @@
 
 namespace WPGraphQL\TEC\Tickets\Data;
 
+use GraphQL\Deferred;
 use WPGraphQL\AppContext;
 use GraphQL\Type\Definition\ResolveInfo;
 use WP_Post;
+use WPGraphQL\TEC\Abstracts\DataHelper;
 use WPGraphQL\TEC\Tickets\Type\Enum\TicketTypeEnum;
 use WPGraphQL\TEC\Tickets\Type\Input\IntRangeInput;
 use WPGraphQL\TEC\Utils\Utils;
@@ -18,33 +20,46 @@ use WPGraphQL\TEC\Utils\Utils;
 /**
  * Class - Ticket Helper
  */
-class TicketHelper {
+class TicketHelper extends DataHelper {
 	/**
-	 * Modifies the default connection configuration.
+	 * The helper name. E.g. `events` or `tickets`.
 	 *
-	 * @param array $config .
+	 * @var string
 	 */
-	public static function get_connection_config( array $config ) : array {
-		$config['connectionArgs'] = array_merge(
-			$config['connectionArgs'] ?? [],
-			self::get_connection_args(),
-		);
+	public static string $name = 'tickets';
 
-		$type = $config['toType'];
+	/**
+	 * The GraphQL type. E.g. `Event` or `RsvpTicket`.
+	 *
+	 * @var string
+	 */
+	public static string $type = 'Ticket';
 
-		$config['resolve'] = function( $source, array $args, AppContext $context, ResolveInfo $info ) use ( $type ) {
-			$args = self::map_args( $args );
+	/**
+	 * The WordPress type. E.g. `tribe_events` or `tec_tc_ticket`.
+	 *
+	 * @var string
+	 */
+	public static string $wp_type = 'Ticket';
 
-			return Factory::resolve_tickets_connection( $source, $args, $context, $info, $type );
-		};
+	/**
+	 * The name of the DataLoader to use.
+	 *
+	 * @var string
+	 */
+	public static string $loader_name = 'ticket';
 
-		return $config;
+	/**
+	 * {@inheritDoc}
+	 */
+	public static function resolver() : string {
+		return __NAMESPACE__ . '\\Connection\\TicketConnectionResolver';
 	}
 
 	/**
-	 * Gets an array of connection args to register to the Ticket Query.
+	 * {@inheritDoc}
 	 */
-	public static function get_connection_args() : array {
+	public static function connection_args() : array {
 		return [
 			'attendeesBetween' => [
 				'type'        => IntRangeInput::$type,
@@ -125,14 +140,13 @@ class TicketHelper {
 		];
 	}
 
+
 	/**
-	 * Converts where arg keys to those understood by TEC.
-	 *
-	 * @param array $args The GraphQL query where args.
+	 * {@inheritDoc}
 	 */
-	public static function map_args( array $args ) : array {
-		if ( isset( $args['where']['provider'] ) ) {
-			$provider = $args['where']['provider'];
+	public static function process_where_args( array $args ) : array {
+		if ( isset( $args['provider'] ) ) {
+			$provider = $args['provider'];
 			$provider = is_array( $provider ) ? $provider : [ $provider ];
 			$provider = array_map( [ Utils::class, 'get_et_provider_for_type' ], $provider );
 		}
@@ -140,21 +154,4 @@ class TicketHelper {
 		return $args;
 	}
 
-	/**
-	 * Converts {type}Name inout to {type}Id.
-	 *
-	 * @param array  $where_args .
-	 * @param string $key the current where argument.
-	 */
-	public static function map_name_to_post_id( array &$where_args, string $key ) : void {
-		$type = substr( $key, 0, -4 );
-
-		$post = get_page_by_path( $where_args[ $key ], OBJECT, 'tribe_' . $type );
-
-		if ( $post instanceof WP_Post ) {
-			$where_args[ $type . 'Id' ] = $post->ID;
-		}
-
-		unset( $where_args[ $key ] );
-	}
 }

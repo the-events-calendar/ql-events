@@ -12,6 +12,7 @@ use WPGraphQL\AppContext;
 use GraphQL\Type\Definition\ResolveInfo;
 use WP_Post;
 use WP_Term;
+use WPGraphQL\TEC\Abstracts\DataHelper;
 use WPGraphQL\TEC\Events\Type\Input\CostFilterInput;
 use WPGraphQL\TEC\Events\Type\Input\DateAndTimezoneInput;
 use WPGraphQL\TEC\Events\Type\Input\DateRangeAndTimezoneInput;
@@ -19,32 +20,46 @@ use WPGraphQL\TEC\Events\Type\Input\DateRangeAndTimezoneInput;
 /**
  * Class - Event Helper
  */
-class EventHelper {
+class EventHelper extends DataHelper {
 	/**
-	 * Modifies the default connection configuration.
+	 * The helper name. E.g. `events` or `tickets`.
 	 *
-	 * @param array $config .
+	 * @var string
 	 */
-	public static function get_connection_config( array $config ) : array {
-		$config['connectionArgs'] = array_merge(
-			$config['connectionArgs'],
-			self::get_connection_args(),
-		);
+	public static string $name = 'events';
 
-		$config['resolve'] = function( $source, array $args, AppContext $context, ResolveInfo $info ) {
-			$args = self::map_args( $args );
+	/**
+	 * The GraphQL type. E.g. `Event` or `RsvpTicket`.
+	 *
+	 * @var string
+	 */
+	public static string $type = 'Event';
 
-			return Factory::resolve_events_connection( $source, $args, $context, $info );
-		};
+	/**
+	 * The WordPress type. E.g. `tribe_events` or `tec_tc_ticket`.
+	 *
+	 * @var string
+	 */
+	public static string $wp_type = 'tribe_events';
 
-		return $config;
+	/**
+	 * The name of the DataLoader to use.
+	 *
+	 * @var string
+	 */
+	public static string $loader_name = 'tribe_events';
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public static function resolver() : string {
+		return __NAMESPACE__ . '\\Connection\\EventConnectionResolver';
 	}
 
 	/**
-	 * Gets an array of connection args to register to the Event Query.
+	 * {@inheritDoc}
 	 */
-	public static function get_connection_args() : array {
-		// @todo add date args.
+	public static function connection_args() : array {
 		return [
 			'cost'               => [
 				'type'        => CostFilterInput::$type,
@@ -173,31 +188,21 @@ class EventHelper {
 	}
 
 	/**
-	 * Converts where arg keys to those understood by TEC.
-	 *
-	 * @param array $args The GraphQL query where args.
+	 * {@inheritDoc}
 	 */
-	public static function map_args( array $args ) : array {
-		if ( empty( $args['where'] ) ) {
-			return $args;
-		}
-
-		foreach ( $args['where'] as $key => &$value ) {
-			if ( empty( $value ) ) {
-				continue;
-			}
-
+	public static function process_where_args( array $args ) : array {
+		foreach ( $args as $key => &$value ) {
 			switch ( $key ) {
 				case 'eventCategoryName':
 					$term = get_term_by( 'slug', $value, 'tribe_events_cat' );
 					if ( $term instanceof WP_Term ) {
-						$args['where']['eventCategoryId'] = $term->term_taxonomy_id;
+						$args['eventCategoryId'] = $term->term_taxonomy_id;
 					}
-					unset( $args['where'][ $key ] );
+					unset( $args[ $key ] );
 					break;
 				case 'organizerName':
 				case 'venueName':
-					self::map_name_to_post_id( $args['where'], $key );
+					self::map_name_to_post_id( $args, $key );
 					break;
 			}
 		}

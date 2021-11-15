@@ -38,6 +38,8 @@ class CoreSchemaFilters implements Hookable {
 
 		// Extend models.
 		add_filter( 'graphql_tec_event_model_fields', [ Factory::class, 'add_fields_to_event_model' ], 10, 2 );
+
+		add_filter( 'graphql_tec_events_connection_args', [ Factory::class, 'add_where_args_to_events_connection' ] );
 	}
 
 	/**

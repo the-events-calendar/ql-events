@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+    'WPGraphQL\\TEC\\Abstracts\\DataHelper' => $baseDir . '/src/Abstracts/DataHelper.php',
     'WPGraphQL\\TEC\\Common\\TypeRegistry' => $baseDir . '/src/Common/TypeRegistry.php',
     'WPGraphQL\\TEC\\Common\\Type\\Enum\\TimezoneModeEnum' => $baseDir . '/src/Common/Type/Enum/TimezoneModeEnum.php',
     'WPGraphQL\\TEC\\Common\\Type\\WPInterface\\NodeWithJsonLd' => $baseDir . '/src/Common/Type/WPInterface/NodeWithJsonLd.php',
@@ -14,7 +15,6 @@ return array(
     'WPGraphQL\\TEC\\Common\\Type\\WPObject\\TecSettings' => $baseDir . '/src/Common/Type/WPObject/TecSettings.php',
     'WPGraphQL\\TEC\\Events\\Connection\\Events' => $baseDir . '/src/Events/Connection/Events.php',
     'WPGraphQL\\TEC\\Events\\Connection\\Organizers' => $baseDir . '/src/Events/Connection/Organizers.php',
-    'WPGraphQL\\TEC\\Events\\Connection\\Venues' => $baseDir . '/src/Events/Connection/Venues.php',
     'WPGraphQL\\TEC\\Events\\CoreSchemaFilters' => $baseDir . '/src/Events/CoreSchemaFilters.php',
     'WPGraphQL\\TEC\\Events\\Data\\Connection\\EventConnectionResolver' => $baseDir . '/src/Events/Data/Connection/EventConnectionResolver.php',
     'WPGraphQL\\TEC\\Events\\Data\\Connection\\OrganizerConnectionResolver' => $baseDir . '/src/Events/Data/Connection/OrganizerConnectionResolver.php',
@@ -35,6 +35,8 @@ return array(
     'WPGraphQL\\TEC\\Events\\Type\\Input\\CostFilterInput' => $baseDir . '/src/Events/Type/Input/CostFilterInput.php',
     'WPGraphQL\\TEC\\Events\\Type\\Input\\DateAndTimezoneInput' => $baseDir . '/src/Events/Type/Input/DateAndTimezoneInput.php',
     'WPGraphQL\\TEC\\Events\\Type\\Input\\DateRangeAndTimezoneInput' => $baseDir . '/src/Events/Type/Input/DateRangeAndTimezoneInput.php',
+    'WPGraphQL\\TEC\\Events\\Type\\WPInterface\\NodeWithOrganizers' => $baseDir . '/src/Events/Type/WPInterface/NodeWithOrganizers.php',
+    'WPGraphQL\\TEC\\Events\\Type\\WPInterface\\NodeWithVenue' => $baseDir . '/src/Events/Type/WPInterface/NodeWithVenue.php',
     'WPGraphQL\\TEC\\Events\\Type\\WPObject\\Event' => $baseDir . '/src/Events/Type/WPObject/Event.php',
     'WPGraphQL\\TEC\\Events\\Type\\WPObject\\Organizer' => $baseDir . '/src/Events/Type/WPObject/Organizer.php',
     'WPGraphQL\\TEC\\Events\\Type\\WPObject\\OrganizerLinkedData' => $baseDir . '/src/Events/Type/WPObject/OrganizerLinkedData.php',

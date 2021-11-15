@@ -10,17 +10,13 @@
 
 namespace WPGraphQL\TEC\Events\Data;
 
-use GraphQL\Deferred;
-use GraphQL\Type\Definition\ResolveInfo;
-use GraphQLRelay\Node\Node;
 use WP_Post;
 use WPGraphQL\AppContext;
 use WPGraphQL\Model\Model as GraphQLModel;
 use WPGraphQL\TEC\Common\Type\WPInterface\NodeWithJsonLd;
-use WPGraphQL\TEC\Events\Data\Connection\EventConnectionResolver;
-use WPGraphQL\TEC\Events\Data\Connection\OrganizerConnectionResolver;
-use WPGraphQL\TEC\Events\Data\Connection\VenueConnectionResolver;
 use WPGraphQL\TEC\Events\Model;
+use WPGraphQL\TEC\Events\Type\WPInterface\NodeWithOrganizers;
+use WPGraphQL\TEC\Events\Type\WPInterface\NodeWithVenue;
 use WPGraphQL\TEC\Events\Type\WPObject;
 use WPGraphQL\TEC\Traits\PostTypeResolverMethod;
 use WPGraphQL\TEC\Utils\Utils;
@@ -30,67 +26,6 @@ use WPGraphQL\TEC\Utils\Utils;
  */
 class Factory {
 	use PostTypeResolverMethod;
-
-
-	/**
-	 * Returns an event object.
-	 *
-	 * @param int        $id      Group ID.
-	 * @param AppContext $context AppContext object.
-	 * @return Deferred|null
-	 */
-	public static function resolve_event_object( $id, AppContext $context ) :?Deferred {
-		if ( empty( $id ) ) {
-			return null;
-		}
-
-		$context->get_loader( 'tribe_events' )->buffer( [ $id ] );
-
-		return new Deferred(
-			function () use ( $id, $context ) {
-				return $context->get_loader( 'tribe_events' )->load( $id );
-			}
-		);
-	}
-
-	/**
-	 * Wrapper for the EventConnectionResolver class.
-	 *
-	 * @param mixed       $source  Source.
-	 * @param array       $args    Query args to pass to the connection resolver.
-	 * @param AppContext  $context The context of the query to pass along.
-	 * @param ResolveInfo $info    The ResolveInfo object.
-	 * @return Deferred
-	 */
-	public static function resolve_events_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
-		return ( new EventConnectionResolver( $source, $args, $context, $info ) )->get_connection();
-	}
-
-	/**
-	 * Wrapper for the OrganizerConnectionResolver class.
-	 *
-	 * @param mixed       $source  Source.
-	 * @param array       $args    Query args to pass to the connection resolver.
-	 * @param AppContext  $context The context of the query to pass along.
-	 * @param ResolveInfo $info    The ResolveInfo object.
-	 * @return Deferred
-	 */
-	public static function resolve_organizers_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
-		return ( new OrganizerConnectionResolver( $source, $args, $context, $info ) )->get_connection();
-	}
-
-	/**
-	 * Wrapper for the VenueConnectionResolver class.
-	 *
-	 * @param mixed       $source  Source.
-	 * @param array       $args    Query args to pass to the connection resolver.
-	 * @param AppContext  $context The context of the query to pass along.
-	 * @param ResolveInfo $info    The ResolveInfo object.
-	 * @return Deferred
-	 */
-	public static function resolve_venues_connection( $source, array $args, AppContext $context, ResolveInfo $info ): Deferred {
-		return ( new VenueConnectionResolver( $source, $args, $context, $info ) )->get_connection();
-	}
 
 	/**
 	 * Ensures the correct models are used even if the dataloader is wrong.
@@ -154,7 +89,14 @@ class Factory {
 		}
 
 		if ( 'tribe_events' === $post_type ) {
-			$config['interfaces'] = array_merge( $config['interfaces'] ?? [], [ NodeWithJsonLd::$type ] );
+			$config['interfaces'] = array_merge(
+				$config['interfaces'] ?? [],
+				[
+					NodeWithJsonLd::$type,
+					NodeWithVenue::$type,
+					NodeWithOrganizers::$type,
+				]
+			);
 
 			$config['resolve'] = function( $source, array $args, AppContext $context ) use ( $post_type ) {
 				return self::resolve( $post_type, $source, $args, $context );

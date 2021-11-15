@@ -14,6 +14,7 @@ use WPGraphQL\AppContext;
 use WPGraphQL\Registry\TypeRegistry;
 use Tribe__Tickets__Tickets;
 use WPGraphQL\TEC\Tickets\Data\Factory;
+use WPGraphQL\TEC\Tickets\Data\TicketHelper;
 use WPGraphQL\TEC\Tickets\Type\WPInterface\Ticket;
 
 /**
@@ -49,7 +50,7 @@ class NodeWithTicket {
 
 							$args['where']['post__in'] = $ticket_ids;
 
-							return Factory::resolve_tickets_connection( $source, $args, $context, $info, Ticket::$type );
+							return TicketHelper::resolve_connection( $source, $args, $context, $info, Ticket::$type );
 						},
 					],
 				],

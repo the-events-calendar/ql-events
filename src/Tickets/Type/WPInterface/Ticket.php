@@ -16,6 +16,7 @@ use WPGraphQL\Registry\TypeRegistry;
 use WPGraphQL\TEC\Events\Data\Connection\EventConnectionResolver;
 use WPGraphQL\TEC\Events\Type\WPObject\Event;
 use WPGraphQL\TEC\Tickets\Data\Factory;
+use WPGraphQL\TEC\Tickets\Data\TicketHelper;
 use WPGraphQL\TEC\Tickets\Type\Enum\StockModeEnum;
 use WPGraphQL\TEC\Tickets\Type\Enum\TicketIdTypeEnum;
 use WPGraphQL\TEC\Tickets\Type\Enum\TicketTypeEnum;
@@ -45,7 +46,7 @@ class Ticket {
 				'interfaces'  => [ 'Node', 'ContentNode', 'UniformResourceIdentifiable', 'DatabaseIdentifier', 'NodeWithTitle', 'NodeWithFeaturedImage' ],
 				'connections' => [
 					'event' => [
-						'toType'   => NodeWithTicket::$type,
+						'toType'   => Event::$type,
 						'oneToOne' => true,
 						'resolve'  => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
 							$args['where']['post__in'] = [ $source->eventId ];
@@ -120,7 +121,7 @@ class Ticket {
 						throw new UserError( sprintf( __( 'No ticket exists with the %1$s: %2$s', 'wp-graphql-tec' ), $id_type, $id ) );
 					}
 
-					return Factory::resolve_ticket_object( $ticket_id, $context );
+					return TicketHelper::resolve_object( $ticket_id, $context );
 				},
 
 			]

@@ -13,6 +13,7 @@ use GraphQLRelay\Relay;
 use WPGraphQL\AppContext;
 use WPGraphQL\Registry\TypeRegistry;
 use WPGraphQL\TEC\Tickets\Data\Factory;
+use WPGraphQL\TEC\Tickets\Data\TicketHelper;
 use WPGraphQL\TEC\Tickets\Type\Enum\TicketIdTypeEnum;
 use WPGraphQL\TEC\Utils\Utils;
 
@@ -103,7 +104,7 @@ class PurchasableTicket {
 						throw new UserError( sprintf( __( 'No ticket exists with the %1$s: %2$s', 'wp-graphql-tec' ), $id_type, $id ) );
 					}
 
-					return Factory::resolve_ticket_object( $ticket_id, $context );
+					return TicketHelper::resolve_object( $ticket_id, $context );
 				},
 
 			]

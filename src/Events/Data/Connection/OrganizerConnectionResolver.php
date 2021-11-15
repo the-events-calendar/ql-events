@@ -30,6 +30,7 @@ class OrganizerConnectionResolver extends PostObjectConnectionResolver {
 	 * @param mixed|string|array $post_type The post type to resolve for.
 	 */
 	public function __construct( $source, array $args, AppContext $context, ResolveInfo $info, $post_type = 'tribe_organizer' ) {
+
 		/**
 		 * The $post_type can either be a single value or an array of post_types to
 		 * pass to WP_Query.
@@ -58,7 +59,7 @@ class OrganizerConnectionResolver extends PostObjectConnectionResolver {
 	 * {@inheritDoc}
 	 */
 	public function get_ids() {
-		return $this->query->get_ids() ?: [];
+		return $this->query->get_posts() ?: [];
 	}
 
 	/**
@@ -67,7 +68,7 @@ class OrganizerConnectionResolver extends PostObjectConnectionResolver {
 	 * @throws InvariantViolation when suppress_filters is enabled.
 	 */
 	public function get_query() {
-		$query = tribe_organizers()->by_args( $this->query_args );
+		$query = tribe_organizers()->by_args( $this->query_args )->build_query();
 
 		if ( isset( $query->query_vars['suppress_filters'] ) && true === $query->query_vars['suppress_filters'] ) {
 			throw new InvariantViolation( __( 'WP_Query has been modified by a plugin or theme to suppress_filters, which will cause issues with WPGraphQL Execution. If you need to suppress filters for a specific reason within GraphQL, consider registering a custom field to the WPGraphQL Schema with a custom resolver.', 'wp-graphql-tec' ) );

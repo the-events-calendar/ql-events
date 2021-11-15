@@ -25,6 +25,7 @@ class EventConnectionResolver extends AbstractConnectionResolver {
 	 * @var mixed|string|array
 	 */
 	public $post_type;
+
 	/**
 	 * {@inheritDoc}
 	 *
@@ -102,7 +103,7 @@ class EventConnectionResolver extends AbstractConnectionResolver {
 	 * @return array
 	 */
 	public function get_ids() {
-		return $this->query->get_ids() ?: [];
+		return $this->query->get_posts() ?: [];
 	}
 
 	/**
@@ -112,6 +113,11 @@ class EventConnectionResolver extends AbstractConnectionResolver {
 	 */
 	public function get_query() {
 		$query = tribe_events()->by_args( $this->query_args );
+		if ( ! empty( $this->args['where'] ) ) {
+			$query = $this->filtered( $query, $this->args['where'] );
+		}
+		$query = $query->build_query();
+
 		if ( isset( $query->query_vars['suppress_filters'] ) && true === $query->query_vars['suppress_filters'] ) {
 			throw new InvariantViolation( __( 'WP_Query has been modified by a plugin or theme to suppress_filters, which will cause issues with WPGraphQL Execution. If you need to suppress filters for a specific reason within GraphQL, consider registering a custom field to the WPGraphQL Schema with a custom resolver.', 'wp-graphql-tec' ) );
 		}
@@ -197,13 +203,8 @@ class EventConnectionResolver extends AbstractConnectionResolver {
 		/**
 		 * Build the query from the where args.
 		 */
-		if ( ! empty( $this->args['where'] ) ) {
+		if ( ! empty( $input_fields ) ) {
 			$query_args = array_merge( $query_args, $input_fields );
-			$query      = tribe_events()->by_args( $query_args );
-
-			// Some meta queries dont work with `by_args()`.
-			$query      = $this->filtered( $query, $this->args['where'] );
-			$query_args = $query->build_query()->query_vars;
 		}
 
 		/**
@@ -325,6 +326,7 @@ class EventConnectionResolver extends AbstractConnectionResolver {
 		 * @param AppContext  $context    object passed down zthe resolve tree
 		 * @param ResolveInfo $info       info about fields passed down the resolve tree
 		 */
+
 		return apply_filters(
 			'graphql_events_connection_query_args',
 			$query_args,
@@ -384,6 +386,11 @@ class EventConnectionResolver extends AbstractConnectionResolver {
 				'venue'              => 'venue',
 				'venueId'            => 'venue',
 				'venueIn'            => 'venue',
+				// Ticket args.
+				'hasTickets'         => 'has_tickets',
+				'hasRsvp'            => 'has_rsvp',
+				'hasRsvpOrTickets'   => 'has_rsvp_or_tickets',
+				'costCurrencySymbol' => 'cost_currency_symbol',
 			]
 		);
 

@@ -35,8 +35,8 @@ public function __construct( array $config, TypeRegistry $type_registry ) {
 
 ### Event Tickets
 - [x] TEC Settings
+- [x] Ticket type ( fields, model, resolver, connections)
 - [ ] Attendee type ( fields, model, resolver, connections)
-- [ ] Ticket type ( fields, model, resolver, connections)
 - [ ] Order type ( fields, model, resolver, connections)
 - [ ] Create, Update, Delete, and RSVP/Purchase mutations
 

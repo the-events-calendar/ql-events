@@ -36,8 +36,10 @@ class TicketConnectionResolver extends AbstractConnectionResolver {
 
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @param mixed|string|array $post_type The post type to resolve for.
 	 */
-	public function __construct( $source, array $args, AppContext $context, ResolveInfo $info, string $post_type = '' ) {
+	public function __construct( $source, array $args, AppContext $context, ResolveInfo $info, $post_type = '' ) {
 		if ( empty( $post_type ) || 'Ticket' === $post_type ) {
 			$post_type =
 				[

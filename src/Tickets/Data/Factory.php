@@ -10,15 +10,11 @@
 
 namespace WPGraphQL\TEC\Tickets\Data;
 
-use GraphQL\Deferred;
-use GraphQL\Type\Definition\ResolveInfo;
 use GraphQLRelay\Relay;
 use Tribe__Tickets__Tickets;
 use WP_Post;
-use WPGraphQL\AppContext;
 use WPGraphQL\Model\Model as GraphQLModel;
 use WPGraphQL\Model\Post;
-use WPGraphQL\TEC\Tickets\Data\Connection\TicketConnectionResolver;
 use WPGraphQL\TEC\Tickets\Model;
 use WPGraphQL\TEC\Tickets\Type\WPInterface;
 use WPGraphQL\TEC\Common\Type\WPInterface as CommonInterface;
@@ -31,43 +27,6 @@ use WPGraphQL\TEC\Utils\Utils;
  */
 class Factory {
 	use PostTypeResolverMethod;
-
-	/**
-	 * Returns a ticket object.
-	 *
-	 * @param int        $id      Group ID.
-	 * @param AppContext $context AppContext object.
-	 * @return Deferred|null
-	 */
-	public static function resolve_ticket_object( $id, AppContext $context ) :?Deferred {
-		if ( empty( $id ) ) {
-			return null;
-		}
-
-		$context->get_loader( 'ticket' )->buffer( [ $id ] );
-
-		return new Deferred(
-			function () use ( $id, $context ) {
-				return $context->get_loader( 'ticket' )->load( $id );
-			}
-		);
-	}
-
-	/**
-	 * Wrapper for the EventConnectionResolver class.
-	 *
-	 * @param mixed       $source    Source.
-	 * @param array       $args      Query args to pass to the connection resolver.
-	 * @param AppContext  $context   The context of the query to pass along.
-	 * @param ResolveInfo $info      The ResolveInfo object.
-	 * @param string      $type The specific post type to resolve to..
-	 * @return Deferred
-	 */
-	public static function resolve_tickets_connection( $source, array $args, AppContext $context, ResolveInfo $info, string $type = '' ): Deferred {
-		$post_type = Utils::graphql_type_to_post_type( $type ) ?? 'Ticket';
-
-		return ( new TicketConnectionResolver( $source, $args, $context, $info, $post_type ) )->get_connection();
-	}
 
 	/**
 	 * Overwrites the GraphQL config for auto-registered object types.
@@ -215,4 +174,32 @@ class Factory {
 		return array_merge( $fields, $fields_to_add );
 	}
 
+	/**
+	 * Extends event connection with where args.
+	 *
+	 * @param array $connection_args .
+	 */
+	public static function add_where_args_to_events_connection( array $connection_args ) : array {
+		return array_merge(
+			$connection_args,
+			[
+				'costCurrencySymbol' => [
+					'type'        => [ 'list_of' => 'String' ],
+					'description' => __( 'One or more currency symbols or currency ISO codes.', 'wp-graphql-tec' ),
+				],
+				'hasTickets'         => [
+					'type'        => 'Boolean',
+					'description' => __( 'Filters events that either have or dont have tickets, based on the provided state. This does NOT include RSVPs or events that have a cost assigned via the cost custom field', 'wp-graphql-tec' ),
+				],
+				'hasRsvp'            => [
+					'type'        => 'Boolean',
+					'description' => __( 'Filters events that either have or dont have RSVP tickets, based on the provided state.', 'wp-graphql-tec' ),
+				],
+				'hasRsvpOrTickets'   => [
+					'type'        => 'Boolean',
+					'description' => __( 'Filters events that either have or dont have either RSVP or regular tickets, based on the provided state.', 'wp-graphql-tec' ),
+				],
+			]
+		);
+	}
 }

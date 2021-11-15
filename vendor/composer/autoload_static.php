@@ -22,6 +22,7 @@ class ComposerStaticInit76247ffd27f1d1ab469519c96f3a9966
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'WPGraphQL\\TEC\\Abstracts\\DataHelper' => __DIR__ . '/../..' . '/src/Abstracts/DataHelper.php',
         'WPGraphQL\\TEC\\Common\\TypeRegistry' => __DIR__ . '/../..' . '/src/Common/TypeRegistry.php',
         'WPGraphQL\\TEC\\Common\\Type\\Enum\\TimezoneModeEnum' => __DIR__ . '/../..' . '/src/Common/Type/Enum/TimezoneModeEnum.php',
         'WPGraphQL\\TEC\\Common\\Type\\WPInterface\\NodeWithJsonLd' => __DIR__ . '/../..' . '/src/Common/Type/WPInterface/NodeWithJsonLd.php',
@@ -29,7 +30,6 @@ class ComposerStaticInit76247ffd27f1d1ab469519c96f3a9966
         'WPGraphQL\\TEC\\Common\\Type\\WPObject\\TecSettings' => __DIR__ . '/../..' . '/src/Common/Type/WPObject/TecSettings.php',
         'WPGraphQL\\TEC\\Events\\Connection\\Events' => __DIR__ . '/../..' . '/src/Events/Connection/Events.php',
         'WPGraphQL\\TEC\\Events\\Connection\\Organizers' => __DIR__ . '/../..' . '/src/Events/Connection/Organizers.php',
-        'WPGraphQL\\TEC\\Events\\Connection\\Venues' => __DIR__ . '/../..' . '/src/Events/Connection/Venues.php',
         'WPGraphQL\\TEC\\Events\\CoreSchemaFilters' => __DIR__ . '/../..' . '/src/Events/CoreSchemaFilters.php',
         'WPGraphQL\\TEC\\Events\\Data\\Connection\\EventConnectionResolver' => __DIR__ . '/../..' . '/src/Events/Data/Connection/EventConnectionResolver.php',
         'WPGraphQL\\TEC\\Events\\Data\\Connection\\OrganizerConnectionResolver' => __DIR__ . '/../..' . '/src/Events/Data/Connection/OrganizerConnectionResolver.php',
@@ -50,6 +50,8 @@ class ComposerStaticInit76247ffd27f1d1ab469519c96f3a9966
         'WPGraphQL\\TEC\\Events\\Type\\Input\\CostFilterInput' => __DIR__ . '/../..' . '/src/Events/Type/Input/CostFilterInput.php',
         'WPGraphQL\\TEC\\Events\\Type\\Input\\DateAndTimezoneInput' => __DIR__ . '/../..' . '/src/Events/Type/Input/DateAndTimezoneInput.php',
         'WPGraphQL\\TEC\\Events\\Type\\Input\\DateRangeAndTimezoneInput' => __DIR__ . '/../..' . '/src/Events/Type/Input/DateRangeAndTimezoneInput.php',
+        'WPGraphQL\\TEC\\Events\\Type\\WPInterface\\NodeWithOrganizers' => __DIR__ . '/../..' . '/src/Events/Type/WPInterface/NodeWithOrganizers.php',
+        'WPGraphQL\\TEC\\Events\\Type\\WPInterface\\NodeWithVenue' => __DIR__ . '/../..' . '/src/Events/Type/WPInterface/NodeWithVenue.php',
         'WPGraphQL\\TEC\\Events\\Type\\WPObject\\Event' => __DIR__ . '/../..' . '/src/Events/Type/WPObject/Event.php',
         'WPGraphQL\\TEC\\Events\\Type\\WPObject\\Organizer' => __DIR__ . '/../..' . '/src/Events/Type/WPObject/Organizer.php',
         'WPGraphQL\\TEC\\Events\\Type\\WPObject\\OrganizerLinkedData' => __DIR__ . '/../..' . '/src/Events/Type/WPObject/OrganizerLinkedData.php',

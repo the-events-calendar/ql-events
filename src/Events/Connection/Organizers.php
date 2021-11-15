@@ -12,8 +12,8 @@ namespace WPGraphQL\TEC\Events\Connection;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
-use WPGraphQL\Data\Connection\PostObjectConnectionResolver;
-use WPGraphQL\TEC\Events\Type\WPObject\Event;
+use WPGraphQL\TEC\Events\Data\OrganizerHelper;
+use WPGraphQL\TEC\Events\Type\WPInterface\NodeWithOrganizers;
 use WPGraphQL\TEC\Events\Type\WPObject\Organizer;
 
 /**
@@ -34,17 +34,17 @@ class Organizers {
 		// From Event.
 		register_graphql_connection(
 			[
-				'fromType'      => Event::$type,
+				'fromType'      => NodeWithOrganizers::$type,
 				'toType'        => Organizer::$type,
 				'fromFieldName' => self::$from_field_name,
 				'resolve'       => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
 					if ( empty( $source->organizerIds ) ) {
 						return null;
 					}
-					$resolver = new PostObjectConnectionResolver( $source, $args, $context, $info );
-					$resolver->set_query_arg( 'post__in', $source->organizerIds );
 
-					return $resolver->get_connection();
+					$args['where']['post__in'] = $source->organizerIds;
+
+					return OrganizerHelper::resolve_connection( $source, $args, $context, $info, 'tribe_organizer' );
 				},
 			]
 		);

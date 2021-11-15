@@ -27,7 +27,7 @@ class Venue {
 	 *
 	 * @var string
 	 */
-	public static $wp_type = 'tribe_organizer';
+	public static $wp_type = 'tribe_venue';
 
 	/**
 	 * {@inheritDoc}

@@ -8,35 +8,51 @@
 
 namespace WPGraphQL\TEC\Events\Data;
 
-use WPGraphQL\AppContext;
-use GraphQL\Type\Definition\ResolveInfo;
+use WPGraphQL\TEC\Abstracts\DataHelper;
 
 /**
  * Class - Event Helper
  */
-class VenueHelper {
+class VenueHelper extends DataHelper {
 	/**
-	 * Modifies the default connection configuration.
+	 * The helper name. E.g. `events` or `tickets`.
 	 *
-	 * @param array $config .
+	 * @var string
 	 */
-	public static function get_connection_config( array $config ) : array {
-		$config['connectionArgs'] = array_merge(
-			$config['connectionArgs'],
-			self::get_connection_args(),
-		);
+	public static string $name = 'venues';
 
-		$config['resolve'] = function( $source, array $args, AppContext $context, ResolveInfo $info ) {
-			return Factory::resolve_venues_connection( $source, $args, $context, $info );
-		};
+	/**
+	 * The GraphQL type. E.g. `Event` or `RsvpTicket`.
+	 *
+	 * @var string
+	 */
+	public static string $type = 'Venue';
 
-		return $config;
+	/**
+	 * The WordPress type. E.g. `tribe_events` or `tec_tc_ticket`.
+	 *
+	 * @var string
+	 */
+	public static string $wp_type = 'tribe_venue';
+
+	/**
+	 * The name of the DataLoader to use.
+	 *
+	 * @var string
+	 */
+	public static string $loader_name = 'post';
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public static function resolver() : string {
+		return __NAMESPACE__ . '\\Connection\\VenueConnectionResolver';
 	}
 
 	/**
-	 * Gets an array of connection args to register to the Event Query.
+	 * {@inheritDoc}
 	 */
-	public static function get_connection_args() : array {
+	public static function connection_args() : array {
 		return [
 			'eventId'     => [
 				'type'        => 'Int',
