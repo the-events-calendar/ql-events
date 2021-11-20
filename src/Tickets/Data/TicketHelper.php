@@ -8,10 +8,7 @@
 
 namespace WPGraphQL\TEC\Tickets\Data;
 
-use GraphQL\Deferred;
-use WPGraphQL\AppContext;
-use GraphQL\Type\Definition\ResolveInfo;
-use WP_Post;
+use Tribe__Tickets__Tickets;
 use WPGraphQL\TEC\Abstracts\DataHelper;
 use WPGraphQL\TEC\Tickets\Type\Enum\TicketTypeEnum;
 use WPGraphQL\TEC\Tickets\Type\Input\IntRangeInput;
@@ -109,15 +106,15 @@ class TicketHelper extends DataHelper {
 				'type'        => [ 'list_of' => 'String' ],
 				'description' => __( 'Filter tickets by their provider currency codes. Accepts a 3-letter currency_codes, or an array of codes.', 'wp-graphql-tec' ),
 			],
-			'eventIn'          => [
+			'eventIdIn'        => [
 				'type'        => [ 'list_of' => 'Int' ],
 				'description' => __( 'Filters tickets attached to a specific post ID or array of IDs.', 'wp-graphql-tec' ),
 			],
-			'eventNotIn'       => [
+			'eventIdNotIn'     => [
 				'type'        => [ 'list_of' => 'Int' ],
 				'description' => __( 'Filters tickets not attached to a specific post ID or array of IDs.', 'wp-graphql-tec' ),
 			],
-			'eventStatus'      => [
+			'eventStatusIn'    => [
 				'type'        => [ 'list_of' => 'String' ],
 				'description' => __( 'Filters tickets by their associated post`s status or array of statii.', 'wp-graphql-tec' ),
 			],
@@ -133,9 +130,9 @@ class TicketHelper extends DataHelper {
 				'type'        => 'Boolean',
 				'description' => __( 'Filters tickets by if they are currently available or available in the future based on the provided value.', 'wp-graphql-tec' ),
 			],
-			'provider'         => [
+			'providerIn'       => [
 				'type'        => [ 'list_of' => TicketTypeEnum::$type ],
-				'description' => __( 'Filters tickets by if they are currently available or available in the future based on the provided value.', 'wp-graphql-tec' ),
+				'description' => __( 'Filters tickets that match a list of ET ticket providers.', 'wp-graphql-tec' ),
 			],
 		];
 	}
@@ -152,6 +149,28 @@ class TicketHelper extends DataHelper {
 		}
 
 		return $args;
+	}
+
+	/**
+	 * Grabs the ticket databaseIds for the source, if they're not set by the model.
+	 *
+	 * Necessary when the source uses a built-in model.
+	 *
+	 * @param mixed $source .
+	 */
+	public static function get_ticket_ids( $source ) : ?array {
+		if ( ! empty( $source->ticketDatabaseIds ) ) {
+			$ticket_ids = $source->ticketDatabaseIds;
+		} else {
+			$provider = Tribe__Tickets__Tickets::get_event_ticket_provider_object( $source->ID );
+			if ( empty( $provider ) ) {
+				return null;
+			}
+
+			$ticket_ids = $provider->get_tickets_ids( (int) $source->ID );
+		}
+
+		return $ticket_ids ?: null;
 	}
 
 }

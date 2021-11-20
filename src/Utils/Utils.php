@@ -82,15 +82,38 @@ class Utils {
 	}
 
 	/**
-	 * Returns an array key-value pair of registered Event Ticket post types and their corresponding GraphQL object type.
+	 * Returns an array key-value pair of registered Event Tickets post types and their corresponding GraphQL object type.
 	 *
 	 * Example: `[ 'tribe_events' => 'Event' ]
 	 */
 	public static function get_et_types() : array {
+		return self::get_et_ticket_types()
+			+ self::get_et_attendee_types();
+	}
+
+	/**
+	 * Returns an array key-value pair of registered Event Ticket ticket post types and their corresponding GraphQL object type.
+	 *
+	 * Example: `[ 'tribe_events' => 'Event' ]
+	 */
+	public static function get_et_ticket_types() : array {
 		return [
 			TicketsObject\RsvpTicket::$wp_type => TicketsObject\RsvpTicket::$type,
 			'tec_tc_ticket'                    => 'TcTicket',
 			'tribe_tpp_tickets'                => 'PayPalTicket',
+		];
+	}
+
+	/**
+	 * Returns an array key-value pair of registered Event Tickets attendee post types and their corresponding GraphQL object type.
+	 *
+	 * Example: `[ 'tribe_events' => 'Event' ]
+	 */
+	public static function get_et_attendee_types() : array {
+		return [
+			'tribe_rsvp_attendees' => 'RsvpAttendee',
+			'tribe_tpp_attendees'  => 'PayPalAttendee',
+			'tec_tc_attendees'     => 'TcAttendee',
 		];
 	}
 
@@ -109,7 +132,13 @@ class Utils {
 				return 'tribe-commerce';
 			case 'tec_tc_ticket':
 			case 'TcTicket':
-				return 'tickets-connerce';
+				return 'tickets-commerce';
+			case 'tribe_rsvp_attendees':
+				return 'rsvp';
+			case 'tribe_tpp_attendees':
+				return 'tribe-commerce';
+			case 'tec_tc_attendee':
+				return 'tickets-commerce';
 		}
 		return 'default';
 	}

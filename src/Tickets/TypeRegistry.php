@@ -37,6 +37,8 @@ class TypeRegistry implements TypeRegistryInterface {
 	 * {@inheritDoc}
 	 */
 	public static function register_enums( GraphQLRegistry $type_registry ) : void {
+		Enum\AttendeeTypeEnum::register_type();
+		Enum\AttendeeOptoutStatusEnum::register_type();
 		Enum\PaypalCurrencyCodeOptionsEnum::register_type();
 		Enum\StockHandlingOptionsEnum::register_type();
 		Enum\StockModeEnum::register_type();
@@ -70,9 +72,13 @@ class TypeRegistry implements TypeRegistryInterface {
 	 * {@inheritDoc}
 	 */
 	public static function register_interfaces( GraphQLRegistry $type_registry ) : void {
-		WPInterface\Ticket::register_interface( $type_registry );
-		WPInterface\PurchasableTicket::register_interface( $type_registry );
+		WPInterface\Attendee::register_interface( $type_registry );
+		WPInterface\NodeWithAttendees::register_interface( $type_registry );
 		WPInterface\NodeWithTicket::register_interface( $type_registry );
+		WPInterface\NodeWithTickets::register_interface( $type_registry );
+		WPInterface\NodeWithUser::register_interface( $type_registry );
+		WPInterface\PurchasableTicket::register_interface( $type_registry );
+		WPInterface\Ticket::register_interface( $type_registry );
 
 		/**
 		 * Fires after ET interfaces have been registered.
@@ -115,6 +121,7 @@ class TypeRegistry implements TypeRegistryInterface {
 	 */
 	public static function register_connections( GraphQLRegistry $type_registry ) : void {
 		Connection\Tickets::register_connections();
+		Connection\Attendees::register_connections();
 
 		/**
 		 * Fires after ET connections have been registered.

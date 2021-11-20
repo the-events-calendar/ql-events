@@ -11,6 +11,7 @@ namespace WPGraphQL\TEC\Tickets;
 use WPGraphQL\AppContext;
 use WPGraphQL\TEC\Interfaces\Hookable;
 use WPGraphQL\TEC\Tickets\Data\Factory;
+use WPGraphQL\TEC\Tickets\Data\Loader\AttendeeLoader;
 use WPGraphQL\TEC\Tickets\Data\Loader\TicketLoader;
 
 /**
@@ -40,6 +41,9 @@ class CoreSchemaFilters implements Hookable {
 		add_filter( 'graphql_tec_event_model_fields', [ Factory::class, 'add_fields_to_event_model' ], 10, 2 );
 
 		add_filter( 'graphql_tec_events_connection_args', [ Factory::class, 'add_where_args_to_events_connection' ] );
+
+		add_filter( 'tribe_repository_attendees_query_args', [ Factory::class, 'tribe_fix_orderby_args' ], 10, 3 );
+		add_filter( 'tribe_repository_tickets_query_args', [ Factory::class, 'tribe_fix_orderby_args' ], 10, 3 );
 	}
 
 	/**
@@ -65,6 +69,21 @@ class CoreSchemaFilters implements Hookable {
 				$args['graphql_single_name'] = 'PayPalTicket';
 				$args['graphql_plural_name'] = 'PayPalTickets';
 				break;
+			case 'tec_tc_attendees':
+				$args['show_in_graphql']     = true;
+				$args['graphql_single_name'] = 'TcAttendee';
+				$args['graphql_plural_name'] = 'TcAttendees';
+				break;
+			case 'tribe_rsvp_attendees':
+				$args['show_in_graphql']     = true;
+				$args['graphql_single_name'] = 'RsvpAttendee';
+				$args['graphql_plural_name'] = 'RsvpAttendees';
+				break;
+			case 'tribe_tpp_attendees':
+				$args['show_in_graphql']     = true;
+				$args['graphql_single_name'] = 'PayPalAttendee';
+				$args['graphql_plural_name'] = 'PayPalAttendees';
+				break;
 		}
 
 		return $args;
@@ -78,8 +97,10 @@ class CoreSchemaFilters implements Hookable {
 	 * @param AppContext $context - AppContext instance.
 	 */
 	public static function register_data_loaders( array $loaders, AppContext $context ) : array {
-		$ticket_loader     = new TicketLoader( $context );
-		$loaders['ticket'] = &$ticket_loader;
+		$ticket_loader       = new TicketLoader( $context );
+		$loaders['ticket']   = &$ticket_loader;
+		$attendee_loader     = new AttendeeLoader( $context );
+		$loaders['attendee'] = &$attendee_loader;
 
 		return $loaders;
 	}

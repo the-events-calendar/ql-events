@@ -1,11 +1,11 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => 'dev-master',
-        'version' => 'dev-master',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '647e70165f1f8494f4184cabf1da91c8f110846e',
+        'reference' => '2a2fb5d843802ed5478bf7e35a0f9ca53994b082',
         'name' => 'justlevine/wp-graphql-tec',
         'dev' => true,
     ),
@@ -287,12 +287,12 @@
             'dev_requirement' => true,
         ),
         'justlevine/wp-graphql-tec' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '647e70165f1f8494f4184cabf1da91c8f110846e',
+            'reference' => '2a2fb5d843802ed5478bf7e35a0f9ca53994b082',
             'dev_requirement' => false,
         ),
         'lucatume/wp-browser' => array(

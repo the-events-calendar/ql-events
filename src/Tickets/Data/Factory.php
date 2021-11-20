@@ -12,7 +12,9 @@ namespace WPGraphQL\TEC\Tickets\Data;
 
 use GraphQLRelay\Relay;
 use Tribe__Tickets__Tickets;
+use Tribe__Repository;
 use WP_Post;
+use WP_Query;
 use WPGraphQL\Model\Model as GraphQLModel;
 use WPGraphQL\Model\Post;
 use WPGraphQL\TEC\Tickets\Model;
@@ -44,13 +46,23 @@ class Factory {
 
 		switch ( true ) {
 			case 'tribe_rsvp_tickets' === $post_type:
-				$config['interfaces'] = array_merge( $config['interfaces'], [ WPInterface\Ticket::$type ] );
+				$config['interfaces'] = [ WPInterface\Ticket::$type ];
 				break;
 			case in_array( $post_type, [ 'tec_tc_ticket', 'tribe_tpp_tickets' ], true ):
-				$config['interfaces'] = array_merge( $config['interfaces'], [ WPInterface\PurchasableTicket::$type ] );
+				$config['interfaces'] = [ WPInterface\PurchasableTicket::$type ];
 				break;
 			case in_array( $post_type, $post_types_with_tickets, true ):
-				$config['interfaces'] = array_merge( $config['interfaces'], [ WPInterface\NodeWithTicket::$type, CommonInterface\NodeWithJsonLd::$type ] );
+				$config['interfaces'] = array_merge(
+					$config['interfaces'],
+					[
+						WPInterface\NodeWithTickets::$type,
+						WPInterface\NodeWithAttendees::$type,
+						CommonInterface\NodeWithJsonLd::$type,
+					]
+				);
+				break;
+			case in_array( $post_type, [ 'tec_tc_attendees', 'tribe_tpp_attendees', 'tribe_rsvp_attendees' ], true ):
+				$config['interfaces'] = [ WPInterface\Attendee::$type ];
 				break;
 		}
 		return $config;
@@ -72,6 +84,11 @@ class Factory {
 				case 'tec_tc_ticket':
 				case 'tribe_tpp_tickets':
 					$model = new Model\PurchasableTicket( $entry );
+					break;
+				case 'tec_tc_attendees':
+				case 'tribe_rsvp_attendees':
+				case 'tribe_tpp_attendees':
+					$model = new Model\Attendee( $entry );
 					break;
 			}
 		}
@@ -95,6 +112,8 @@ class Factory {
 			case is_a( $node, Model\PurchasableTicket::class ):
 				$type = Model\PurchasableTicket::class;
 				break;
+			case is_a( $node, Model\Attendee::class ):
+				$type = Model\Attendee::class;
 		}
 
 		return $type;
@@ -117,6 +136,11 @@ class Factory {
 			case 'PayPalTickets':
 				$config = TicketHelper::get_connection_config( $config );
 				break;
+			case 'RsvpAttendees':
+			case 'TcAttendees':
+			case 'PayPalAttendees':
+				$config = AttendeeHelper::get_connection_config( $config );
+				break;
 		}
 
 		return $config;
@@ -136,12 +160,9 @@ class Factory {
 		$ticket_ids = ! empty( $provider ) ? $provider->get_tickets_ids( $database_id ) : null;
 
 		$fields_to_add = [
-			// @todo fix DB error from ORDER BY unset.
-			/* phpcs:ignore
 			'availableTickets'         => function() use ( $database_id ) : int {
 				return tribe_events_count_available_tickets( $database_id );
 			},
-			*/
 			'capacity'                 => function() use ( $database_id ) : ?int {
 				return tribe_get_event_capacity( $database_id );
 			},
@@ -157,12 +178,9 @@ class Factory {
 			'isPartiallySoldOut'       => function() use ( $database_id ) : bool {
 				return tribe_events_partially_soldout( $database_id );
 			},
-			// @todo fix DB error from ORDER BY unset.
-			/* phpcs:ignore
 			'isSoldOut'                => function() use ( $database_id ) : bool {
 				return tribe_events_has_soldout( $database_id );
 			},
-			*/
 			'ticketDatabaseIds'        => function() use ( $ticket_ids ) : ?array {
 				return $ticket_ids ?: null;
 			},
@@ -201,5 +219,25 @@ class Factory {
 				],
 			]
 		);
+	}
+
+	/**
+	 * Fixes the default orderby args set by TEC.
+	 *
+	 * @param array $query_args An array of the query arguments the query will be initialized with.
+	 */
+	public static function tribe_fix_orderby_args( array $query_args ) : array {
+		// Checks if `orderby` isnt using an associative array.
+		if ( isset( $query_args['orderby'] ) && is_array( $query_args['orderby'] ) && isset( $query_args['orderby'][0] ) ) {
+			$orderby = [];
+			$order   = $query_args['order'] ?? 'DESC';
+
+			foreach ( $query_args['orderby'] as $field ) {
+				$orderby[ $field ] = $order;
+			}
+			$query_args['orderby'] = $orderby;
+		}
+
+		return $query_args;
 	}
 }

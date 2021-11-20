@@ -41,7 +41,7 @@ class PurchasableTicket {
 				'interfaces'  => [ 'Node', 'ContentNode', 'UniformResourceIdentifiable', 'DatabaseIdentifier', 'NodeWithTitle', 'NodeWithFeaturedImage', 'Ticket' ],
 				'fields'      => self::get_fields( $type_registry ),
 				'resolveType' => function ( $value ) use ( &$type_registry ) {
-					$possible_types = Utils::get_et_types();
+					$possible_types = Utils::get_et_ticket_types();
 					if ( isset( $possible_types[ $value->post_type ] ) ) {
 						return $type_registry->get_type( $possible_types[ $value->post_type ] );
 					}
@@ -97,7 +97,7 @@ class PurchasableTicket {
 					}
 
 					$post_type         = get_post_type( $ticket_id );
-					$ticket_post_types = array_keys( Utils::get_et_types() );
+					$ticket_post_types = array_keys( Utils::get_et_attendee_types() );
 
 					if ( false === $post_type || ! in_array( $post_type, $ticket_post_types, true ) ) {
 						/* translators: %1$s: ID type, %2$s: ID value */

@@ -1,6 +1,6 @@
 <?php
 /**
- * Resolves connections to Tickets
+ * Resolves connections to Attendees
  *
  * @package WPGraphQL\TEC\Tickets\Data\Connection
  * @since 0.0.1
@@ -9,7 +9,7 @@
 namespace WPGraphQL\TEC\Tickets\Data\Connection;
 
 use GraphQL\Error\InvariantViolation;
-use WPGraphQL\TEC\Tickets\Model\Ticket;
+use WPGraphQL\TEC\Tickets\Model\Attendee;
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
 use WPGraphQL\Data\Connection\AbstractConnectionResolver;
@@ -17,9 +17,9 @@ use WPGraphQL\TEC\Utils\Utils;
 use WPGraphQL\Utils\Utils as GraphQLUtils;
 
 /**
- * Class - TicketConnectionResolver
+ * Class - AttendeeConnectionResolver
  */
-class TicketConnectionResolver extends AbstractConnectionResolver {
+class AttendeeConnectionResolver extends AbstractConnectionResolver {
 	/**
 	 * The current post type.
 	 *
@@ -28,7 +28,7 @@ class TicketConnectionResolver extends AbstractConnectionResolver {
 	public $post_type;
 
 	/**
-	 * The ORM provider to be used by tribe_tickets().
+	 * The ORM provider to be used by tribe_attendees().
 	 *
 	 * @var string
 	 */
@@ -40,18 +40,13 @@ class TicketConnectionResolver extends AbstractConnectionResolver {
 	 * @param mixed|string|array $post_type The post type to resolve for.
 	 */
 	public function __construct( $source, array $args, AppContext $context, ResolveInfo $info, $post_type = '' ) {
-		if ( empty( $post_type ) || 'Ticket' === $post_type ) {
+		if ( empty( $post_type ) || 'Attendee' === $post_type ) {
 			$post_type =
 				[
-					'tec_tc_ticket',
-					'tribe_rsvp_tickets',
-					'tribe_tpp_tickets',
+					'tec_tc_attendees',
+					'tribe_rsvp_attendees',
+					'tribe_tpp_attendees',
 				];
-		} elseif ( 'PurchasableTicket' === $post_type ) {
-			$post_type = [
-				'tec_tc_ticket',
-				'tribe_tpp_tickets',
-			];
 		}
 
 		$this->post_type = $post_type;
@@ -76,7 +71,7 @@ class TicketConnectionResolver extends AbstractConnectionResolver {
 		 * even execute the connection
 		 */
 		if ( isset( $this->post_type ) && 'revision' === $this->post_type ) {
-			if ( $this->source instanceof Ticket ) {
+			if ( $this->source instanceof Attendee ) {
 				$parent_post_type_obj = get_post_type_object( $this->source->post_type );
 				if ( ! isset( $parent_post_type_obj->cap->edit_post ) || ! current_user_can( $parent_post_type_obj->cap->edit_post, $this->source->ID ) ) {
 					$this->should_execute = false;
@@ -87,10 +82,10 @@ class TicketConnectionResolver extends AbstractConnectionResolver {
 				 */
 			} else {
 				$post_type_obj = get_post_type_object( $this->post_type );
-				if ( ! current_user_can( 'edit_event_tickets' ) && (
+				if (
 					! isset( $post_type_obj->cap->edit_post ) ||
 					! current_user_can( $post_type_obj->cap->edit_posts )
-				) ) {
+				) {
 					$this->should_execute = false;
 				}
 			}
@@ -103,7 +98,7 @@ class TicketConnectionResolver extends AbstractConnectionResolver {
 	 * {@inheritDoc}
 	 */
 	public function get_loader_name() {
-		return 'ticket';
+		return 'attendee';
 	}
 
 	/**
@@ -112,7 +107,7 @@ class TicketConnectionResolver extends AbstractConnectionResolver {
 	 * @return array
 	 */
 	public function get_ids() {
-		return $this->query->get_ids() ?: [];
+		return $this->query->get_ids();
 	}
 
 	/**
@@ -121,7 +116,7 @@ class TicketConnectionResolver extends AbstractConnectionResolver {
 	 * @throws InvariantViolation
 	 */
 	public function get_query() {
-		$query = tribe_tickets( $this->orm_provider )->by_args( $this->query_args );
+		$query = tribe_attendees( $this->orm_provider )->by_args( $this->query_args );
 		if ( isset( $query->query_vars['suppress_filters'] ) && true === $query->query_vars['suppress_filters'] ) {
 			throw new InvariantViolation( __( 'WP_Query has been modified by a plugin or theme to suppress_filters, which will cause issues with WPGraphQL Execution. If you need to suppress filters for a specific reason within GraphQL, consider registering a custom field to the WPGraphQL Schema with a custom resolver.', 'wp-graphql-tec' ) );
 		}
@@ -144,7 +139,7 @@ class TicketConnectionResolver extends AbstractConnectionResolver {
 			// Ignore sticky posts by default.
 			'ignore_sticky_posts' => true,
 			// Set the post_type for the query based on the type of post being queried.
-			'post_type'           => $this->post_type ?: array_keys( Utils::get_et_ticket_types() ),
+			'post_type'           => $this->post_type ?: array_keys( Utils::get_et_attendee_types() ),
 			// This is all we need.
 			'fields'              => 'ids',
 			// Don't calculate the total rows, it's not needed and can be expensive.
@@ -209,10 +204,8 @@ class TicketConnectionResolver extends AbstractConnectionResolver {
 		 */
 		if ( ! empty( $this->args['where'] ) ) {
 			$query_args = array_merge( $query_args, $input_fields );
-			$query      = tribe_tickets( $this->orm_provider )->by_args( $query_args );
+			$query      = tribe_attendees( $this->orm_provider )->by_args( $query_args );
 
-			// Some meta queries dont work with `by_args()`.
-			$query      = $this->filtered( $query, $this->args['where'] );
 			$query_args = $query->build_query()->query_vars;
 		}
 
@@ -339,7 +332,7 @@ class TicketConnectionResolver extends AbstractConnectionResolver {
 		 * @param ResolveInfo $info       info about fields passed down the resolve tree
 		 */
 		return apply_filters(
-			'graphql_tickets_connection_query_args',
+			'graphql_attendee_connection_query_args',
 			$query_args,
 			$this->source,
 			$this->args,
@@ -360,65 +353,73 @@ class TicketConnectionResolver extends AbstractConnectionResolver {
 		$query_args = GraphQLUtils::map_input(
 			$where_args,
 			[
-				'authorName'      => 'author_name',
-				'authorIn'        => 'author__in',
-				'authorNotIn'     => 'author__not_in',
-				'tagId'           => 'tag_id',
-				'tagIds'          => 'tag__and',
-				'tagIn'           => 'tag__in',
-				'tagNotIn'        => 'tag__not_in',
-				'tagSlugAnd'      => 'tag_slug__and',
-				'tagSlugIn'       => 'tag_slug__in',
-				'search'          => 's',
-				'id'              => 'p',
-				'parent'          => 'post_parent',
-				'parentIn'        => 'post_parent__in',
-				'parentNotIn'     => 'post_parent__not_in',
-				'in'              => 'post__in',
-				'notIn'           => 'post__not_in',
-				'nameIn'          => 'post_name__in',
-				'hasPassword'     => 'has_password',
-				'password'        => 'post_password',
-				'status'          => 'post_status',
-				'stati'           => 'post_status',
-				'dateQuery'       => 'date_query',
-				'attendeesMax'    => 'attendees_max',
-				'attendeesMin'    => 'attendees_min',
-				'availableFrom'   => 'available_from',
-				'availableUntil'  => 'available_until',
-				'capacityMax'     => 'capacity_max',
-				'capacityMin'     => 'capacity_min',
-				'checkedInMax'    => 'checkedin_max',
-				'checkedInMin'    => 'checkedin_min',
-				'currencyCode'    => 'currency_code',
-				'eventIdIn'       => 'event',
-				'eventIdNotIn'    => 'event__not_in',
-				'eventStatusIn'   => 'event_status',
-				'hasAttendeeMeta' => 'has_attendee_meta',
-				'isActive'        => 'is_active',
-				'isAvailable'     => 'is_available',
-				'providerIn'      => 'provider',
+				'authorName'             => 'author_name',
+				'authorIn'               => 'author__in',
+				'authorNotIn'            => 'author__not_in',
+				'tagId'                  => 'tag_id',
+				'tagIds'                 => 'tag__and',
+				'tagIn'                  => 'tag__in',
+				'tagNotIn'               => 'tag__not_in',
+				'tagSlugAnd'             => 'tag_slug__and',
+				'tagSlugIn'              => 'tag_slug__in',
+				'search'                 => 's',
+				'id'                     => 'p',
+				'parent'                 => 'post_parent',
+				'parentIn'               => 'post_parent__in',
+				'parentNotIn'            => 'post_parent__not_in',
+				'in'                     => 'post__in',
+				'notIn'                  => 'post__not_in',
+				'nameIn'                 => 'post_name__in',
+				'hasPassword'            => 'has_password',
+				'password'               => 'post_password',
+				'status'                 => 'post_status',
+				'stati'                  => 'post_status',
+				'dateQuery'              => 'date_query',
+				'eventIdIn'              => 'event',
+				'eventIdNotIn'           => 'event__not_in',
+				'eventStatusIn'          => 'event_status',
+				'hasAttendeeMeta'        => 'has_attendee_meta',
+				'holderEmail'            => 'holder_email__like',
+				'holderEmailIn'          => 'holder_email_id',
+				'holderEmailNotIn'       => 'holder_email_id__not_in',
+				'holderName'             => 'holder_name__like',
+				'holderNameIn'           => 'holder_name_id',
+				'holderNameNotIn'        => 'holder_name_id__not_in',
+				'isShowAttendeesEnabled' => 'event__show_attendees',
+				'isCheckedIn'            => 'checkedIn',
+				'optoutStatus'           => 'optout',
+				// @todo TEC needs to fix in Tribe__Attendees schema.
+				'orderIdIn'              => 'purchase_order',
+				'orderIdNotIn'           => 'order__not_in',
+				'orderStatusIn'          => 'order_status',
+				'orderStatusNotIn'       => 'order_status__not_in',
+				'price'                  => 'price',
+				'priceMax'               => 'price_max',
+				'priceMin'               => 'price_min',
+				'productIdIn'            => 'product_id',
+				'productIdNotIn'         => 'product_id__not_in',
+				'providerIn'             => 'provider',
+				'providerNotIn'          => 'provider__not_in',
+				'purchaserEmail'         => 'purchaser_email__like',
+				'purchaserEmailIn'       => 'purchaser_email_id',
+				'purchaserEmailNotIn'    => 'purchaser_email_id__not_in',
+				'purchaserName'          => 'purchaser_name__like',
+				'purchaserNameIn'        => 'purchaser_name_id',
+				'purchaserNameNotIn'     => 'purchaser_name_id__not_in',
+				'rsvpStatus'             => 'rsvp_status',
+				'rsvpStatusOrNone'       => 'rsvp_status__or_none',
+				'securityCodeIn'         => 'security_code_id',
+				'securityCodeNotIn'      => 'security_code_id__not_in',
+				'ticketIdIn'             => 'ticket',
+				'ticketIdNotIn'          => 'ticket__not_in',
+				'userIdIn'               => 'user',
+				'userIdNotIn'            => 'user__not_in',
 			]
 		);
 
 		if ( ! empty( $query_args['post_status'] ) ) {
 			$allowed_stati             = $this->sanitize_post_stati( $query_args['post_status'] );
 			$query_args['post_status'] = ! empty( $allowed_stati ) ? $allowed_stati : [ 'publish' ];
-		}
-
-		// Remove TEC filters we need to apply manually.
-		foreach ( $query_args as $key => $value ) {
-			if ( in_array(
-				$key,
-				[
-					'attendeesBetween',
-					'capacityBetween',
-					'checkedInBetween',
-				],
-				true
-			) ) {
-				unset( $query_args[ $key ] );
-			}
 		}
 
 		/**
@@ -437,7 +438,7 @@ class TicketConnectionResolver extends AbstractConnectionResolver {
 		 * @return array
 		 * @since 0.0.5
 		 */
-		$query_args = apply_filters( 'graphql_map_input_fields_to_ticket_query', $query_args, $where_args, $this->source, $this->args, $this->context, $this->info, $this->post_type );
+		$query_args = apply_filters( 'graphql_map_input_fields_to_attendee_query', $query_args, $where_args, $this->source, $this->args, $this->context, $this->info, $this->post_type );
 
 		/**
 		 * Return the Query Args
@@ -560,46 +561,5 @@ class TicketConnectionResolver extends AbstractConnectionResolver {
 		 */
 	public function is_valid_offset( $offset ) {
 		return ! empty( get_post( absint( $offset ) ) );
-	}
-
-	/**
-	 * Returns the tribe_tickets() query with meta filters processed.
-	 *
-	 * This is necessary as these queries require multiple arguments not handled by tribe_tickets()->by_args().
-	 *
-	 * @param mixed $query .
-	 * @param array $where_args .
-	 *
-	 * @return mixed.
-	 */
-	public function filtered( $query, array $where_args ) {
-		$query_args = GraphQLUtils::map_input(
-			$where_args,
-			[
-				'attendeesBetween' => 'attendees_between',
-				'capacityBetween'  => 'capacity_between',
-				'checkedInBetween' => 'checkedin_between',
-			]
-		);
-
-		foreach ( $query_args as $key => $value ) {
-			if ( empty( $value ) ) {
-				continue;
-			}
-
-			switch ( $key ) {
-				case 'attendees_between':
-				case 'capacity_between':
-				case 'checkedin_between':
-					$query->by(
-						$key,
-						$value['min'],
-						$value['max']
-					);
-					break;
-			}
-		}
-
-		return $query;
 	}
 }

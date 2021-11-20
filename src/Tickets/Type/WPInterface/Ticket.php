@@ -13,9 +13,8 @@ use GraphQL\Type\Definition\ResolveInfo;
 use GraphQLRelay\Relay;
 use WPGraphQL\AppContext;
 use WPGraphQL\Registry\TypeRegistry;
-use WPGraphQL\TEC\Events\Data\Connection\EventConnectionResolver;
-use WPGraphQL\TEC\Events\Type\WPObject\Event;
-use WPGraphQL\TEC\Tickets\Data\Factory;
+use WPGraphQL\TEC\Events\Type\WPInterface\NodeWithEvent;
+use WPGraphQL\TEC\Tickets\Data\AttendeeHelper;
 use WPGraphQL\TEC\Tickets\Data\TicketHelper;
 use WPGraphQL\TEC\Tickets\Type\Enum\StockModeEnum;
 use WPGraphQL\TEC\Tickets\Type\Enum\TicketIdTypeEnum;
@@ -43,23 +42,19 @@ class Ticket {
 			self::$type,
 			[
 				'description' => __( 'Ticket object', 'wp-graphql-tec' ),
-				'interfaces'  => [ 'Node', 'ContentNode', 'UniformResourceIdentifiable', 'DatabaseIdentifier', 'NodeWithTitle', 'NodeWithFeaturedImage' ],
-				'connections' => [
-					'event' => [
-						'toType'   => Event::$type,
-						'oneToOne' => true,
-						'resolve'  => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
-							$args['where']['post__in'] = [ $source->eventId ];
-
-							$resolver = new EventConnectionResolver( $source, $args, $context, $info );
-
-							return $resolver->one_to_one()->get_connection();
-						},
-					],
+				'interfaces'  => [
+					'Node',
+					'ContentNode',
+					'UniformResourceIdentifiable',
+					'DatabaseIdentifier',
+					'NodeWithTitle',
+					'NodeWithFeaturedImage',
+					NodeWithEvent::$type,
+					NodeWithAttendees::$type,
 				],
 				'fields'      => self::get_fields( $type_registry ),
 				'resolveType' => function ( $value ) use ( &$type_registry ) {
-					$possible_types = Utils::get_et_types();
+					$possible_types = Utils::get_et_ticket_types();
 					if ( isset( $possible_types[ $value->post_type ] ) ) {
 						return $type_registry->get_type( $possible_types[ $value->post_type ] );
 					}
@@ -114,7 +109,7 @@ class Ticket {
 					}
 
 					$post_type         = get_post_type( $ticket_id );
-					$ticket_post_types = array_keys( Utils::get_et_types() );
+					$ticket_post_types = array_keys( Utils::get_et_ticket_types() );
 
 					if ( false === $post_type || ! in_array( $post_type, $ticket_post_types, true ) ) {
 						/* translators: %1$s: ID type, %2$s: ID value */

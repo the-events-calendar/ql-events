@@ -71,6 +71,7 @@ class TypeRegistry implements TypeRegistryInterface {
 	public static function register_interfaces( GraphQLRegistry $type_registry ) : void {
 		WPInterface\NodeWithVenue::register_interface( $type_registry );
 		WPInterface\NodeWithOrganizers::register_interface( $type_registry );
+		WPInterface\NodeWithEvent::register_interface( $type_registry );
 		/**
 		 * Fires after TEC interfaces have been registered.
 		 *
@@ -117,7 +118,6 @@ class TypeRegistry implements TypeRegistryInterface {
 	 */
 	public static function register_connections( GraphQLRegistry $type_registry ) : void {
 		Connection\Events::register_connections();
-		Connection\Organizers::register_connections();
 
 		/**
 		 * Fires after TEC connections have been registered.

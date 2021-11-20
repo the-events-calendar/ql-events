@@ -51,7 +51,7 @@ class Ticket extends Post {
 	public function __construct( WP_Post $post ) {
 		parent::__construct( $post );
 
-		if ( ! isset( $this->data->post_type ) || ! isset( $this->data->ID ) || ! in_array( $this->data->post_type, array_keys( Utils::get_et_types() ), true ) ) {
+		if ( ! isset( $this->data->post_type ) || ! isset( $this->data->ID ) || ! in_array( $this->data->post_type, array_keys( Utils::get_et_ticket_types() ), true ) ) {
 			throw new Exception( __( 'The object returned is not a Ticket.', 'wp-graphql-tec' ) );
 		}
 
