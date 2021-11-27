@@ -48,8 +48,8 @@ class PurchasableTicket {
 
 					throw new UserError(
 						sprintf(
-							/* translators: %s: Product type */
-							__( 'The "%s" product type is not supported by the core WPGraphQL for TEC schema.', 'wp-graphql-tec' ),
+							/* translators: %s: Ticket type */
+							__( 'The "%s" ticket type is not supported by the core WPGraphQL for TEC schema.', 'wp-graphql-tec' ),
 							$value->type
 						)
 					);

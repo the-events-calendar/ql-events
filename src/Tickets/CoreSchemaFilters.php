@@ -12,6 +12,7 @@ use WPGraphQL\AppContext;
 use WPGraphQL\TEC\Interfaces\Hookable;
 use WPGraphQL\TEC\Tickets\Data\Factory;
 use WPGraphQL\TEC\Tickets\Data\Loader\AttendeeLoader;
+use WPGraphQL\TEC\Tickets\Data\Loader\OrderLoader;
 use WPGraphQL\TEC\Tickets\Data\Loader\TicketLoader;
 
 /**
@@ -69,7 +70,7 @@ class CoreSchemaFilters implements Hookable {
 				$args['graphql_single_name'] = 'PayPalTicket';
 				$args['graphql_plural_name'] = 'PayPalTickets';
 				break;
-			case 'tec_tc_attendees':
+			case 'tec_tc_attendee':
 				$args['show_in_graphql']     = true;
 				$args['graphql_single_name'] = 'TcAttendee';
 				$args['graphql_plural_name'] = 'TcAttendees';
@@ -83,6 +84,16 @@ class CoreSchemaFilters implements Hookable {
 				$args['show_in_graphql']     = true;
 				$args['graphql_single_name'] = 'PayPalAttendee';
 				$args['graphql_plural_name'] = 'PayPalAttendees';
+				break;
+			case 'tec_tc_order':
+				$args['show_in_graphql']     = true;
+				$args['graphql_single_name'] = 'TcOrder';
+				$args['graphql_plural_name'] = 'TcOrders';
+				break;
+			case 'tec_tpp_orders':
+				$args['show_in_graphql']     = true;
+				$args['graphql_single_name'] = 'PayPalOrder';
+				$args['graphql_plural_name'] = 'PayPalOrders';
 				break;
 		}
 
@@ -101,6 +112,8 @@ class CoreSchemaFilters implements Hookable {
 		$loaders['ticket']   = &$ticket_loader;
 		$attendee_loader     = new AttendeeLoader( $context );
 		$loaders['attendee'] = &$attendee_loader;
+		$order_loader        = new OrderLoader( $context );
+		$loaders['order']    = &$order_loader;
 
 		return $loaders;
 	}

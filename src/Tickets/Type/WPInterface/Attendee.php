@@ -9,7 +9,6 @@
 namespace WPGraphQL\TEC\Tickets\Type\WPInterface;
 
 use GraphQL\Error\UserError;
-use GraphQL\Type\Definition\ResolveInfo;
 use GraphQLRelay\Relay;
 use WPGraphQL\AppContext;
 use WPGraphQL\Registry\TypeRegistry;
@@ -46,6 +45,7 @@ class Attendee {
 					'UniformResourceIdentifiable',
 					'DatabaseIdentifier',
 					'NodeWithTitle',
+					NodeWithOrder::$type,
 					NodeWithTicket::$type,
 					NodeWithUser::$type,
 					NodeWithEvent::$type,
@@ -58,8 +58,8 @@ class Attendee {
 					}
 					throw new UserError(
 						sprintf(
-							/* translators: %s: Product type */
-							__( 'The "%s" product type is not supported by the core WPGraphQL for TEC schema.', 'wp-graphql-tec' ),
+							/* translators: %s: Attendee type */
+							__( 'The "%s" attendee type is not supported by the core WPGraphQL for TEC schema.', 'wp-graphql-tec' ),
 							$value->type
 						)
 					);

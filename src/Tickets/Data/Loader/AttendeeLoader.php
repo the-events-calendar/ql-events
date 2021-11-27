@@ -52,7 +52,7 @@ class AttendeeLoader extends AbstractDataLoader {
 		$post = null;
 		switch ( $entry->post_type ) {
 			case 'tribe_rsvp_attendees':
-			case 'tec_tc_attendees':
+			case 'tec_tc_attendee':
 			case 'tribe_tpp_attendees':
 			default:
 				$post = new Attendee( $entry );
@@ -75,10 +75,10 @@ class AttendeeLoader extends AbstractDataLoader {
 			return $keys;
 		}
 
-		$ticket_post_types = array_keys( Utils::get_et_attendee_types() );
+		$post_types = array_keys( Utils::get_et_attendee_types() );
 
 		$args = [
-			'post_types'          => $ticket_post_types,
+			'post_types'          => $post_types,
 			'post_status'         => 'any',
 			'posts_per_page'      => count( $keys ),
 			'post__in'            => $keys,
@@ -127,7 +127,7 @@ class AttendeeLoader extends AbstractDataLoader {
 				$loaded_posts[ $key ] = null;
 			}
 
-			if ( ! in_array( $post_type, $ticket_post_types, true ) ) {
+			if ( ! in_array( $post_type, $post_types, true ) ) {
 				/* translators: invalid post-type error message */
 				throw new UserError( sprintf( __( '%s is not a valid Attendee post type', 'wp-graphql-tec' ), $post_type ) );
 			}

@@ -88,7 +88,8 @@ class Utils {
 	 */
 	public static function get_et_types() : array {
 		return self::get_et_ticket_types()
-			+ self::get_et_attendee_types();
+			+ self::get_et_attendee_types()
+			+ self::get_et_order_types();
 	}
 
 	/**
@@ -113,7 +114,18 @@ class Utils {
 		return [
 			'tribe_rsvp_attendees' => 'RsvpAttendee',
 			'tribe_tpp_attendees'  => 'PayPalAttendee',
-			'tec_tc_attendees'     => 'TcAttendee',
+			'tec_tc_attendee'      => 'TcAttendee',
+		];
+	}
+	/**
+	 * Returns an array key-value pair of registered Event Tickets order post types and their corresponding GraphQL object type.
+	 *
+	 * Example: `[ 'tribe_events' => 'Event' ]
+	 */
+	public static function get_et_order_types() : array {
+		return [
+			'tec_tc_order'     => 'TcOrder',
+			'tribe_tpp_orders' => 'PayPalOrder',
 		];
 	}
 
@@ -126,18 +138,22 @@ class Utils {
 		switch ( $type ) {
 			case 'tribe_rsvp_tickets':
 			case 'RsvpTicket':
+			case 'tribe_rsvp_attendees':
+			case 'RsvpAttendee':
 				return 'rsvp';
 			case 'tribe_tpp_tickes':
 			case 'PayPalTicket':
+			case 'tribe_tpp_orders':
+			case 'PayPalOrder':
+			case 'tribe_tpp_attendees':
+			case 'PayPalAttendee':
 				return 'tribe-commerce';
 			case 'tec_tc_ticket':
 			case 'TcTicket':
-				return 'tickets-commerce';
-			case 'tribe_rsvp_attendees':
-				return 'rsvp';
-			case 'tribe_tpp_attendees':
-				return 'tribe-commerce';
 			case 'tec_tc_attendee':
+			case 'TcAttendee':
+			case 'tec_tc_order':
+			case 'TcOrder':
 				return 'tickets-commerce';
 		}
 		return 'default';

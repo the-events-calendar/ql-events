@@ -1,8 +1,8 @@
 <?php
 /**
- * DataLoader - TicketLoader
+ * DataLoader - OrderLoader
  *
- * Loads Models for TEC Ticket post type.
+ * Loads Models for TEC Order post type.
  *
  * @package WPGraphQL\TEC\Tickets\Data\Loader
  * @since 0.0.1
@@ -13,25 +13,24 @@ namespace WPGraphQL\TEC\Tickets\Data\Loader;
 use GraphQL\Error\UserError;
 use WP_Query;
 use WPGraphQL\Data\Loader\AbstractDataLoader;
-use WPGraphQL\TEC\Tickets\Model\RsvpTicket;
-use WPGraphQL\TEC\Tickets\Model\Ticket;
-use WPGraphQL\TEC\Tickets\Model\PurchasableTicket;
 use WPGraphQL\TEC\Utils\Utils;
 use WP_Post;
+use WPGraphQL\TEC\Tickets\Model\Order;
+
 /**
- * Class - TicketLoader
+ * Class - OrderLoader
  */
-class TicketLoader extends AbstractDataLoader {
+class OrderLoader extends AbstractDataLoader {
 	/**
 	 * {@inheritDoc}
 	 *
 	 * @param WP_Post $entry .
 	 */
-	protected function get_model( $entry, $key ) : ?Ticket {
+	protected function get_model( $entry, $key ) : ?Order {
 		if (
 			empty( $entry ) ||
 			! isset( $entry->post_type ) ||
-			! in_array( $entry->post_type, [ ...array_keys( Utils::get_et_ticket_types() ), 'revision' ], true )
+			! in_array( $entry->post_type, [ ...array_keys( Utils::get_et_order_types() ), 'revision' ], true )
 		) {
 			return null;
 		}
@@ -47,21 +46,10 @@ class TicketLoader extends AbstractDataLoader {
 
 		if ( 'revision' === $entry->post_type && ! empty( $entry->post_parent ) && absint( $entry->post_parent ) ) {
 			$post_parent = $entry->post_parent;
-			$context->get_loader( 'ticket' )->load_deferred( $post_parent );
+			$context->get_loader( 'order' )->load_deferred( $post_parent );
 		}
 
-		$post = null;
-		switch ( $entry->post_type ) {
-			case 'tribe_rsvp_tickets':
-				$post = new RsvpTicket( $entry );
-				break;
-			case 'tec_tc_ticket':
-			case 'tribe_tpp_ticket':
-				$post = new PurchasableTicket( $entry );
-				break;
-			default:
-				$post = new Ticket( $entry );
-		}
+		$post = new Order( $entry );
 
 		if ( ! isset( $post->fields ) || empty( $post->fields ) ) {
 			return null;
@@ -80,7 +68,7 @@ class TicketLoader extends AbstractDataLoader {
 			return $keys;
 		}
 
-		$post_types = array_keys( Utils::get_et_ticket_types() );
+		$post_types = array_keys( Utils::get_et_order_types() );
 
 		$args = [
 			'post_types'          => $post_types,
@@ -134,7 +122,7 @@ class TicketLoader extends AbstractDataLoader {
 
 			if ( ! in_array( $post_type, $post_types, true ) ) {
 				/* translators: invalid post-type error message */
-				throw new UserError( sprintf( __( '%s is not a valid Ticket post type', 'wp-graphql-tec' ), $post_type ) );
+				throw new UserError( sprintf( __( '%s is not a valid Order post type', 'wp-graphql-tec' ), $post_type ) );
 			}
 			$loaded_posts[ $key ] = get_post( (int) $key );
 		}

@@ -9,7 +9,7 @@
 namespace WPGraphQL\TEC\Tickets\Type\WPObject;
 
 use WPGraphQL\TEC\TEC;
-use WPGraphQL\TEC\Tickets\Type\Enum\PaypalCurrencyCodeOptionsEnum;
+use WPGraphQL\TEC\Tickets\Type\Enum\CurrencyCodeEnum;
 use WPGraphQL\TEC\Tickets\Type\Enum\StockHandlingOptionsEnum;
 use WPGraphQL\TEC\Tickets\Type\Enum\TicketFormLocationOptionsEnum;
 use WPGraphQL\TEC\Utils\Utils;
@@ -71,8 +71,8 @@ class TecSettings {
 				'description' => __( 'Whether PayPal Sandbox mode for testing has been enabled.', 'wp-graphql-tec' ),
 				'resolve'     => fn() => (bool) tribe_get_option( 'ticket-paypal-sandbox' ),
 			];
-			$fields['currencyCode']                 = [
-				'type'        => PaypalCurrencyCodeOptionsEnum::$type,
+			$fields['currency']                     = [
+				'type'        => CurrencyCodeEnum::$type,
 				'description' => __( 'Whether PayPal Sandbox mode for testing has been enabled.', 'wp-graphql-tec' ),
 				'resolve'     => fn() => tribe_get_option( 'ticket-commerce-currency-code' ) ?: null,
 			];

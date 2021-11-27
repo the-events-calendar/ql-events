@@ -38,8 +38,6 @@ class Factory {
 	public static function set_object_type_config( array $config ) : array {
 		$post_type = Utils::graphql_type_to_post_type( $config['name'] );
 
-		$post_types_with_tickets = Utils::get_enabled_post_types_for_tickets();
-
 		if ( is_null( $post_type ) ) {
 			return $config;
 		}
@@ -51,7 +49,7 @@ class Factory {
 			case in_array( $post_type, [ 'tec_tc_ticket', 'tribe_tpp_tickets' ], true ):
 				$config['interfaces'] = [ WPInterface\PurchasableTicket::$type ];
 				break;
-			case in_array( $post_type, $post_types_with_tickets, true ):
+			case in_array( $post_type, Utils::get_enabled_post_types_for_tickets(), true ):
 				$config['interfaces'] = array_merge(
 					$config['interfaces'],
 					[
@@ -61,8 +59,11 @@ class Factory {
 					]
 				);
 				break;
-			case in_array( $post_type, [ 'tec_tc_attendees', 'tribe_tpp_attendees', 'tribe_rsvp_attendees' ], true ):
+			case in_array( $post_type, array_keys( Utils::get_et_attendee_types() ), true ):
 				$config['interfaces'] = [ WPInterface\Attendee::$type ];
+				break;
+			case in_array( $post_type, array_keys( Utils::get_et_order_types() ), true ):
+				$config['interfaces'] = [ WPInterface\Order::$type ];
 				break;
 		}
 		return $config;
@@ -85,11 +86,14 @@ class Factory {
 				case 'tribe_tpp_tickets':
 					$model = new Model\PurchasableTicket( $entry );
 					break;
-				case 'tec_tc_attendees':
+				case 'tec_tc_attendee':
 				case 'tribe_rsvp_attendees':
 				case 'tribe_tpp_attendees':
 					$model = new Model\Attendee( $entry );
 					break;
+				case 'tec_tc_order':
+				case 'tec_tpp_orders':
+					$model = new Model\Order( $entry );
 			}
 		}
 
@@ -114,6 +118,10 @@ class Factory {
 				break;
 			case is_a( $node, Model\Attendee::class ):
 				$type = Model\Attendee::class;
+				break;
+			case is_a( $node, Model\Order::class ):
+				$type = Model\Order::class;
+				break;
 		}
 
 		return $type;
@@ -130,16 +138,15 @@ class Factory {
 			return $config;
 		}
 
-		switch ( $config['toType'] ) {
-			case WPObject\RsvpTicket::$type:
-			case 'TcTickets':
-			case 'PayPalTickets':
+		switch ( true ) {
+			case in_array( $config['toType'], Utils::get_et_ticket_types(), true ):
 				$config = TicketHelper::get_connection_config( $config );
 				break;
-			case 'RsvpAttendees':
-			case 'TcAttendees':
-			case 'PayPalAttendees':
+			case in_array( $config['toType'], Utils::get_et_attendee_types(), true ):
 				$config = AttendeeHelper::get_connection_config( $config );
+				break;
+			case in_array( $config['toType'], Utils::get_et_order_types(), true ):
+				$config = OrderHelper::get_connection_config( $config );
 				break;
 		}
 

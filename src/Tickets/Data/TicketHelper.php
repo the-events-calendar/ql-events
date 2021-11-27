@@ -10,6 +10,7 @@ namespace WPGraphQL\TEC\Tickets\Data;
 
 use Tribe__Tickets__Tickets;
 use WPGraphQL\TEC\Abstracts\DataHelper;
+use WPGraphQL\TEC\Tickets\Type\Enum\CurrencyCodeEnum;
 use WPGraphQL\TEC\Tickets\Type\Enum\TicketTypeEnum;
 use WPGraphQL\TEC\Tickets\Type\Input\IntRangeInput;
 use WPGraphQL\TEC\Utils\Utils;
@@ -102,8 +103,8 @@ class TicketHelper extends DataHelper {
 				'type'        => 'Int',
 				'description' => __( 'Filter by tickets that have a minimum number of checked-in attendees', 'wp-graphql-tec' ),
 			],
-			'currencyCode'     => [
-				'type'        => [ 'list_of' => 'String' ],
+			'currency'         => [
+				'type'        => [ 'list_of' => CurrencyCodeEnum::$type ],
 				'description' => __( 'Filter tickets by their provider currency codes. Accepts a 3-letter currency_codes, or an array of codes.', 'wp-graphql-tec' ),
 			],
 			'eventIdIn'        => [
