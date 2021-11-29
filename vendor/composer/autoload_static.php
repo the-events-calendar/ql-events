@@ -82,6 +82,7 @@ class ComposerStaticInit70778bcb3841274af4cc70b093cb0596
         'WPGraphQL\\TEC\\Tickets\\Model\\RsvpTicket' => __DIR__ . '/../..' . '/src/Tickets/Model/RsvpTicket.php',
         'WPGraphQL\\TEC\\Tickets\\Model\\Ticket' => __DIR__ . '/../..' . '/src/Tickets/Model/Ticket.php',
         'WPGraphQL\\TEC\\Tickets\\Mutation\\CreateRsvp' => __DIR__ . '/../..' . '/src/Tickets/Mutation/CreateRsvp.php',
+        'WPGraphQL\\TEC\\Tickets\\Mutation\\UpdateRsvp' => __DIR__ . '/../..' . '/src/Tickets/Mutation/UpdateRsvp.php',
         'WPGraphQL\\TEC\\Tickets\\TypeRegistry' => __DIR__ . '/../..' . '/src/Tickets/TypeRegistry.php',
         'WPGraphQL\\TEC\\Tickets\\Type\\Enum\\AttendeeOptoutStatusEnum' => __DIR__ . '/../..' . '/src/Tickets/Type/Enum/AttendeeOptoutStatusEnum.php',
         'WPGraphQL\\TEC\\Tickets\\Type\\Enum\\AttendeeTypeEnum' => __DIR__ . '/../..' . '/src/Tickets/Type/Enum/AttendeeTypeEnum.php',

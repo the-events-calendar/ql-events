@@ -146,6 +146,7 @@ class TypeRegistry implements TypeRegistryInterface {
 	 */
 	public static function register_mutations( GraphQLRegistry $type_registry ) : void {
 		Mutation\CreateRsvp::register_mutation();
+		Mutation\UpdateRsvp::register_mutation();
 
 		/**
 		 * Fires after TEC mutations have been registered.

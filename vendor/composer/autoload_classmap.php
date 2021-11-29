@@ -67,6 +67,7 @@ return array(
     'WPGraphQL\\TEC\\Tickets\\Model\\RsvpTicket' => $baseDir . '/src/Tickets/Model/RsvpTicket.php',
     'WPGraphQL\\TEC\\Tickets\\Model\\Ticket' => $baseDir . '/src/Tickets/Model/Ticket.php',
     'WPGraphQL\\TEC\\Tickets\\Mutation\\CreateRsvp' => $baseDir . '/src/Tickets/Mutation/CreateRsvp.php',
+    'WPGraphQL\\TEC\\Tickets\\Mutation\\UpdateRsvp' => $baseDir . '/src/Tickets/Mutation/UpdateRsvp.php',
     'WPGraphQL\\TEC\\Tickets\\TypeRegistry' => $baseDir . '/src/Tickets/TypeRegistry.php',
     'WPGraphQL\\TEC\\Tickets\\Type\\Enum\\AttendeeOptoutStatusEnum' => $baseDir . '/src/Tickets/Type/Enum/AttendeeOptoutStatusEnum.php',
     'WPGraphQL\\TEC\\Tickets\\Type\\Enum\\AttendeeTypeEnum' => $baseDir . '/src/Tickets/Type/Enum/AttendeeTypeEnum.php',
