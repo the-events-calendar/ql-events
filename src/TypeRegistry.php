@@ -42,6 +42,7 @@ class TypeRegistry implements TypeRegistryInterface {
 		self::register_objects( $type_registry );
 		self::register_fields( $type_registry );
 		self::register_connections( $type_registry );
+		self::register_mutations( $type_registry );
 
 		/**
 		 * Fires after all types have been registered.
@@ -313,5 +314,49 @@ class TypeRegistry implements TypeRegistryInterface {
 		 * @param GraphQLRegistry $type_registry Instance of the WPGraphQL TypeRegistry.
 		 */
 		do_action( 'graphql_tec_after_register_connections', $type_registry );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public static function register_mutations( GraphQLRegistry $type_registry ) : void {
+		/**
+		 * Fires before all connections have been registered.
+		 *
+		 * @param GraphQLRegistry $type_registry Instance of the WPGraphQL TypeRegistry.
+		 */
+		do_action( 'graphql_tec_before_register_mutations', $type_registry );
+
+		/**
+		 * Hook to register common mutations.
+		 *
+		 * @param GraphQLRegistry $type_registry Instance of the WPGraphQL TypeRegistry.
+		 */
+		do_action( 'graphql_tec_register_common_mutations', $type_registry );
+
+		if ( TEC::is_tec_loaded() ) {
+			/**
+			 * Hook to register TEC mutations.
+			 *
+			 * @param GraphQLRegistry $type_registry Instance of the WPGraphQL TypeRegistry.
+			 */
+			do_action( 'graphql_tec_register_tec_mutations', $type_registry );
+		}
+
+		if ( TEC::is_et_loaded() ) {
+			/**
+			 * Hook to register ET mutations.
+			 *
+			 * @param GraphQLRegistry $type_registry Instance of the WPGraphQL TypeRegistry.
+			 */
+			do_action( 'graphql_tec_register_et_mutations', $type_registry );
+		}
+
+		/**
+		 * Fires after all connections have been registered.
+		 *
+		 * @param GraphQLRegistry $type_registry Instance of the WPGraphQL TypeRegistry.
+		 */
+		do_action( 'graphql_tec_after_register_mutations', $type_registry );
 	}
 }

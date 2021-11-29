@@ -15,6 +15,7 @@ use WPGraphQL\TEC\Tickets\Type\Enum;
 use WPGraphQL\TEC\Tickets\Type\Input;
 use WPGraphQL\TEC\Tickets\Type\WPInterface;
 use WPGraphQL\TEC\Tickets\Type\WPObject;
+use WPGraphQL\TEC\Tickets\Mutation;
 
 /**
  * Class - TypeRegistry
@@ -31,6 +32,7 @@ class TypeRegistry implements TypeRegistryInterface {
 		add_action( 'graphql_tec_register_et_objects', [ __CLASS__, 'register_objects' ] );
 		add_action( 'graphql_tec_register_et_fields', [ __CLASS__, 'register_fields' ] );
 		add_action( 'graphql_tec_register_et_connections', [ __CLASS__, 'register_connections' ] );
+		add_action( 'graphql_tec_register_et_mutations', [ __CLASS__, 'register_mutations' ] );
 	}
 
 	/**
@@ -47,6 +49,7 @@ class TypeRegistry implements TypeRegistryInterface {
 		Enum\TicketTypeEnum::register_type();
 		Enum\TicketFormLocationOptionsEnum::register_type();
 		Enum\OrderTypeEnum::register_type();
+		Enum\OrderStatusEnum::register_type();
 
 		/**
 		 * Fires after ET enums have been registered.
@@ -61,6 +64,7 @@ class TypeRegistry implements TypeRegistryInterface {
 	 */
 	public static function register_inputs( GraphQLRegistry $type_registry ) : void {
 		Input\IntRangeInput::register_type();
+		Input\AttendeeInput::register_type();
 
 		/**
 		 * Fires after TEC enums have been registered.
@@ -135,5 +139,19 @@ class TypeRegistry implements TypeRegistryInterface {
 		 * @param GraphQLRegistry $type_registry Instance of the WPGraphQL TypeRegistry.
 		 */
 		do_action( 'graphql_tec_after_register_et_connections', $type_registry );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public static function register_mutations( GraphQLRegistry $type_registry ) : void {
+		Mutation\CreateRsvp::register_mutation();
+
+		/**
+		 * Fires after TEC mutations have been registered.
+		 *
+		 * @param GraphQLRegistry $type_registry Instance of the WPGraphQL TypeRegistry.
+		 */
+		do_action( 'graphql_tec_after_register_et_mutations', $type_registry );
 	}
 }

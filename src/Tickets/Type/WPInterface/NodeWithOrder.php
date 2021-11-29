@@ -34,16 +34,6 @@ class NodeWithOrder {
 			self::$type,
 			[
 				'description' => __( 'Order Fields', 'wp-graphql-tec' ),
-				'connections' => [
-					'order' => [
-						'toType'  => Order::$type,
-						'resolve' => function ( $source, array $args, AppContext $context ) {
-							if ( empty( $source->orderId ) ) {
-								return null;
-							}
-						},
-					],
-				],
 				'fields'      => [
 					'order'           => [
 						'type'        => Order::$type,

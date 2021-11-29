@@ -31,6 +31,7 @@ class TypeRegistry implements TypeRegistryInterface {
 		add_action( 'graphql_tec_register_common_objects', [ __CLASS__, 'register_objects' ] );
 		add_action( 'graphql_tec_register_common_fields', [ __CLASS__, 'register_fields' ] );
 		add_action( 'graphql_tec_register_common_connections', [ __CLASS__, 'register_connections' ] );
+		add_action( 'graphql_tec_register_common_mutations', [ __CLASS__, 'register_mutations' ] );
 	}
 
 	/**
@@ -52,11 +53,11 @@ class TypeRegistry implements TypeRegistryInterface {
 	 */
 	public static function register_inputs( GraphQLRegistry $type_registry ) : void {
 		/**
-		 * Fires after TEC enums have been registered.
+		 * Fires after TEC inputs have been registered.
 		 *
 		 * @param GraphQLRegistry $type_registry Instance of the WPGraphQL TypeRegistry.
 		 */
-		do_action( 'graphql_tec_after_register_tec_inputs', $type_registry );
+		do_action( 'graphql_tec_after_register_common_inputs', $type_registry );
 	}
 
 	/**
@@ -109,5 +110,17 @@ class TypeRegistry implements TypeRegistryInterface {
 		 * @param GraphQLRegistry $type_registry Instance of the WPGraphQL TypeRegistry.
 		 */
 		do_action( 'graphql_tec_after_register_common_connections', $type_registry );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public static function register_mutations( GraphQLRegistry $type_registry ) : void {
+		/**
+		 * Fires after TEC mutations have been registered.
+		 *
+		 * @param GraphQLRegistry $type_registry Instance of the WPGraphQL TypeRegistry.
+		 */
+		do_action( 'graphql_tec_after_register_common_mutations', $type_registry );
 	}
 }

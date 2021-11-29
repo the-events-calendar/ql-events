@@ -63,4 +63,11 @@ interface TypeRegistryInterface {
 	 * @param TypeRegistry $type_registry .
 	 */
 	public static function register_connections( TypeRegistry $type_registry ) : void;
+
+	/**
+	 * Fires hooks responsible for registering mutations to GraphQL types.
+	 *
+	 * @param TypeRegistry $type_registry .
+	 */
+	public static function register_mutations( TypeRegistry $type_registry ) : void;
 }

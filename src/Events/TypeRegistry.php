@@ -30,6 +30,7 @@ class TypeRegistry implements TypeRegistryInterface {
 		add_action( 'graphql_tec_register_tec_objects', [ __CLASS__, 'register_objects' ] );
 		add_action( 'graphql_tec_register_tec_fields', [ __CLASS__, 'register_fields' ] );
 		add_action( 'graphql_tec_register_tec_connections', [ __CLASS__, 'register_connections' ] );
+		add_action( 'graphql_tec_register_tec_mutations', [ __CLASS__, 'register_mutations' ] );
 	}
 
 	/**
@@ -125,5 +126,17 @@ class TypeRegistry implements TypeRegistryInterface {
 		 * @param GraphQLRegistry $type_registry Instance of the WPGraphQL TypeRegistry.
 		 */
 		do_action( 'graphql_tec_after_register_tec_connections', $type_registry );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public static function register_mutations( GraphQLRegistry $type_registry ) : void {
+		/**
+		 * Fires after TEC mutations have been registered.
+		 *
+		 * @param GraphQLRegistry $type_registry Instance of the WPGraphQL TypeRegistry.
+		 */
+		do_action( 'graphql_tec_after_register_tec_mutations', $type_registry );
 	}
 }
