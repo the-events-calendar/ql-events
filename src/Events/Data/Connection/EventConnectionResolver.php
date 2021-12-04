@@ -391,6 +391,9 @@ class EventConnectionResolver extends AbstractConnectionResolver {
 				'hasRsvp'            => 'has_rsvp',
 				'hasRsvpOrTickets'   => 'has_rsvp_or_tickets',
 				'costCurrencySymbol' => 'cost_currency_symbol',
+				// ECP args.
+				'hasGeolocation'     => 'has_geoloc',
+				'relatedTo'          => 'related_to',
 			]
 		);
 
@@ -416,6 +419,12 @@ class EventConnectionResolver extends AbstractConnectionResolver {
 					'startsBetween',
 					'startsOnDate',
 					'startsOnOrAfter',
+					'customFieldLike',
+					'customFieldBetween',
+					'customFieldGreaterThan',
+					'customFieldLessThan',
+					'geolocation',
+					'near',
 				],
 				true
 			) ) {
@@ -578,18 +587,27 @@ class EventConnectionResolver extends AbstractConnectionResolver {
 		$query_args = Utils::map_input(
 			$where_args,
 			[
-				'cost'              => 'cost',
-				'endsAfter'         => 'ends_after',
-				'endsBefore'        => 'ends_before',
-				'endsBetween'       => 'ends_between',
-				'endsOnOrBefore'    => 'ends_on_or_before',
-				'eventDateOverlaps' => 'date_overlaps',
-				'startsOnDate'      => 'on_date',
-				'runsBetween'       => 'runs_between',
-				'startsAfter'       => 'starts_after',
-				'startsBefore'      => 'starts_before',
-				'startsBetween'     => 'starts_between',
-				'startsOnOrAfter'   => 'starts_on_or_after',
+				'cost'                   => 'cost',
+				'endsAfter'              => 'ends_after',
+				'endsBefore'             => 'ends_before',
+				'endsBetween'            => 'ends_between',
+				'endsOnOrBefore'         => 'ends_on_or_before',
+				'eventDateOverlaps'      => 'date_overlaps',
+				'startsOnDate'           => 'on_date',
+				'runsBetween'            => 'runs_between',
+				'startsAfter'            => 'starts_after',
+				'startsBefore'           => 'starts_before',
+				'startsBetween'          => 'starts_between',
+				'startsOnOrAfter'        => 'starts_on_or_after',
+				// ECP.
+				'customFieldLike'        => 'custom_field',
+				'customFieldBetween'     => 'custom_field_between',
+				'customFieldGreaterThan' => 'custom_field_greater_than',
+				'customFieldLessThan'    => 'custom_field_less_than',
+				'geolocation'            => 'geoloc',
+				'isRecurringEvent'       => 'in_series',
+				'inRecurringEventSeries' => 'in_series',
+				'near'                   => 'near',
 			]
 		);
 
@@ -629,6 +647,37 @@ class EventConnectionResolver extends AbstractConnectionResolver {
 						$value['startDateTime'],
 						$value['endDateTime'],
 						$value['timezone'] ?? null,
+					);
+					break;
+				case 'custom_field':
+				case 'custom_field_greater_than':
+				case 'custom_field_less_than':
+					$query->by(
+						$key,
+						$value['name'],
+						$value['value'] ?? '',
+					);
+					break;
+				case 'custom_field_between':
+					$query->by(
+						$key,
+						$value['min'],
+						$value['max'],
+					);
+					break;
+				case 'geolocation':
+					$query->by(
+						$key,
+						$value['coordinates']['latitude'],
+						$value['coordinates']['longitude'],
+						$value['distance'] ?? 10,
+					);
+					break;
+				case 'near':
+					$query->by(
+						$key,
+						$value['address'],
+						$value['distance'] ?? 10,
 					);
 					break;
 			}

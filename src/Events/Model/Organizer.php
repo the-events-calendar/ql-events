@@ -8,6 +8,7 @@
 
 namespace WPGraphQL\TEC\Events\Model;
 
+use WP_Post;
 use GraphQLRelay\Relay;
 use WPGraphQL\Model\Post;
 /**
@@ -35,7 +36,7 @@ class Organizer extends Post {
 					return tribe_get_organizer_email( $this->data->ID ) ?: null;
 				},
 				'id'         => function() : ?string {
-					return ! empty( $this->data->ID ) ? Relay::toGlobalId( 'tribe_organizer', (string) $this->data->ID ) : null;
+					return ! empty( $this->data->ID ) ? Relay::toGlobalId( $this->data->post_type, (string) $this->data->ID ) : null;
 				},
 				'linkedData' => function() {
 					// TEC delivers this as an array with the eventId as the key.
@@ -58,9 +59,9 @@ class Organizer extends Post {
 			 * Useful for adding fields to a model when an extension.
 			 *
 			 * @param array $fields The fields registered to the model.
-			 * @param __CLASS__ $model The current model.
+			 * @param WP_Post $data The post data.
 			 */
-			$this->fields = apply_filters( 'graphql_tec_organizer_model_fields', $this->fields, $this );
+			$this->fields = apply_filters( 'graphql_tec_organizer_model_fields', $this->fields, $this->data );
 		}
 	}
 }

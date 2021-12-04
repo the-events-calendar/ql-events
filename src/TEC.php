@@ -9,6 +9,7 @@
 namespace WPGraphQL\TEC;
 
 use WPGraphQL\TEC\Events\CoreSchemaFilters as EventsSchemaFilters;
+use WPGraphQL\TEC\EventsPro\CoreSchemaFilters as EventsProSchemaFilters;
 use WPGraphQL\TEC\Tickets\CoreSchemaFilters as TicketsSchemaFilters;
 
 if ( ! class_exists( 'WPGraphQL\TEC\TEC' ) ) :
@@ -56,6 +57,22 @@ if ( ! class_exists( 'WPGraphQL\TEC\TEC' ) ) :
 		 */
 		public static function is_tec_loaded() : bool {
 			return class_exists( 'Tribe__Events__Main' );
+		}
+
+		/**
+		 * Returns true if The Events Calendar Pro is activated.
+		 */
+		public static function is_tec_pro_loaded() : bool {
+			$activated = function_exists( 'tribe_check_plugin' );
+			if ( $activated ) {
+				$tickets_plus_can_run = self::is_tec_loaded()
+					&& class_exists( 'Tribe__Events__Pro__Main' )
+					&& tribe_check_plugin( 'Tribe__Events__Pro__Main' );
+
+				return apply_filters( 'tribe_events_calendar_pro_can_run', $tickets_plus_can_run );
+			}
+
+			return false;
 		}
 
 		/**
@@ -130,6 +147,10 @@ if ( ! class_exists( 'WPGraphQL\TEC\TEC' ) ) :
 			// WPGraphQL core filters.
 			if ( self::is_tec_loaded() ) {
 				EventsSchemaFilters::register_hooks();
+			}
+
+			if ( self::is_tec_pro_loaded() ) {
+				EventsProSchemaFilters::register_hooks();
 			}
 
 			if ( self::is_et_loaded() ) {

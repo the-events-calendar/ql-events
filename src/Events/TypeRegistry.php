@@ -86,7 +86,6 @@ class TypeRegistry implements TypeRegistryInterface {
 	 */
 	public static function register_objects( GraphQLRegistry $type_registry ) : void {
 		WPObject\OrganizerLinkedData::register_type();
-		WPObject\VenueCoordinates::register_type();
 		WPObject\VenueLinkedData::register_type();
 
 		/**

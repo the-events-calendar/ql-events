@@ -91,6 +91,7 @@ class NodeWithTickets {
 								return null;
 							}
 
+							// @todo this is wrong. Needs to be the ticket type.
 							return array_map( fn( $id ) => Relay::toGlobalId( $source->post_type, $id ), $ids );
 						},
 					],

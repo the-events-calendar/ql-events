@@ -60,7 +60,7 @@ class NodeWithEvent {
 								return null;
 							}
 
-							return Relay::toGlobalId( 'tribe_Event', (string) $source->eventId );
+							return Relay::toGlobalId( 'tribe_events', (string) $source->eventId );
 						},
 					],
 				],

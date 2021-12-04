@@ -10,17 +10,11 @@
 
 namespace WPGraphQL\TEC\Tickets\Data;
 
-use GraphQLRelay\Relay;
-use Tribe__Tickets__Tickets;
-use Tribe__Repository;
 use WP_Post;
-use WP_Query;
 use WPGraphQL\Model\Model as GraphQLModel;
-use WPGraphQL\Model\Post;
 use WPGraphQL\TEC\Tickets\Model;
 use WPGraphQL\TEC\Tickets\Type\WPInterface;
 use WPGraphQL\TEC\Common\Type\WPInterface as CommonInterface;
-use WPGraphQL\TEC\Tickets\Type\WPObject;
 use WPGraphQL\TEC\Traits\PostTypeResolverMethod;
 use WPGraphQL\TEC\Utils\Utils;
 
@@ -151,81 +145,6 @@ class Factory {
 		}
 
 		return $config;
-	}
-
-	/**
-	 * Extends event model with ticket fields.
-	 *
-	 * @param array $fields .
-	 * @param Post  $model .
-	 */
-	public static function add_fields_to_event_model( array $fields, Post $model ) : array {
-		$post_type   = $model->post_type;
-		$database_id = (int) $model->ID;
-		$provider    = Tribe__Tickets__Tickets::get_event_ticket_provider_object( $model->ID );
-
-		$ticket_ids = ! empty( $provider ) ? $provider->get_tickets_ids( $database_id ) : null;
-
-		$fields_to_add = [
-			'availableTickets'         => function() use ( $database_id ) : int {
-				return tribe_events_count_available_tickets( $database_id );
-			},
-			'capacity'                 => function() use ( $database_id ) : ?int {
-				return tribe_get_event_capacity( $database_id );
-			},
-			'hasTickets'               => function() use ( $ticket_ids ) : bool {
-				return ! empty( $ticket_ids );
-			},
-			'hasTicketsOnSale'         => function() use ( $database_id ) : bool {
-				return tribe_events_has_tickets_on_sale( $database_id );
-			},
-			'hasUnlimitedStockTickets' => function() use ( $database_id ) : bool {
-				return tribe_events_has_unlimited_stock_tickets( $database_id );
-			},
-			'isPartiallySoldOut'       => function() use ( $database_id ) : bool {
-				return tribe_events_partially_soldout( $database_id );
-			},
-			'isSoldOut'                => function() use ( $database_id ) : bool {
-				return tribe_events_has_soldout( $database_id );
-			},
-			'ticketDatabaseIds'        => function() use ( $ticket_ids ) : ?array {
-				return $ticket_ids ?: null;
-			},
-			'ticketIds'                => function() use ( $ticket_ids, $post_type ) : ?array {
-				return ! empty( $ticket_ids ) ? array_map( fn( $id ) => Relay::toGlobalId( $post_type, $id ), $ticket_ids ) : null;
-			},
-		];
-
-		return array_merge( $fields, $fields_to_add );
-	}
-
-	/**
-	 * Extends event connection with where args.
-	 *
-	 * @param array $connection_args .
-	 */
-	public static function add_where_args_to_events_connection( array $connection_args ) : array {
-		return array_merge(
-			$connection_args,
-			[
-				'costCurrencySymbol' => [
-					'type'        => [ 'list_of' => 'String' ],
-					'description' => __( 'One or more currency symbols or currency ISO codes.', 'wp-graphql-tec' ),
-				],
-				'hasTickets'         => [
-					'type'        => 'Boolean',
-					'description' => __( 'Filters events that either have or dont have tickets, based on the provided state. This does NOT include RSVPs or events that have a cost assigned via the cost custom field', 'wp-graphql-tec' ),
-				],
-				'hasRsvp'            => [
-					'type'        => 'Boolean',
-					'description' => __( 'Filters events that either have or dont have RSVP tickets, based on the provided state.', 'wp-graphql-tec' ),
-				],
-				'hasRsvpOrTickets'   => [
-					'type'        => 'Boolean',
-					'description' => __( 'Filters events that either have or dont have either RSVP or regular tickets, based on the provided state.', 'wp-graphql-tec' ),
-				],
-			]
-		);
 	}
 
 	/**

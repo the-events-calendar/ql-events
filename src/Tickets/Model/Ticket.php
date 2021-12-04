@@ -102,6 +102,7 @@ class Ticket extends Post {
 					if ( empty( $image_id ) ) {
 						return null;
 					}
+					// @todo wrong post-type.
 					return Relay::toGlobalId( $this->data->post_type, $image_id );
 				},
 				'featuredImageDatabaseId' => function() : ?int {

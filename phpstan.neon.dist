@@ -7,6 +7,7 @@ parameters:
 		stubFiles:
 			# Simulate added properties
 			- phpstan/class-wp-post-type.stub
+			- phpstan/class-wp-post.stub
 			- phpstan/class-wp-taxonomy.stub
 			- phpstan/tec-methods.stub
 		bootstrapFiles:
@@ -17,6 +18,7 @@ parameters:
 		scanDirectories:
 			- ../wp-graphql/
 			- ../the-events-calendar/
+			- ../events-calendar-pro/
 			- ../event-tickets/
 		ignoreErrors:
 			- '#^Function apply_filters(_ref_array)? invoked with ([1-9]|1[0-2]) parameters, 2 required\.$#'

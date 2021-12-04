@@ -11,6 +11,7 @@ namespace WPGraphQL\TEC;
 use WPGraphQL\Registry\TypeRegistry as GraphQLRegistry;
 use WPGraphQL\TEC\Common\TypeRegistry as CommonTypeRegistry;
 use WPGraphQL\TEC\Events\TypeRegistry as EventsTypeRegistry;
+use WPGraphQL\TEC\EventsPro\TypeRegistry as EventsProTypeRegistry;
 use WPGraphQL\TEC\Interfaces\TypeRegistryInterface;
 use WPGraphQL\TEC\Tickets\TypeRegistry as TicketsTypeRegistry;
 
@@ -26,8 +27,16 @@ class TypeRegistry implements TypeRegistryInterface {
 	public static function init( GraphQLRegistry $type_registry ) : void {
 		// Initializes module-specific type registries.
 		CommonTypeRegistry::init( $type_registry );
-		EventsTypeRegistry::init( $type_registry );
-		TicketsTypeRegistry::init( $type_registry );
+
+		if ( TEC::is_tec_loaded() ) {
+			EventsTypeRegistry::init( $type_registry );
+		}
+		if ( TEC::is_tec_pro_loaded() ) {
+			EventsProTypeRegistry::init( $type_registry );
+		}
+		if ( TEC::is_et_loaded() ) {
+			TicketsTypeRegistry::init( $type_registry );
+		}
 
 		/**
 		 * Fires before all types have been registered.

@@ -152,6 +152,14 @@ configure_wordpress() {
     wp rewrite structure '/%year%/%monthnum%/%postname%/'
 }
 
+setup_tec_pro() {
+	if [ ! -d $WP_CORE_DIR/wp-content/plugins/events-calendar-pro ]; then
+		download "https://pue.tri.be/api/plugins/v2/download?plugin=events-calendar-pro&version=5.10.0&key=$TEC_PRO_KEY" $TMPDIR/tec-pro.zip
+		unzip $TMPDIR/tec-pro.zip -d $WP_CORE_DIR/wp-content/plugins
+	fi
+	wp plugin activate events-calendar-pro
+}
+
 setup_plugin() {
 
 	# Add this repo as a plugin to the repo
@@ -183,6 +191,8 @@ setup_plugin() {
 	# Activate TEC
 	wp plugin activate the-events-calendar
 	wp plugin activate event-tickets
+
+	setup_tec_pro
 
 	# activate the plugin
 	wp plugin activate wp-graphql-tec

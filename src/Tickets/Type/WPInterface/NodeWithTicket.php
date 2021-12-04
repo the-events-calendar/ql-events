@@ -60,6 +60,7 @@ class NodeWithTicket {
 							if ( $source->ticketId === $source->ID ) {
 								return null;
 							}
+							// @todo make generic.
 							return Relay::toGlobalId( 'tribe_ticket', (string) $source->ticketId );
 						},
 					],
