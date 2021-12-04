@@ -39,6 +39,7 @@ class TypeRegistry implements TypeRegistryInterface {
 	 * {@inheritDoc}
 	 */
 	public static function register_enums( GraphQLRegistry $type_registry ) : void {
+		Enum\DistanceUnitEnum::register_type();
 	}
 
 	/**

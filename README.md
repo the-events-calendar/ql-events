@@ -41,4 +41,8 @@ public function __construct( array $config, TypeRegistry $type_registry ) {
 - [ ] Create, Update, Delete, and RSVP/Purchase mutations
 
 ### Future
-- [ ] Extensions: Events Calendar Pro, Event Tickets Plus, Community Events, Community Tickets, Virtual Events.
+- [X] Events Calendar Pro
+- [ ] Event Tickets Plus
+- [ ] Community Events
+- [ ] Community Tickets
+- [ ] Virtual Events
