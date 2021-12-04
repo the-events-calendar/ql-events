@@ -62,7 +62,7 @@ if ( ! class_exists( 'WPGraphQL\TEC\TEC' ) ) :
 		/**
 		 * Returns true if The Events Calendar Pro is activated.
 		 */
-		public static function is_tec_pro_loaded() : bool {
+		public static function is_ecp_loaded() : bool {
 			$activated = function_exists( 'tribe_check_plugin' );
 			if ( $activated ) {
 				$tickets_plus_can_run = self::is_tec_loaded()
@@ -149,7 +149,7 @@ if ( ! class_exists( 'WPGraphQL\TEC\TEC' ) ) :
 				EventsSchemaFilters::register_hooks();
 			}
 
-			if ( self::is_tec_pro_loaded() ) {
+			if ( self::is_ecp_loaded() ) {
 				EventsProSchemaFilters::register_hooks();
 			}
 

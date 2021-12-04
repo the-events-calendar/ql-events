@@ -31,7 +31,7 @@ class TypeRegistry implements TypeRegistryInterface {
 		if ( TEC::is_tec_loaded() ) {
 			EventsTypeRegistry::init( $type_registry );
 		}
-		if ( TEC::is_tec_pro_loaded() ) {
+		if ( TEC::is_ecp_loaded() ) {
 			EventsProTypeRegistry::init( $type_registry );
 		}
 		if ( TEC::is_et_loaded() ) {
