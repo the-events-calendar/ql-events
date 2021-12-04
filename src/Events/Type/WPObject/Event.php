@@ -34,13 +34,6 @@ class Event {
 	 * {@inheritDoc}
 	 */
 	public static function register_fields() : void {
-		self::register_core_fields();
-	}
-
-	/**
-	 * Register the fields used by TEC Core plugin.
-	 */
-	public static function register_core_fields() : void {
 		register_graphql_fields(
 			self::$type,
 			[

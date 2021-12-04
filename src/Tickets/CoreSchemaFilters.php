@@ -10,10 +10,12 @@ namespace WPGraphQL\TEC\Tickets;
 
 use WPGraphQL\AppContext;
 use WPGraphQL\TEC\Interfaces\Hookable;
+use WPGraphQL\TEC\Tickets\Data\EventHelper;
 use WPGraphQL\TEC\Tickets\Data\Factory;
 use WPGraphQL\TEC\Tickets\Data\Loader\AttendeeLoader;
 use WPGraphQL\TEC\Tickets\Data\Loader\OrderLoader;
 use WPGraphQL\TEC\Tickets\Data\Loader\TicketLoader;
+use WPGraphQL\TEC\Tickets\Model\Event;
 
 /**
  * Class - CoreSchemaFilters
@@ -39,9 +41,9 @@ class CoreSchemaFilters implements Hookable {
 		add_filter( 'graphql_wp_connection_type_config', [ Factory::class, 'set_connection_type_config' ], );
 
 		// Extend models.
-		add_filter( 'graphql_tec_event_model_fields', [ Factory::class, 'add_fields_to_event_model' ], 10, 2 );
+		add_filter( 'graphql_tec_event_model_fields', [ Event::class, 'extend' ], 10, 2 );
 
-		add_filter( 'graphql_tec_events_connection_args', [ Factory::class, 'add_where_args_to_events_connection' ] );
+		add_filter( 'graphql_tec_events_connection_args', [ EventHelper::class, 'add_where_args_to_events_connection' ] );
 
 		add_filter( 'tribe_repository_attendees_query_args', [ Factory::class, 'tribe_fix_orderby_args' ], 10, 3 );
 		add_filter( 'tribe_repository_tickets_query_args', [ Factory::class, 'tribe_fix_orderby_args' ], 10, 3 );
@@ -99,7 +101,6 @@ class CoreSchemaFilters implements Hookable {
 
 		return $args;
 	}
-
 
 	/**
 	 * Registers data-loaders to be used when resolving TEC-related GraphQL types.

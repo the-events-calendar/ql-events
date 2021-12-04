@@ -1,0 +1,6 @@
+<?php
+
+/**
+ * @property int $duration
+ */
+final class WP_Post {}

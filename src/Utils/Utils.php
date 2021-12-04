@@ -209,4 +209,22 @@ class Utils {
 
 		return substr( $haystack, -$length ) === $needle;
 	}
+
+	/**
+	 * Converts a sentence to camelcase
+	 *
+	 * @param string $str .
+	 * @param array  $no_strip additional characters to keep.
+	 */
+	public static function to_camel_case( string $str, array $no_strip = [] ) : string {
+		// non-alpha and non-numeric characters become spaces.
+		$str = preg_replace( '/[^a-z0-9' . implode( '', $no_strip ) . ']+/i', ' ', $str ) ?? '';
+		$str = trim( $str );
+		// uppercase the first character of each word.
+		$str = ucwords( $str );
+		$str = str_replace( ' ', '', $str );
+		$str = lcfirst( $str );
+
+		return $str;
+	}
 }

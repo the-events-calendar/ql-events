@@ -5,7 +5,7 @@
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '82b891c0aedf2a056bff4ff31e4ef9d5970e90e2',
+        'reference' => '91f69eab0401105bdeddb8d0d1e43530112cefa2',
         'name' => 'justlevine/wp-graphql-tec',
         'dev' => true,
     ),
@@ -292,7 +292,7 @@
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '82b891c0aedf2a056bff4ff31e4ef9d5970e90e2',
+            'reference' => '91f69eab0401105bdeddb8d0d1e43530112cefa2',
             'dev_requirement' => false,
         ),
         'lucatume/wp-browser' => array(

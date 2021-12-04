@@ -68,6 +68,7 @@ class NodeWithAttendees {
 								return null;
 							}
 
+							// @todo wrong post type
 							return array_map( fn( $id) => Relay::toGlobalId( $source->post_type, (string) $id ), $attendee_ids );
 						},
 					],

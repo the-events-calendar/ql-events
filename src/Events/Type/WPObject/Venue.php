@@ -8,7 +8,6 @@
 
 namespace WPGraphQL\TEC\Events\Type\WPObject;
 
-use WPGraphQL\TEC\Events\Type\WPObject\VenueCoordinates;
 use WPGraphQL\TEC\Events\Type\WPObject\VenueLinkedData;
 
 /**
@@ -33,13 +32,6 @@ class Venue {
 	 * {@inheritDoc}
 	 */
 	public static function register_fields() : void {
-		self::register_core_fields();
-	}
-
-	/**
-	 * Register the fields used by TEC Core plugin.
-	 */
-	public static function register_core_fields() : void {
 		register_graphql_fields(
 			self::$type,
 			[
@@ -51,15 +43,6 @@ class Venue {
 					'type'        => 'String',
 					'description' => __( 'The venue city.', 'wp-graphql-tec' ),
 				],
-				// @todo Enable for TEC Pro.
-				// phpcs:disable
-				/*
-				'coordinates'   => [
-					'type'        => VenueCoordinates::$type,
-					'description' => __( 'The venue coordinates.', 'wp-graphql-tec' ),
-				],
-				*/
-				// phpcs:enable
 				'country'       => [
 					'type'        => 'String',
 					'description' => __( 'The venue country.', 'wp-graphql-tec' ),
