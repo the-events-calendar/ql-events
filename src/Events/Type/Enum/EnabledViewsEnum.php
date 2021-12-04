@@ -38,13 +38,13 @@ class EnabledViewsEnum {
 		 * @return array
 		 */
 	public static function get_values() : array {
-		$views = tribe( 'events.views.v2.manager' )->get_registered_views();
+		$views = tribe( 'Tribe\Events\Views\V2\Manager' )->get_registered_views();
 
 		if ( false === $views ) {
 			return [];
 		}
 
-		$values =[];
+		$values = [];
 		foreach ( array_keys( $views ) as $value ) {
 			$values[ $value ] = [
 				'name'        => strtoupper( str_replace( '-', '_', (string) $value ) ),
