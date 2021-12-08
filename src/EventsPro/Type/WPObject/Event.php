@@ -35,11 +35,6 @@ class Event {
 					'description' => __( 'The link for all occurrences of an event', 'wp-graphql-tec' ),
 					'resolve'     => fn( $source ) => $source,
 				],
-				'customFields'      => [
-					'type'        => CustomFields::$type,
-					'description' => __( 'Event custom fields', 'wp-graphql-tec' ),
-					'resolve'     => fn ( $source ) => ! empty( $source->custom ) ? $source->custom : null,
-				],
 			]
 		);
 	}

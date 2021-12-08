@@ -8,6 +8,7 @@
 
 namespace WPGraphQL\TEC\EventsPro\Type\WPObject;
 
+use WPGraphQL\TEC\Events\Type\WPObject\Event;
 use WPGraphQL\TEC\Utils\Utils;
 use WPGraphQL\Type\WPEnumType;
 
@@ -26,6 +27,11 @@ class CustomFields {
 	 * {@inheritDoc}
 	 */
 	public static function register_type() : void {
+		$fields = tribe_get_option( 'custom-fields', '' );
+		if ( empty( $fields ) ) {
+			return;
+		}
+
 		register_graphql_object_type(
 			self::$type,
 			[
@@ -33,12 +39,6 @@ class CustomFields {
 				'fields'      => [],
 			],
 		);
-
-		$fields = tribe_get_option( 'custom-fields', '' );
-
-		if ( empty( $fields ) ) {
-			return;
-		}
 
 		foreach ( $fields as $field ) {
 			$name = Utils::to_camel_case( $field['label'] ?? $field['name'] );
@@ -76,6 +76,16 @@ class CustomFields {
 				);
 			}
 		}
+
+		register_graphql_field(
+			Event::$type,
+			'customFields',
+			[
+				'type'        => self::$type,
+				'description' => __( 'Event custom fields', 'wp-graphql-tec' ),
+				'resolve'     => fn ( $source ) => ! empty( $source->custom ) ? $source->custom : null,
+			]
+		);
 	}
 
 		/**
