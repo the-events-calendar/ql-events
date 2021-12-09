@@ -40,7 +40,7 @@ SKIP_DB_CREATE=${SKIP_DB_CREATE-false}
 
 download() {
     if [ `which curl` ]; then
-        curl -s "$1" > "$2";
+        curl -sL "$1" > "$2";
     elif [ `which wget` ]; then
         wget -nv -O "$2" "$1"
     fi
@@ -167,6 +167,13 @@ setup_etp() {
 	fi
 	wp plugin activate event-tickets-plus
 }
+setup_woo_graphql() {
+	if [ ! -d $WP_CORE_DIR/wp-content/plugins/wp-graphql-woocommerce ]; then
+		download "https://github.com/wp-graphql/wp-graphql-woocommerce/releases/download/v0.10.6/wp-graphql-woocommerce.zip" $TMPDIR/woographql.zip
+		unzip $TMPDIR/woographql.zip -d $WP_CORE_DIR/wp-content/plugins/wp-graphql-woocommerce
+	fi
+	wp plugin activate wp-graphql-woocommerce
+}
 
 setup_plugin() {
 
@@ -202,6 +209,12 @@ setup_plugin() {
 
 	setup_ecp
 	setup_etp
+
+	# Install Woocommerce
+	wp plugin install woocommerce
+	wp plugin activate woocommerce
+	
+	setup_woo_graphql
 
 	# activate the plugin
 	wp plugin activate wp-graphql-tec
