@@ -35,7 +35,7 @@ class NodeWithOrder {
 			[
 				'description' => __( 'Order Fields', 'wp-graphql-tec' ),
 				'fields'      => [
-					'order'           => [
+					'ticketOrder'     => [
 						'type'        => Order::$type,
 						'description' => __( 'The order', 'wp-graphql-tec' ),
 						'resolve'     => function( $source, array $args, AppContext $context ) {

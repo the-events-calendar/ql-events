@@ -42,7 +42,7 @@ class TypeRegistry implements TypeRegistryInterface {
 		Enum\AttendeeTypeEnum::register_type();
 		Enum\AttendeeOptoutStatusEnum::register_type();
 		Enum\CurrencyCodeEnum::register_type();
-		Enum\PaymentGatewaysEnum::register_type();
+		// phpcs:ignoreLine Enum\PaymentGatewaysEnum::register_type();
 		Enum\StockHandlingOptionsEnum::register_type();
 		Enum\StockModeEnum::register_type();
 		Enum\TicketIdTypeEnum::register_type();

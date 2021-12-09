@@ -41,7 +41,7 @@ class OrderConnectionResolver extends AbstractConnectionResolver {
 	 * @param mixed|string|array $post_type The post type to resolve for.
 	 */
 	public function __construct( $source, array $args, AppContext $context, ResolveInfo $info, $post_type = '' ) {
-		if ( empty( $post_type ) || 'Order' === $post_type ) {
+		if ( empty( $post_type ) || 'TicketOrder' === $post_type ) {
 			$post_type = array_keys( Utils::get_et_order_types() );
 		}
 
@@ -94,7 +94,7 @@ class OrderConnectionResolver extends AbstractConnectionResolver {
 	 * {@inheritDoc}
 	 */
 	public function get_loader_name() {
-		return 'order';
+		return 'et_order';
 	}
 
 	/**

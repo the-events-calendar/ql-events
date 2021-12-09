@@ -46,7 +46,7 @@ class OrderLoader extends AbstractDataLoader {
 
 		if ( 'revision' === $entry->post_type && ! empty( $entry->post_parent ) && absint( $entry->post_parent ) ) {
 			$post_parent = $entry->post_parent;
-			$context->get_loader( 'order' )->load_deferred( $post_parent );
+			$context->get_loader( 'et_order' )->load_deferred( $post_parent );
 		}
 
 		$post = new Order( $entry );

@@ -22,7 +22,7 @@ class Orders {
 	 *
 	 * @var string
 	 */
-	public static string $from_field_name = 'orders';
+	public static string $from_field_name = 'ticketOrders';
 
 	/**
 	 * Registers the various connections from other Types to Orders.

@@ -114,7 +114,7 @@ class CoreSchemaFilters implements Hookable {
 		$attendee_loader     = new AttendeeLoader( $context );
 		$loaders['attendee'] = &$attendee_loader;
 		$order_loader        = new OrderLoader( $context );
-		$loaders['order']    = &$order_loader;
+		$loaders['et_order'] = &$order_loader;
 
 		return $loaders;
 	}

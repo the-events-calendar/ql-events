@@ -30,21 +30,21 @@ class OrderHelper extends DataHelper {
 	 *
 	 * @var string
 	 */
-	public static string $type = 'Order';
+	public static string $type = 'TicketOrder';
 
 	/**
 	 * The WordPress type. E.g. `tribe_events` or `tec_tc_ticket`.
 	 *
 	 * @var string
 	 */
-	public static string $wp_type = 'Order';
+	public static string $wp_type = 'TicketOrder';
 
 	/**
 	 * The name of the DataLoader to use.
 	 *
 	 * @var string
 	 */
-	public static string $loader_name = 'order';
+	public static string $loader_name = 'et_order';
 
 	/**
 	 * {@inheritDoc}
@@ -70,6 +70,9 @@ class OrderHelper extends DataHelper {
 				'type'        => [ 'list_of' => 'Int' ],
 				'description' => __( 'Filters Orders not attached to a specific event ID or array of IDs.', 'wp-graphql-tec' ),
 			],
+			/** phpcs:disable
+			 * @todo figure out how to add with ETP, since they dont use gateways.
+			 *
 			'gateway'            => [
 				'type'        => PaymentGatewaysEnum::$type,
 				'description' => __( 'Filters Orders that match the specified payment gateway.', 'wp-graphql-tec' ),
@@ -78,6 +81,8 @@ class OrderHelper extends DataHelper {
 				'type'        => 'String',
 				'description' => __( 'Filters Orders that match the specified payment gateway order id.', 'wp-graphql-tec' ),
 			],
+			 * phpcs:enable
+			 */
 			'hash'               => [
 				'type'        => 'ID',
 				'description' => __( 'Filters Orders that match the specified hash key.', 'wp-graphql-tec' ),
