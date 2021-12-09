@@ -154,7 +154,7 @@ configure_wordpress() {
 
 setup_ecp() {
 	if [ ! -d $WP_CORE_DIR/wp-content/plugins/events-calendar-pro ]; then
-		download "https://pue.tri.be/api/plugins/v2/download?plugin=events-calendar-pro&version=5.10.0&key=$ECP_KEY" $TMPDIR/tec-pro.zip
+		download "https://pue.tri.be/api/plugins/v2/download?plugin=events-calendar-pro&key=$ECP_KEY" $TMPDIR/tec-pro.zip
 		unzip $TMPDIR/tec-pro.zip -d $WP_CORE_DIR/wp-content/plugins
 	fi
 	wp plugin activate events-calendar-pro
@@ -162,7 +162,7 @@ setup_ecp() {
 
 setup_etp() {
 	if [ ! -d $WP_CORE_DIR/wp-content/plugins/event-tickets-plus ]; then
-		download "https://pue.tri.be/api/plugins/v2/download?plugin=event-tickets-plus&version=5.3.1&key=$ETP_KEY" $TMPDIR/etp.zip
+		download "https://pue.tri.be/api/plugins/v2/download?plugin=event-tickets-plus&key=$ETP_KEY" $TMPDIR/etp.zip
 		unzip $TMPDIR/etp.zip -d $WP_CORE_DIR/wp-content/plugins
 	fi
 	wp plugin activate event-tickets-plus
