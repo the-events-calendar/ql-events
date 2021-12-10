@@ -89,6 +89,10 @@ class Event {
 					'type'        => 'Boolean',
 					'description' => __( 'Whether the event is multi-day or not.', 'wp-graphql-tec' ),
 				],
+				'isPast'           => [
+					'type'        => 'Boolean',
+					'description' => __( 'Whether the event date has passed.', 'wp-graphql-tec' ),
+				],
 				'isSticky'         => [
 					'type'        => 'Boolean',
 					'description' => __( 'Whether the event is sticky in Month view.', 'wp-graphql-tec' ),

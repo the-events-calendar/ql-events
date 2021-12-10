@@ -90,6 +90,7 @@ class Event extends Post {
 				},
 				'isMultiday'       => fn() : bool => ! empty( $this->data->multiday ),
 				'isSticky'         => fn() : bool => ! empty( $this->data->sticky ),
+				'isPast'           => fn() : bool => tribe_is_past_event( $this->data->ID ),
 				'organizerIds'     => function() : ?array {
 					$organizer_ids = tribe_get_organizer_ids( $this->data->ID ) ?: null;
 					return $organizer_ids;

@@ -44,3 +44,14 @@
 	 * @return bool
 	 */
 	function tribe_events_has_unlimited_stock_tickets( $event = null ) {}
+
+	/**
+	 * Detect if an Event is Past
+	 *
+	 * Returns true if the current time is past the event end time
+	 *
+	 * @param mixed|null $event
+	 *
+	 * @return bool
+	 */
+	function tribe_is_past_event( $event = null ) {}
