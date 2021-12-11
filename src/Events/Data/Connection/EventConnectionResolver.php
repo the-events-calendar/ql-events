@@ -307,7 +307,7 @@ class EventConnectionResolver extends AbstractConnectionResolver {
 		 */
 		if ( empty( $query_args['orderby'] ) ) {
 			$query_args['order_by'] = 'event_date';
-			$query_args['order']    = ! empty( $last ) ? 'DESC' : 'ASC';
+			$query_args['order']    = ! empty( $last ) ? 'ASC' : 'DESC';
 		}
 
 		/**
