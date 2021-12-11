@@ -40,6 +40,7 @@ class TypeRegistry implements TypeRegistryInterface {
 		Enum\CostOperatorEnum::register_type();
 		Enum\CurrencyPositionEnum::register_type();
 		Enum\EnabledViewsEnum::register_type();
+		Enum\EventConnectionOrderbyEnum::register_type();
 		Enum\EventsTemplateEnum::register_type();
 
 		/**
@@ -57,6 +58,7 @@ class TypeRegistry implements TypeRegistryInterface {
 		Input\CostFilterInput::register_type();
 		Input\DateAndTimezoneInput::register_type();
 		Input\DateRangeAndTimezoneInput::register_type();
+		Input\EventConnectionOrderbyInput::register_type();
 
 		/**
 		 * Fires after TEC enums have been registered.

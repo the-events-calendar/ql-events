@@ -16,6 +16,7 @@ use WPGraphQL\TEC\Abstracts\DataHelper;
 use WPGraphQL\TEC\Events\Type\Input\CostFilterInput;
 use WPGraphQL\TEC\Events\Type\Input\DateAndTimezoneInput;
 use WPGraphQL\TEC\Events\Type\Input\DateRangeAndTimezoneInput;
+use WPGraphQL\TEC\Events\Type\Input\EventConnectionOrderbyInput;
 
 /**
  * Class - Event Helper
@@ -104,6 +105,12 @@ class EventHelper extends DataHelper {
 			'isSticky'           => [
 				'type'        => 'Boolean',
 				'description' => __( 'Only return events that match the provided sticky state.', 'wp-graphql-tec' ),
+			],
+			'orderby'            => [
+				'type'        => [
+					'list_of' => EventConnectionOrderbyInput::$type,
+				],
+				'description' => __( 'What paramater to use to order the objects by.', 'wp-graphql-tec' ),
 			],
 			'runsBetween'        => [
 				'type'        => DateRangeAndTimezoneInput::$type,

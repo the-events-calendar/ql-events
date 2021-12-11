@@ -32,7 +32,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '07bea835ad5a1829d6b988af2f97afadcb457d70',
+    'reference' => '6cfc1e5dd63a7254eee1f102644306ab9ed9a790',
     'name' => 'justlevine/wp-graphql-tec',
   ),
   'versions' => 
@@ -324,16 +324,16 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '07bea835ad5a1829d6b988af2f97afadcb457d70',
+      'reference' => '6cfc1e5dd63a7254eee1f102644306ab9ed9a790',
     ),
     'lucatume/wp-browser' => 
     array (
-      'pretty_version' => '3.0.14',
-      'version' => '3.0.14.0',
+      'pretty_version' => '3.0.15',
+      'version' => '3.0.15.0',
       'aliases' => 
       array (
       ),
-      'reference' => '1dae9e523bddd77c6d242c2033fd5616cdf6d375',
+      'reference' => '389f7055e2f25618b955721fc27f63df777f620e',
     ),
     'mikehaertl/php-shellcommand' => 
     array (
@@ -807,12 +807,12 @@ private static $installed = array (
     ),
     'symfony/console' => 
     array (
-      'pretty_version' => 'v5.4.0',
-      'version' => '5.4.0.0',
+      'pretty_version' => 'v5.4.1',
+      'version' => '5.4.1.0',
       'aliases' => 
       array (
       ),
-      'reference' => 'ec3661faca1d110d6c307e124b44f99ac54179e3',
+      'reference' => '9130e1a0fc93cb0faadca4ee917171bd2ca9e5f4',
     ),
     'symfony/css-selector' => 
     array (
@@ -1003,12 +1003,12 @@ private static $installed = array (
     ),
     'symfony/translation' => 
     array (
-      'pretty_version' => 'v5.4.0',
-      'version' => '5.4.0.0',
+      'pretty_version' => 'v5.4.1',
+      'version' => '5.4.1.0',
       'aliases' => 
       array (
       ),
-      'reference' => '6fe32b10e912a518805bc9eafc2a87145773cf13',
+      'reference' => '8c82cd35ed861236138d5ae1c78c0c7ebcd62107',
     ),
     'symfony/translation-contracts' => 
     array (
