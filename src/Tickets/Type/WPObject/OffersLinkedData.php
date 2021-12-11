@@ -80,9 +80,11 @@ class OffersLinkedData {
 			EventLinkedData::$type,
 			[
 				'offers' => [
-					'type'    => [ 'list_of' => 'OfferslinkedData' ],
+					'type'    => [ 'list_of' => self::$type ],
 					'resolve' => function( $source ) : ?array {
-						return property_exists( $source, 'offers' ) && ! empty( $source->offers ) ? $source->offers : null;
+						return ! empty( $source->offers ) ? (
+							! is_array( $source->offers ) ? [ $source->offers ] : $source->offers
+							) : null;
 					},
 				],
 			],
