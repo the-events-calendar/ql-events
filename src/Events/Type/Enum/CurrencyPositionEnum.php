@@ -33,9 +33,9 @@ class CurrencyPositionEnum {
 						'value'      => 'prefix',
 						'desciption' => __( 'Display before the cost.', 'wp-graphql-tec' ),
 					],
-					'postfix' => [
-						'name'        => 'POSTFIX',
-						'value'       => 'postfix',
+					'suffix' => [
+						'name'        => 'SUFFIX',
+						'value'       => 'suffix',
 						'description' => __( 'Display after the cost.', 'wp-graphql-tec' ),
 					],
 				],
