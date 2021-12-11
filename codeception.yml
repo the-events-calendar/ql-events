@@ -74,11 +74,17 @@ modules:
             adminEmail: '%ADMIN_EMAIL%'
             title: 'Test'
             plugins:
+                - event-tickets-plus/event-tickets-plus.php
+                - event-tickets/event-tickets.php
+                - events-calendar-pro/events-calendar-pro.php
                 - the-events-calendar/the-events-calendar.php
-                - wp-graphql/wp-graphql.php
                 - wp-graphql-tec/wp-graphql-tec.php
+                - wp-graphql/wp-graphql.php
             activatePlugins:
+                - event-tickets-plus/event-tickets-plus.php
+                - event-tickets/event-tickets.php
+                - events-calendar-pro/events-calendar-pro.php
                 - the-events-calendar/the-events-calendar.php
-                - wp-graphql/wp-graphql.php
                 - wp-graphql-tec/wp-graphql-tec.php
+                - wp-graphql/wp-graphql.php
             configFile: 'tests/_data/config.php'

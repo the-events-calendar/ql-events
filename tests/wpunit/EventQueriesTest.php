@@ -84,44 +84,138 @@ class EventQueriesTest extends TecGraphQLTestCase {
 	}
 
 	public function testEventQueryArgs() : void {
-		// $event_ids = [
-		// $this->event_id,
-		// $this->factory->event->create(),
-		// ];
+		$event_ids = [
+			$this->event_id,
+			$this->factory->event->create( [ 'when' => '+48 hours' ] ),
+			$this->factory->event->create( [ 'when' => '+72 hours' ] ),
+			$this->factory->event->create( [ 'when' => '+96 hours' ] ),
+			$this->factory->event->create( [ 'when' => '+120 hours' ] ),
+			$this->factory->event->create( [ 'when' => '+144 hours' ] ),
+		];
+
+		$event_ids = array_reverse( $event_ids );
 
 		$query = '
-			query testQueryArgs( $id: RootQueryToEventConnectionWhereArgs ){
-				events( where: $where ) {
+			query testPagination( $first: Int, $after: String, $last:Int, $before: String ) {
+				events( first: $first, after: $after, last: $last, before: $before ) {
 					nodes {
 						databaseId
+					}
+					pageInfo{
+						hasNextPage
+						hasPreviousPage
+						startCursor
+						endCursor
+					}
+					edges {
+						cursor
 					}
 				}
 			}
 		';
 
 		$variables = [
-			'where' => [
-				'organizerId' => $this->organizer_one_id,
-			],
+			'first'  => 2,
+			'after'  => null,
+			'last'   => null,
+			'before' => null,
 		];
 
-		$expected = [
-			$this->expectedObject(
-				'events',
-				[
-					$this->expectedNode(
-						'0',
-						[
-							$this->expectedField( 'databaseId', $this->eventId ),
-						]
-					),
-				]
-			),
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+
+		// Check `first` argument.
+
+		$this->assertArrayNotHasKey( 'errors', $response, '`first` has errors' );
+		$this->assertCount( 2, $response['data']['events']['nodes'], 'First does not return correct amount.' );
+		$this->assertSame( $event_ids[0], $response['data']['events']['nodes'][0]['databaseId'], 'First - node 0 is not same.' );
+		$this->assertSame( $event_ids[1], $response['data']['events']['nodes'][1]['databaseId'], 'First - node 1 is not same.' );
+		$this->assertTrue( $response['data']['events']['pageInfo']['hasNextPage'], 'First does not have next page.' );
+		$this->assertFalse( $response['data']['events']['pageInfo']['hasPreviousPage'], 'First has previous page.' );
+
+		// Check `after` argument.
+		$variables = [
+			'first'  => 2,
+			'after'  => $response['data']['events']['pageInfo']['endCursor'],
+			'last'   => null,
+			'before' => null,
 		];
 
-		$this->markTestIncomplete(
-			'This test has not been implemented yet. Requires https://github.com/wp-graphql/wp-graphql/pull/2141.'
-		);
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+
+		$this->assertArrayNotHasKey( 'errors', $response, 'first/after #1 has errors' );
+		$this->assertCount( 2, $response['data']['events']['nodes'], 'First/after #1 does not return correct amount.' );
+		$this->assertSame( $event_ids[2], $response['data']['events']['nodes'][0]['databaseId'], 'First/after #1 - node 0 is not same.' );
+		$this->assertSame( $event_ids[3], $response['data']['events']['nodes'][1]['databaseId'], 'First/after #1 - node 1 is not same.' );
+		$this->assertTrue( $response['data']['events']['pageInfo']['hasNextPage'], 'First/after #1 does not have next page.' );
+		$this->assertTrue( $response['data']['events']['pageInfo']['hasPreviousPage'], 'First/after #1 does not have previous page.' );
+
+		$variables = [
+			'first'  => 2,
+			'after'  => $response['data']['events']['pageInfo']['endCursor'],
+			'last'   => null,
+			'before' => null,
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+
+		$this->assertArrayNotHasKey( 'errors', $response, 'first/after #2 has errors' );
+		$this->assertCount( 2, $response['data']['events']['nodes'], 'First/after #2 does not return correct amount.' );
+		$this->assertSame( $event_ids[4], $response['data']['events']['nodes'][0]['databaseId'], 'First/after #2 - node 0 is not same.' );
+		$this->assertSame( $event_ids[5], $response['data']['events']['nodes'][1]['databaseId'], 'First/after #2 - node 1 is not same.' );
+		$this->assertFalse( $response['data']['events']['pageInfo']['hasNextPage'], 'First/after #2 has next page.' );
+		$this->assertTrue( $response['data']['events']['pageInfo']['hasPreviousPage'], 'First/after #2 does not have previous page.' );
+
+		// Check last argument.
+		$variables = [
+			'first'  => null,
+			'after'  => null,
+			'last'   => 2,
+			'before' => null,
+		];
+		$response  = $this->graphql( compact( 'query', 'variables' ) );
+
+		$this->assertArrayNotHasKey( 'errors', $response, 'Last has errors' );
+		$this->assertCount( 2, $response['data']['events']['nodes'], 'Last does not return correct amount.' );
+		$this->assertSame( $event_ids[5], $response['data']['events']['nodes'][0]['databaseId'], 'Last - node 0 is not same.' );
+		$this->assertSame( $event_ids[4], $response['data']['events']['nodes'][1]['databaseId'], 'Last - node 1 is not same.' );
+		$this->assertFalse( $response['data']['events']['pageInfo']['hasNextPage'], 'Last has next page.' );
+		$this->assertTrue( $response['data']['events']['pageInfo']['hasPreviousPage'], 'Last does not have previous page.' );
+
+		// Check `before` argument.
+		$variables = [
+			'first'  => null,
+			'after'  => null,
+			'last'   => 2,
+			'before' => $response['data']['events']['pageInfo']['endCursor'],
+		];
+		$response  = $this->graphql( compact( 'query', 'variables' ) );
+
+		$this->assertArrayNotHasKey( 'errors', $response, 'Last/before #1 has errors' );
+		$this->assertCount( 2, $response['data']['events']['nodes'], 'Last/before #1 does not return correct amount.' );
+		$this->assertSame( $event_ids[3], $response['data']['events']['nodes'][0]['databaseId'], 'Last/before #1 - node 0 is not same.' );
+		$this->assertSame( $event_ids[2], $response['data']['events']['nodes'][1]['databaseId'], 'Last/before #1 - node 1 is not same.' );
+		$this->assertTrue( $response['data']['events']['pageInfo']['hasNextPage'], 'Last/before #1 does not have next page.' );
+		$this->assertTrue( $response['data']['events']['pageInfo']['hasPreviousPage'], 'Last/before #1 does not have previous page.' );
+
+		$variables = [
+			'first'  => null,
+			'after'  => null,
+			'last'   => 2,
+			'before' => $response['data']['events']['pageInfo']['endCursor'],
+		];
+		$response  = $this->graphql( compact( 'query', 'variables' ) );
+
+		$this->assertArrayNotHasKey( 'errors', $response, 'Last/before #2 has errors' );
+		$this->assertCount( 2, $response['data']['events']['nodes'], 'Last/before #2 does not return correct amount.' );
+		$this->assertSame( $event_ids[1], $response['data']['events']['nodes'][0]['databaseId'], 'Last/before #2 - node 0 is not same.' );
+		$this->assertSame( $event_ids[0], $response['data']['events']['nodes'][1]['databaseId'], 'Last/before #2 - node 1 is not same.' );
+		$this->assertTrue( $response['data']['events']['pageInfo']['hasNextPage'], 'Last/before #2 does not have next page.' );
+		$this->assertFalse( $response['data']['events']['pageInfo']['hasPreviousPage'], 'Last/before #2 has previous page.' );
+
+		unset( $event_ids[5] );
+		foreach ( $event_ids as $id ) {
+			wp_delete_post( $id );
+		}
 	}
 
 	private function get_query() : string {
@@ -141,6 +235,7 @@ class EventQueriesTest extends TecGraphQLTestCase {
 					isAllDay
 					isFeatured
 					isMultiday
+					isPast
 					isSticky
 					linkedData {
 						context
@@ -162,21 +257,24 @@ class EventQueriesTest extends TecGraphQLTestCase {
 						type
 						url
 					}
+					organizerDatabaseIds
+					organizerIds
 					organizers {
 						nodes {
 							databaseId
 						}
 					}
+					origin
 					showMap
 					showMapLink
 					startDate
 					startDateUTC
 					timezone
 					timezoneAbbr
+					venueDatabaseId
+					venueId
 					venue {
-						node {
-							databaseId
-						}
+						databaseId
 					}
 				}
 			}
