@@ -28,7 +28,7 @@ class CurrencyPositionEnum {
 			[
 				'description' => __( 'The position of the currency symbol.', 'wp-graphql-tec' ),
 				'values'      => [
-					'prefix'  => [
+					'prefix' => [
 						'name'       => 'PREFIX',
 						'value'      => 'prefix',
 						'desciption' => __( 'Display before the cost.', 'wp-graphql-tec' ),
