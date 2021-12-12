@@ -159,6 +159,14 @@ if ( ! class_exists( 'WPGraphQL\TEC\TEC' ) ) :
 
 			// Initialize TEC type registry.
 			add_action( get_graphql_register_action(), [ TypeRegistry::class, 'init' ] );
+
+			// Remove `manage_sensitive_info`.
+			add_action(
+				'do_graphql_request',
+				function() {
+					remove_action( 'the_post', [ tribe( \Tribe\Events\Views\V2\Hooks::class ), 'manage_sensitive_info' ] );
+				}
+			);
 		}
 	}
 
