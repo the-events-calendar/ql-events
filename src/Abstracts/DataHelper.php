@@ -130,6 +130,10 @@ abstract class DataHelper {
 		return function ( $source, array $args, AppContext $context, ResolveInfo $info ) use ( $post_type ) {
 			$args = self::get_processed_args( $args );
 
+			if ( 'EventCategory' === $info->parentType->name ) {
+				$args['where']['categoryId'] = $source->databaseId;
+			}
+
 			return static::resolve_connection( $source, $args, $context, $info, $post_type );
 		};
 	}

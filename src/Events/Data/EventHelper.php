@@ -62,132 +62,132 @@ class EventHelper extends DataHelper {
 	 */
 	public static function connection_args() : array {
 		return [
-			'cost'               => [
+			'cost'              => [
 				'type'        => CostFilterInput::$type,
 				'description' => __( 'Filters events that have a cost relative to the given value based on the operator. Providing the symbol parameter should limit event results to only those events whose cost is relative to the value AND the currency symbol matches.', 'wp-graphql-tec' ),
 			],
-			'endsAfter'          => [
+			'endsAfter'         => [
 				'type'        => DateAndTimezoneInput::$type,
 				'description' => __( 'Filters events whose end date occurs after the provided date (exclusive).', 'wp-graphql-tec' ),
 			],
-			'endsBefore'         => [
+			'endsBefore'        => [
 				'type'        => DateAndTimezoneInput::$type,
 				'description' => __( 'Filters events whose end date occurs before the provided date (inclusive).', 'wp-graphql-tec' ),
 			],
-			'endsBetween'        => [
+			'endsBetween'       => [
 				'type'        => DateRangeAndTimezoneInput::$type,
 				'description' => __( 'Filters events whose whose end date occurs between a set of dates (inclusive). ', 'wp-graphql-tec' ),
 			],
-			'endsOnOrBefore'     => [
+			'endsOnOrBefore'    => [
 				'type'        => DateAndTimezoneInput::$type,
 				'description' => __( 'Filters events whose end date occurs on or before the provided date (exclusive).', 'wp-graphql-tec' ),
 			],
-			'eventDateOverlaps'  => [
+			'eventDateOverlaps' => [
 				'type'        => DateRangeAndTimezoneInput::$type,
 				'description' => __( 'Filters events whose duration overlaps a given Start and End date (inclusive).', 'wp-graphql-tec' ),
 			],
-			'isAllDay'           => [
+			'isAllDay'          => [
 				'type'        => 'Boolean',
 				'description' => __( 'Only return events that match the provided all day state.', 'wp-graphql-tec' ),
 			],
-			'isFeatured'         => [
+			'isFeatured'        => [
 				'type'        => 'Boolean',
 				'description' => __( 'Only return events that match the provided featured state.', 'wp-graphql-tec' ),
 			],
-			'isHidden'           => [
+			'isHidden'          => [
 				'type'        => 'Boolean',
 				'description' => __( 'Only return events that match the provided hidden state.', 'wp-graphql-tec' ),
 			],
-			'isMultiday'         => [
+			'isMultiday'        => [
 				'type'        => 'Boolean',
 				'description' => __( 'Only return events that match the provided multi day state.', 'wp-graphql-tec' ),
 			],
-			'isSticky'           => [
+			'isSticky'          => [
 				'type'        => 'Boolean',
 				'description' => __( 'Only return events that match the provided sticky state.', 'wp-graphql-tec' ),
 			],
-			'orderby'            => [
+			'orderby'           => [
 				'type'        => [
 					'list_of' => EventConnectionOrderbyInput::$type,
 				],
 				'description' => __( 'What paramater to use to order the objects by.', 'wp-graphql-tec' ),
 			],
-			'runsBetween'        => [
+			'runsBetween'       => [
 				'type'        => DateRangeAndTimezoneInput::$type,
 				'description' => __( 'Filters events to include only those events whose start and end dates are between a set of dates. ', 'wp-graphql-tec' ),
 			],
-			'startsAfter'        => [
+			'startsAfter'       => [
 				'type'        => DateAndTimezoneInput::$type,
 				'description' => __( 'Filters events whose start date occurs after the provided date (exclusive).', 'wp-graphql-tec' ),
 			],
-			'startsBefore'       => [
+			'startsBefore'      => [
 				'type'        => DateAndTimezoneInput::$type,
 				'description' => __( 'Filters events whose start date occurs before the provided date (exclusive).', 'wp-graphql-tec' ),
 			],
-			'startsBetween'      => [
+			'startsBetween'     => [
 				'type'        => DateRangeAndTimezoneInput::$type,
 				'description' => __( 'Filters events whose whose start date occurs between a set of dates (inclusive). ', 'wp-graphql-tec' ),
 			],
-			'startsOnDate'       => [
+			'startsOnDate'      => [
 				'type'        => DateAndTimezoneInput::$type,
 				'description' => __( 'Filters events to include only those that start on a specific date.', 'wp-graphql-tec' ),
 			],
-			'startsOnOrAfter'    => [
+			'startsOnOrAfter'   => [
 				'type'        => DateAndTimezoneInput::$type,
 				'description' => __( 'Filters events whose start date occurs on or after the provided date (inclusive).', 'wp-graphql-tec' ),
 			],
-			'timezone'           => [
+			'timezone'          => [
 				'type'        => 'String',
 				'description' => __( 'Filters events to those set to provided timezone string or UTC offset.', 'wp-graphql-tec' ),
 			],
 			// Event Category.
-			'eventCategoryId'    => [
+			'categoryId'        => [
 				'type'        => 'Int',
 				'description' => __( 'Category ID.', 'wp-graphql-tec' ),
 			],
-			'eventCategoryIn'    => [
+			'categoryIn'        => [
 				'type'        => [ 'list_of' => 'ID' ],
 				'description' => __( 'Array of category IDs, used to display objects from one category OR another.', 'wp-graphql-tec' ),
 			],
-			'eventCategoryName'  => [
+			'categoryName'      => [
 				'type'        => 'String',
 				'description' => __( 'Use Event Category slug.', 'wp-graphql-tec' ),
 			],
-			'eventCategoryNotIn' => [
+			'categoryNotIn'     => [
 				'type'        => [ 'list_of' => 'ID' ],
 				'description' => __( 'Array of category IDs, used to display objects from one category OR another.', 'wp-graphql-tec' ),
 			],
 			// Organizer.
-			'organizerId'        => [
+			'organizerId'       => [
 				'type'        => 'Int',
 				'description' => __( 'Organizer ID.', 'wp-graphql-tec' ),
 			],
-			'organizerIn'        => [
+			'organizerIn'       => [
 				'type'        => [ 'list_of' => 'ID' ],
 				'description' => __( 'Array of organizer IDs, used to display objects from one organizer OR another.', 'wp-graphql-tec' ),
 			],
-			'organizerName'      => [
+			'organizerName'     => [
 				'type'        => 'String',
 				'description' => __( 'Use Organizer slug.', 'wp-graphql-tec' ),
 			],
-			'organizerNotIn'     => [
+			'organizerNotIn'    => [
 				'type'        => [ 'list_of' => 'ID' ],
 				'description' => __( 'Array of organizer IDs, used to display objects from one organizer OR another.', 'wp-graphql-tec' ),
 			],
 			// Venue.
-			'venueId'            => [
+			'venueId'           => [
 				'type'        => 'Int',
 				'description' => __( 'Venue ID.', 'wp-graphql-tec' ),
 			],
-			'venueIn'            => [
+			'venueIn'           => [
 				'type'        => [ 'list_of' => 'ID' ],
 				'description' => __( 'Array of venue IDs, used to display objects from one venue OR another.', 'wp-graphql-tec' ),
 			],
-			'venueName'          => [
+			'venueName'         => [
 				'type'        => 'String',
 				'description' => __( 'Use Venue slug.', 'wp-graphql-tec' ),
 			],
-			'venueNotIn'         => [
+			'venueNotIn'        => [
 				'type'        => [ 'list_of' => 'ID' ],
 				'description' => __( 'Array of venue IDs, used to display objects from one venue OR another.', 'wp-graphql-tec' ),
 			],
@@ -200,10 +200,10 @@ class EventHelper extends DataHelper {
 	public static function process_where_args( array $args ) : array {
 		foreach ( $args as $key => &$value ) {
 			switch ( $key ) {
-				case 'eventCategoryName':
+				case 'categoryName':
 					$term = get_term_by( 'slug', $value, 'tribe_events_cat' );
 					if ( $term instanceof WP_Term ) {
-						$args['eventCategoryId'] = $term->term_taxonomy_id;
+						$args['categoryId'] = $term->term_taxonomy_id;
 					}
 					unset( $args[ $key ] );
 					break;
