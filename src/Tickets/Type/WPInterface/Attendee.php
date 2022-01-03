@@ -94,7 +94,7 @@ class Attendee {
 							break;
 						case 'global_id':
 							$id_components = Relay::fromGlobalId( $id );
-							if ( empty( $id_components['id'] ) || empty( $id_componenets['type'] ) ) {
+							if ( empty( $id_components['id'] ) || empty( $id_components['type'] ) ) {
 								throw new UserError( __( 'The global ID is invalid.', 'wp-graphql-tec' ) );
 							}
 							$attendee_id = absint( $id_components['id'] );

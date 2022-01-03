@@ -28,8 +28,7 @@ class OrderLoader extends AbstractDataLoader {
 	 */
 	protected function get_model( $entry, $key ) : ?Order {
 		if (
-			empty( $entry ) ||
-			! isset( $entry->post_type ) ||
+			empty( $entry->post_type ) ||
 			! in_array( $entry->post_type, [ ...array_keys( Utils::get_et_order_types() ), 'revision' ], true )
 		) {
 			return null;
@@ -50,10 +49,6 @@ class OrderLoader extends AbstractDataLoader {
 		}
 
 		$post = new Order( $entry );
-
-		if ( ! isset( $post->fields ) || empty( $post->fields ) ) {
-			return null;
-		}
 
 		return $post;
 	}

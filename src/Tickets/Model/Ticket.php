@@ -51,12 +51,12 @@ class Ticket extends Post {
 	public function __construct( WP_Post $post ) {
 		parent::__construct( $post );
 
-		if ( ! isset( $this->data->post_type ) || ! isset( $this->data->ID ) || ! in_array( $this->data->post_type, array_keys( Utils::get_et_ticket_types() ), true ) ) {
+		if ( empty( $this->data->post_type ) || ! in_array( $this->data->post_type, array_keys( Utils::get_et_ticket_types() ), true ) ) {
 			throw new Exception( __( 'The object returned is not a Ticket.', 'wp-graphql-tec' ) );
 		}
 
 		// Restore the excerpt.
-		$this->data->post_excerpt = $post->post_excerpt ?? '';
+		$this->data->post_excerpt = $post->post_excerpt ?: '';
 
 		$this->provider = tribe_tickets_get_ticket_provider( $this->data->ID );
 
@@ -112,7 +112,7 @@ class Ticket extends Post {
 					}
 					return (int) $image_id;
 				},
-				'price'                   => fn() : ?float => $this->ticket_data->price ?? null,
+				'price'                   => fn() : float => $this->ticket_data->price,
 				'provider'                => fn() => $this->provider,
 				'providerClass'           => fn() : ?string => $this->ticket_data->provider_class ?? null,
 				'showDescription'         => fn() : bool => (bool) $this->ticket_data->show_description,

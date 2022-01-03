@@ -25,7 +25,7 @@ class Venue extends Post {
 	 * @throws Exception .
 	 */
 	public function __construct( WP_Post $post ) {
-		if ( ! isset( $post->post_type ) || 'tribe_venue' !== $post->post_type ) {
+		if ( ! empty( $post->post_type ) || 'tribe_venue' !== $post->post_type ) {
 			throw new Exception( __( 'The object returned is not a venue.', 'wp-graphql-tec' ) );
 		}
 

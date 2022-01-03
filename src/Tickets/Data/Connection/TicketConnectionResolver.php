@@ -189,22 +189,6 @@ class TicketConnectionResolver extends AbstractConnectionResolver {
 		}
 
 		/**
-		 * If the post_type is "attachment" set the default "post_status" $query_arg to "inherit"
-		 */
-		if ( 'attachment' === $this->post_type || 'revision' === $this->post_type ) {
-			$query_args['post_status'] = 'inherit';
-
-			if ( isset( $query_args['post_parent'] ) ) {
-
-				/**
-				 * Unset the "post_parent" for attachments, as we don't really care if they
-				 * have a post_parent set by default
-				 */
-				unset( $query_args['post_parent'] );
-			}
-		}
-
-		/**
 		 * Build the query from the where args.
 		 */
 		if ( ! empty( $this->args['where'] ) ) {

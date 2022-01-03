@@ -34,16 +34,16 @@ class RecurrenceDetails {
 				'description' => __( 'Event recurrence details', 'wp-graphql-tec' ),
 				'connections' => [
 					'eventsInSeries' => [
-						'toType' => Event::$type,
-						'resolve' => function ( $source, array $args, AppContext $context, ResolveInfo $info ){
-							if( null === $source->parentDatabaseId) {
+						'toType'  => Event::$type,
+						'resolve' => function ( $source, array $args, AppContext $context, ResolveInfo $info ) {
+							if ( null === $source->parentDatabaseId ) {
 								return null;
 							}
 
 							$args['where']['inSeries'] = $source->parentDatabaseId;
 
 							return EventHelper::resolve_connection( $source, $args, $context, $info, 'tribe_events' );
-						}
+						},
 					],
 				],
 				'fields'      => [

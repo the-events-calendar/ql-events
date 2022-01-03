@@ -22,7 +22,7 @@ class PurchasableTicket extends Ticket {
 			// Grab exceprt for future use.
 			parent::init();
 			$fields = [
-				'isOnSale'          => fn() : ?bool => $this->ticket_data->on_sale ?? null,
+				'isOnSale'          => fn() : bool => ! empty( $this->ticket_data->on_sale ),
 				'priceSuffix'       => fn() : ?string => $this->ticket_data->price_suffix ?: null,
 				'quantityCancelled' => fn() : int => $this->ticket_data->qty_cancelled(),
 				'quantityPending'   => fn() : int => $this->ticket_data->qty_pending(),

@@ -185,6 +185,13 @@ class EventConnectionResolver extends AbstractConnectionResolver {
 		}
 
 		/**
+		 * Build the query from the where args.
+		 */
+		if ( ! empty( $input_fields ) ) {
+			$query_args = array_merge( $query_args, $input_fields );
+		}
+
+		/**
 		 * If the post_type is "attachment" set the default "post_status" $query_arg to "inherit"
 		 */
 		if ( 'attachment' === $this->post_type || 'revision' === $this->post_type ) {
@@ -198,13 +205,6 @@ class EventConnectionResolver extends AbstractConnectionResolver {
 				 */
 				unset( $query_args['post_parent'] );
 			}
-		}
-
-		/**
-		 * Build the query from the where args.
-		 */
-		if ( ! empty( $input_fields ) ) {
-			$query_args = array_merge( $query_args, $input_fields );
 		}
 
 		/**

@@ -29,8 +29,7 @@ class TicketLoader extends AbstractDataLoader {
 	 */
 	protected function get_model( $entry, $key ) : ?Ticket {
 		if (
-			empty( $entry ) ||
-			! isset( $entry->post_type ) ||
+			empty( $entry->post_type ) ||
 			! in_array( $entry->post_type, [ ...array_keys( Utils::get_et_ticket_types() ), 'revision' ], true )
 		) {
 			return null;
@@ -61,10 +60,6 @@ class TicketLoader extends AbstractDataLoader {
 				break;
 			default:
 				$post = new Ticket( $entry );
-		}
-
-		if ( ! isset( $post->fields ) || empty( $post->fields ) ) {
-			return null;
 		}
 
 		return $post;

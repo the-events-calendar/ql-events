@@ -67,4 +67,15 @@
 				<property name="skipIfInheritdoc" value="true" />
 		</properties>
 	</rule>
+	
+	<!-- Ensures doc blocks follow basic formatting -->
+	<rule ref="Generic.Commenting.DocComment">
+			<!-- Allow single-line doc comments. See https://github.com/squizlabs/PHP_CodeSniffer/issues/258. -->
+			<exclude name="Generic.Commenting.DocComment.ContentAfterOpen" />
+			<exclude name="Generic.Commenting.DocComment.ContentBeforeClose" />
+			<!-- Don't require short description -->
+			<exclude name="Generic.Commenting.DocComment.MissingShort" />
+			<!-- Doesn't work well with annotations -->
+			<exclude name="Generic.Commenting.DocComment.TagValueIndent" />
+	</rule>
 </ruleset>

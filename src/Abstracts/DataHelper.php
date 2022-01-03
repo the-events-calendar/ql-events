@@ -11,13 +11,14 @@ namespace WPGraphQL\TEC\Abstracts;
 use GraphQL\Deferred;
 use GraphQL\Type\Definition\ResolveInfo;
 use WPGraphQL\AppContext;
+use WPGraphQL\Data\Connection\AbstractConnectionResolver;
+
 use WPGraphQL\TEC\Utils\Utils;
 
 /**
  * Abstract Class - DataHelper
  */
 abstract class DataHelper {
-
 	/**
 	 * The helper name. E.g. `events` or `tickets`.
 	 *
@@ -91,9 +92,12 @@ abstract class DataHelper {
 			$post_type = static::$wp_type;
 		}
 
-		$resolver = static::resolver();
+		$resolver_name = static::resolver();
 
-		return ( new $resolver( $source, $args, $context, $info, $post_type ) )->get_connection();
+		/** @var AbstractConnectionResolver $resolver */
+		$resolver = new $resolver_name( $source, $args, $context, $info, $post_type );
+
+		return $resolver->get_connection();
 	}
 
 	/**

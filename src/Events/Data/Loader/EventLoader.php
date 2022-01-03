@@ -52,12 +52,8 @@ class EventLoader extends AbstractDataLoader {
 			$post_parent = $entry->post_parent;
 			$context->get_loader( 'tribe_events' )->load_deferred( $post_parent );
 		}
-		$post = new Event( $entry );
-		if ( ! isset( $post->fields ) || empty( $post->fields ) ) {
-			return null;
-		}
 
-		return $post;
+		return new Event( $entry );
 	}
 
 	/**

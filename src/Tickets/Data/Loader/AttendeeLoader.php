@@ -28,8 +28,7 @@ class AttendeeLoader extends AbstractDataLoader {
 	 */
 	protected function get_model( $entry, $key ) : ?Attendee {
 		if (
-			empty( $entry ) ||
-			! isset( $entry->post_type ) ||
+			empty( $entry->post_type ) ||
 			! in_array( $entry->post_type, [ ...array_keys( Utils::get_et_attendee_types() ), 'revision' ], true )
 		) {
 			return null;
@@ -56,10 +55,6 @@ class AttendeeLoader extends AbstractDataLoader {
 			case 'tribe_tpp_attendees':
 			default:
 				$post = new Attendee( $entry );
-		}
-
-		if ( ! isset( $post->fields ) || empty( $post->fields ) ) {
-			return null;
 		}
 
 		return $post;

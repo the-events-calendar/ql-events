@@ -30,7 +30,7 @@ if ( ! class_exists( 'WPGraphQL\TEC\TEC' ) ) :
 		 * TEC Constructor
 		 */
 		public static function instance() : self {
-			if ( ! isset( self::$instance ) && ! ( is_a( self::$instance, __CLASS__ ) ) ) {
+			if ( ! ( is_a( self::$instance, __CLASS__ ) ) ) {
 				if ( ! function_exists( 'is_plugin_active' ) ) {
 					require_once ABSPATH . 'wp-admin/includes/plugin.php';
 				}
