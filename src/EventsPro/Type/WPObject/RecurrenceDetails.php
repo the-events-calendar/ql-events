@@ -8,9 +8,10 @@
 
 namespace WPGraphQL\TEC\EventsPro\Type\WPObject;
 
-use WPGraphQL\TEC\Utils\Utils;
-use WPGraphQL\Type\WPEnumType;
-
+use WPGraphQL\TEC\Events\Data\EventHelper;
+use WPGraphQL\TEC\Events\Type\WPObject\Event;
+use WPGraphQL\AppContext;
+use GraphQL\Type\Definition\ResolveInfo;
 /**
  * Class - RecurrenceDetails
  */
@@ -31,6 +32,20 @@ class RecurrenceDetails {
 			self::$type,
 			[
 				'description' => __( 'Event recurrence details', 'wp-graphql-tec' ),
+				'connections' => [
+					'eventsInSeries' => [
+						'toType' => Event::$type,
+						'resolve' => function ( $source, array $args, AppContext $context, ResolveInfo $info ){
+							if( null === $source->parentDatabaseId) {
+								return null;
+							}
+
+							$args['where']['inSeries'] = $source->parentDatabaseId;
+
+							return EventHelper::resolve_connection( $source, $args, $context, $info, 'tribe_events' );
+						}
+					],
+				],
 				'fields'      => [
 					'permalinkAll'   => [
 						'type'        => 'String',
@@ -48,7 +63,6 @@ class RecurrenceDetails {
 						'type'        => 'String',
 						'description' => __( 'The link to export the whole recurring series in iCal format', 'wp-graphql-tec' ),
 						'resolve'     => fn( $source) => $source->recurrenceIcalLink,
-
 					],
 				],
 			]
