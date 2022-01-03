@@ -22,7 +22,7 @@ class Event {
 	 */
 	public static function extend( array $fields, WP_Post $data ) : array {
 		$fields['isRecurring'] = function() use ( $data ) : bool {
-			return ! empty( $data->is_recurring );
+			return ! empty( $data->recurring );
 		};
 
 		$fields['recurrenceText'] = function() use ( $data ) : ?string {
