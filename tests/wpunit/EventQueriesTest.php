@@ -10,6 +10,7 @@ use GraphQLRelay\Relay;
 use Tribe__Date_Utils as DateUtils;
 use Tribe__Events__Timezones as Timezones;
 use WPGraphQL\TEC\Test\TestCase\TecGraphQLTestCase;
+use WPGraphQL\Type\WPEnumType;
 
 /**
  * Class - EventQueriesTest
@@ -231,16 +232,19 @@ class EventQueriesTest extends TecGraphQLTestCase {
 					endDate
 					endDateUTC
 					eventUrl
-					hideFromUpcoming
+					hasMap
+					hasMapLink
+					id
 					isAllDay
+					isHiddenFromUpcoming
 					isFeatured
 					isMultiday
 					isPast
 					isSticky
 					linkedData {
 						context
-						endDate
 						description
+						endDate
 						image
 						location {
 							type
@@ -265,8 +269,8 @@ class EventQueriesTest extends TecGraphQLTestCase {
 						}
 					}
 					origin
-					showMap
-					showMapLink
+					scheduleDetails
+					scheduleDetailsShort
 					startDate
 					startDateUTC
 					timezone
@@ -282,8 +286,10 @@ class EventQueriesTest extends TecGraphQLTestCase {
 	}
 
 	private function get_expected_response( $event ) : array {
-		$cost        = tribe_get_cost( $event->ID );
+		$cost        = tribe_get_formatted_cost( $event->ID );
 		$linked_data = tribe( 'tec.json-ld.event' )->get_data( $event->ID )[ $event->ID ];
+
+		codecept_debug( $linked_data->offers );
 
 		return [
 			$this->expectedObject(
@@ -291,51 +297,59 @@ class EventQueriesTest extends TecGraphQLTestCase {
 				[
 					$this->expectedField(
 						'cost',
-						$cost ?: null,
+						$cost ?: static::IS_NULL,
 					),
 					$this->expectedField(
 						'costMax',
-						! empty( $cost ) ? tribe( 'tec.cost-utils' )->get_maximum_cost( $cost ) : null,
+						! empty( $cost ) ? tribe( 'tec.cost-utils' )->get_maximum_cost( $cost ) : static::IS_NULL,
 					),
 					$this->expectedField(
 						'costMin',
-						! empty( $cost ) ? tribe( 'tec.cost-utils' )->get_minimum_cost( $cost ) : null,
+						! empty( $cost ) ? tribe( 'tec.cost-utils' )->get_minimum_cost( $cost ) : static::IS_NULL,
 					),
 					$this->expectedField(
 						'currencyPosition',
-						tribe_get_event_meta( $event->ID, '_EventCurrencyPosition', true ) ?: null,
+						WPEnumType::get_safe_name( tribe_get_event_meta( $event->ID, '_EventCurrencyPosition', true ) ) ?: static::IS_NULL,
 					),
 					$this->expectedField(
 						'currencySymbol',
-						tribe_get_event_meta( $event->ID, '_EventCurrencySymbol', true ) ?: null,
+						tribe_get_event_meta( $event->ID, '_EventCurrencySymbol', true ) ?: static::IS_NULL,
 					),
 					$this->expectedField(
 						'duration',
-						isset( $event->duration ) ? ( $event->duration ?: null ) : null,
+						(int) tribe_get_event_meta( $event->ID, '_EventDuration', true ) ?: static::IS_NULL,
 					),
 					$this->expectedField(
 						'endDate',
-						tribe_get_end_date( $event->ID, true, DateUtils::DBDATETIMEFORMAT ) ?? null,
+						tribe_get_end_date( $event->ID, true, DateUtils::DBDATETIMEFORMAT ) ?? static::IS_NULL,
 					),
 					$this->expectedField(
 						'endDateUTC',
-						tribe_get_event_meta( $event->ID, '_EventEndDateUTC', true ) ?: null,
+						tribe_get_event_meta( $event->ID, '_EventEndDateUTC', true ) ?: static::IS_NULL,
 					),
 					$this->expectedField(
 						'eventUrl',
-						tribe_get_event_meta( $event->ID, '_EventURL', true ) ?: null,
+						tribe_get_event_meta( $event->ID, '_EventURL', true ) ?: static::IS_NULL,
 					),
 					$this->expectedField(
-						'hideFromUpcomming',
-						tribe_get_event_meta( $event->ID, '_EventHideFromUpcoming', true ) ?? null,
+						'hasMap',
+						! empty( tribe_get_event_meta( $event->ID, '_EventShowMap', true ) ),
+					),
+					$this->expectedField(
+						'hasMapLink',
+						! empty( tribe_get_event_meta( $event->ID, '_EventShowMapLink', true ) ),
 					),
 					$this->expectedField(
 						'id',
-						! empty( $event->ID ) ? Relay::toGlobalId( 'tribe_events', (string) $event->ID ) : null,
+						Relay::toGlobalId( 'tribe_events', (string) $event->ID )
 					),
 					$this->expectedField(
 						'isAllDay',
 						tribe_event_is_all_day( $event->ID ),
+					),
+					$this->expectedField(
+						'isHiddenFromUpcoming',
+						! empty( tribe_get_event_meta( $event->ID, '_EventHideFromUpcoming', true ) ),
 					),
 					$this->expectedField(
 						'isFeatured',
@@ -351,49 +365,38 @@ class EventQueriesTest extends TecGraphQLTestCase {
 					),
 					$this->expectedField(
 						'origin',
-						tribe_get_event_meta( $event->ID, '_EventOrigin', true ) ?: null,
-					),
-					$this->expectedField(
-						'phone',
-						tribe_get_event_meta( $event->ID, '_EventPhone', true ) ?: null,
+						tribe_get_event_meta( $event->ID, '_EventOrigin', true ) ?: static::IS_NULL,
 					),
 					$this->expectedField(
 						'scheduleDetails',
-						tribe_events_event_schedule_details( $event->ID, '', '', false ) ?: null,
+						tribe_events_event_schedule_details( $event->ID, '', '', false ) ?: static::IS_NULL,
 					),
 					$this->expectedField(
-						'showMap',
-						tribe_get_event_meta( $event->ID, '_EventShowMap', true ) ?? null,
-					),
-					$this->expectedField(
-						'showMapLink',
-						tribe_get_event_meta( $event->ID, '_EventShowMapLink', true ) ?? null,
+						'scheduleDetailsShort',
+						tribe_events_event_short_schedule_details( $event->ID, '', '', false ) ?: static::IS_NULL,
 					),
 					$this->expectedField(
 						'startDate',
-						tribe_get_start_date( $event->ID, true, DateUtils::DBDATETIMEFORMAT ) ?? null,
+						tribe_get_start_date( $event->ID, true, DateUtils::DBDATETIMEFORMAT ) ?? static::IS_NULL,
 					),
 					$this->expectedField(
 						'startDateUTC',
-						tribe_get_event_meta( $event->ID, '_EventStartDateUTC', true ) ?: null,
+						tribe_get_event_meta( $event->ID, '_EventStartDateUTC', true ) ?: static::IS_NULL,
 					),
 					$this->expectedField(
 						'timezone',
-						Timezones::get_event_timezone_string( $event->ID ) ?: null,
+						Timezones::get_event_timezone_string( $event->ID ) ?: static::IS_NULL,
 					),
 					$this->expectedField(
 						'timezoneAbbr',
-						tribe_get_event_meta( $event->ID, '_EventTimezoneAbbr', true ) ?: null,
+						tribe_get_event_meta( $event->ID, '_EventTimezoneAbbr', true ) ?: static::IS_NULL,
 					),
 					$this->expectedObject(
 						'venue',
 						[
-							$this->expectedNode(
-								'0',
-								$this->expectedField(
-									'databaseId',
-									$this->venue_id
-								)
+							$this->expectedField(
+								'databaseId',
+								$this->venue_id
 							),
 						]
 					),
@@ -401,18 +404,24 @@ class EventQueriesTest extends TecGraphQLTestCase {
 						'organizers',
 						[
 							$this->expectedNode(
-								'0',
-								$this->expectedField(
-									'databaseId',
-									$this->organizer_one_id
-								)
+								'nodes',
+								[
+									$this->expectedField(
+										'databaseId',
+										$this->organizer_one_id
+									),
+								],
+								0
 							),
 							$this->expectedNode(
-								'1',
-								$this->expectedField(
-									'databaseId',
-									$this->organizer_two_id
-								)
+								'nodes',
+								[
+									$this->expectedField(
+										'databaseId',
+										$this->organizer_two_id
+									),
+								],
+								1
 							),
 						]
 					),
@@ -421,66 +430,64 @@ class EventQueriesTest extends TecGraphQLTestCase {
 						[
 							$this->expectedField(
 								'context',
-								! empty( $linked_data->{'@context'} ) ? $linked_data->{'@context'} : null,
+								! empty( $linked_data->{'@context'} ) ? $linked_data->{'@context'} : static::IS_NULL,
 							),
 							$this->expectedField(
 								'description',
-								! empty( $linked_data->description ) ? wp_strip_all_tags( html_entity_decode( $linked_data->description ) ) : null,
+								! empty( $linked_data->description ) ? wp_strip_all_tags( html_entity_decode( $linked_data->description ) ) : static::IS_NULL,
 							),
 							$this->expectedField(
 								'endDate',
-								! empty( $linked_data->endDate ) ? $linked_data->endDate : null,
+								! empty( $linked_data->endDate ) ? $linked_data->endDate : static::IS_NULL,
 							),
 							$this->expectedField(
 								'image',
-								! empty( $linked_data->image ) ? $linked_data->image : null,
-							),
-							$this->expectedField(
-								'name',
-								! empty( $linked_data->name ) ? $linked_data->name : null,
-							),
-							$this->expectedField(
-								'offers',
-								! empty( $linked_data->offers ) ? $linked_data->offers : null,
-							),
-							// Organizer
-							$this->expectedField(
-								'performer',
-								! empty( $linked_data->performer ) ? $linked_data->performer : null,
-							),
-							$this->expectedField(
-								'startDate',
-								! empty( $linked_data->startDate ) ? $linked_data->startDate : null,
-							),
-							$this->expectedField(
-								'type',
-								! empty( $linked_data->{'@type'} ) ? $linked_data->{'@type'} : null,
-							),
-							$this->expectedField(
-								'url',
-								! empty( $linked_data->url ) ? $linked_data->url : null,
+								! empty( $linked_data->image ) ? $linked_data->image : static::IS_NULL,
 							),
 							$this->expectedObject(
 								'location',
 								[
 									$this->expectedField(
 										'type',
-										! empty( $linked_data->location->{'@type'} ) ? $linked_data->location->{'@type'} : null,
+										! empty( $linked_data->location->{'@type'} ) ? $linked_data->location->{'@type'} : static::IS_NULL,
 									),
 								]
+							),
+							$this->expectedField(
+								'name',
+								! empty( $linked_data->name ) ? $linked_data->name : static::IS_NULL,
+							),
+							$this->expectedNode(
+								'offers',
+								[
+									$this->expectedField( 'type', ! empty( $linked_data->offers->{'@type'} ) ? $linked_data->offers->{'@type'} : static::IS_NULL ),
+								],
+								0
 							),
 							$this->expectedObject(
 								'organizer',
 								[
 									$this->expectedField(
 										'type',
-										! empty( $linked_data->organizer->{'@type'} ) ? $linked_data->organizer->{'@type'} : null,
+										! empty( $linked_data->organizer->{'@type'} ) ? $linked_data->organizer->{'@type'} : static::IS_NULL,
 									),
 								]
 							),
 							$this->expectedField(
-								'offers',
-								null
+								'performer',
+								! empty( $linked_data->performer ) ? $linked_data->performer : static::IS_NULL,
+							),
+							$this->expectedField(
+								'startDate',
+								! empty( $linked_data->startDate ) ? $linked_data->startDate : static::IS_NULL,
+							),
+							$this->expectedField(
+								'type',
+								! empty( $linked_data->{'@type'} ) ? $linked_data->{'@type'} : static::IS_NULL,
+							),
+							$this->expectedField(
+								'url',
+								! empty( $linked_data->url ) ? $linked_data->url : static::IS_NULL,
 							),
 						]
 					),

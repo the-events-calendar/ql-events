@@ -52,6 +52,15 @@ class Event extends \WP_UnitTest_Factory_For_Post {
 		$utc_offset = Arr::get( $args, 'utc_offset', 0 );
 		$timezone   = Arr::get( $args, 'timezone', Timezones::build_timezone_object()->getName() );
 
+		// By defaut an event will use USD.
+		$symbol = '$';
+		// By default an event will be 10-20 Dollars.
+		$cost = [ 10, 20 ];
+		// By default an event currency position will be 'prefix';
+		$position = 'prefix';
+		// By default the url will be http://example.com
+		$url = 'http://example.com';
+
 		$utc          = Timezones::build_timezone_object( 'UTC' );
 		$timezone_obj = Timezones::build_timezone_object( $timezone );
 
@@ -77,13 +86,19 @@ class Event extends \WP_UnitTest_Factory_For_Post {
 		}
 
 		$meta_input = [
-			'_EventStartDate'    => $local_start,
-			'_EventEndDate'      => $local_end,
-			'_EventStartDateUTC' => $utc_start,
-			'_EventEndDateUTC'   => $utc_end,
-			'_EventDuration'     => $duration,
-			'_EventTimezone'     => $timezone,
-			'_EventTimezoneAbbr' => Timezones::abbr( $local_start, $timezone ),
+			'_EventStartDate'        => $local_start,
+			'_EventEndDate'          => $local_end,
+			'_EventStartDateUTC'     => $utc_start,
+			'_EventEndDateUTC'       => $utc_end,
+			'_EventDuration'         => $duration,
+			'_EventTimezone'         => $timezone,
+			'_EventTimezoneAbbr'     => Timezones::abbr( $local_start, $timezone ),
+			'_EventCurrencySymbol'   => $symbol,
+			'_EventCurrencyPosition' => $position,
+			'_EventCost'             => $cost,
+			'_EventURL'              => $url,
+			'_EventShowMap'          => true,
+			'_EventShowMapLink'      => true,
 		];
 
 		if ( isset( $args['venue'] ) ) {
