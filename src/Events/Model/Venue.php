@@ -50,7 +50,7 @@ class Venue extends Post {
 			parent::init();
 
 			$fields = [
-				'address'       => fn() : ?string => ! empty( $this->data->address ) ? $this->data->adresss : null,
+				'address'       => fn() : ?string => ! empty( $this->data->address ) ? $this->data->address : null,
 				'city'          => fn() : ?string => ! empty( $this->data->city ) ? $this->data->city : null,
 				'country'       => fn() : ?string => ! empty( $this->data->country ) ? $this->data->country : null,
 				'id'            => fn() : ?string => ! empty( $this->data->ID ) ? Relay::toGlobalId( $this->data->post_type, (string) $this->data->ID ) : null,
@@ -62,14 +62,8 @@ class Venue extends Post {
 				'mapLink'       => fn() : ?string => ! empty( $this->data->directions_link ) ? $this->data->directions_link : null,
 				'phone'         => fn() : ?string => ! empty( $this->data->phone ) ? $this->data->phone : null,
 				'province'      => fn() : ?string => ! empty( $this->data->province ) ? $this->data->province : null,
-				'hasMap'        => function() : bool {
-					$value = get_post_meta( $this->data->ID, '_VenueShowMap', true );
-					return ! is_null( $value ) ? $value : null;
-				},
-				'hasMapLink'    => function() : bool {
-					$value = get_post_meta( $this->data->ID, '_VenueShowMapLink', true );
-					return ! is_null( $value ) ? $value : null;
-				},
+				'hasMap'        => fn() : bool => ! empty( get_post_meta( $this->data->ID, '_VenueShowMap', true ) ),
+				'hasMapLink'    => fn() : bool => ! empty( get_post_meta( $this->data->ID, '_VenueShowMapLink', true ) ),
 				'state'         => fn() : ?string => ! empty( $this->data->state ) ? $this->data->state : null,
 				'stateProvince' => fn() : ?string => ! empty( $this->data->state_province ) ? $this->data->state_province : null,
 				'website'       => fn() : ?string => ! empty( $this->data->website ) ? $this->data->website : null,
