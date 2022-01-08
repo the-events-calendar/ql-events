@@ -22,9 +22,7 @@ class VenueQueriesTest extends TecGraphQLTestCase {
 		$this->venue_id = $this->factory->venue->create();
 		$this->event_id = $this->factory->event->create(
 			[
-				'venue' => [
-					$this->venue_id,
-				],
+				'venue' => $this->venue_id,
 			]
 		);
 
@@ -76,9 +74,65 @@ class VenueQueriesTest extends TecGraphQLTestCase {
 	}
 
 	public function testConnectionArgs() : void {
-		$this->markTestIncomplete(
-			'This test has not been implemented yet. Requires https://github.com/wp-graphql/wp-graphql/pull/2141.'
-		);
+		$venue_ids = [
+			$this->venue_id,
+			$this->factory->venue->create( [ 'location' => 'paris' ] ),
+			$this->factory->venue->create( [ 'location' => 'new_york' ] ),
+		];
+
+		$query = '
+			query testConnectionArgs( $where: RootQueryToVenueConnectionWhereArgs ){
+				venues( where: $where ) {
+					nodes {
+						databaseId
+					}
+				}
+			}
+		';
+
+		// Test by eventId.
+		$variables = [
+			'where' => [
+				'eventId' => $this->event_id,
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+
+		$this->assertArrayNotHasKey( 'errors', $response, '`eventId` has errors' );
+		$this->assertCount( 1, $response['data']['venues']['nodes'], '`eventId` does not return correct amount' );
+		$this->assertSame( $venue_ids[0], $response['data']['venues']['nodes'][0]['databaseId'], '`eventId` - node is not the same' );
+
+		// Test by hasEvents.
+		$variables = [
+			'where' => [
+				'hasEvents' => true,
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+
+		$this->assertArrayNotHasKey( 'errors', $response, '`hasEvents` has errors' );
+		$this->assertCount( 1, $response['data']['venues']['nodes'], '`hasEvents` does not return correct amount' );
+		$this->assertSame( $venue_ids[0], $response['data']['venues']['nodes'][0]['databaseId'], '`hasEvents` - node is not the same' );
+
+		$variables = [
+			'where' => [
+				'hasEvents' => false,
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+
+		$this->assertArrayNotHasKey( 'errors', $response, '`! hasEvents` has errors' );
+		$this->assertCount( 2, $response['data']['venues']['nodes'], '`! hasEvents` does not return correct amount' );
+		$this->assertSame( $venue_ids[2], $response['data']['venues']['nodes'][0]['databaseId'], '`! hasEvents` - node 0 is not the same' );
+		$this->assertSame( $venue_ids[1], $response['data']['venues']['nodes'][1]['databaseId'], '`! hasEvents` - node 1 is not the same' );
+
+		unset( $venue_ids[0] );
+		foreach ( $venue_ids as $id ) {
+			wp_delete_post( $id );
+		}
 	}
 
 	private function get_query() : string {
