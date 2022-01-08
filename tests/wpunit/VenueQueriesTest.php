@@ -35,16 +35,16 @@ class VenueQueriesTest extends TecGraphQLTestCase {
 	 * {@inheritDoc}
 	 */
 	public function tearDown() : void {
-		// $this->factory->event->delete( $this->event_id );
-		// $this->factory->venue->delete( $this->venue_id );
-		// $this->factory->organizer->delete( $this->organizer_one_id );
-		// $this->factory->organizer->delete( $this->organizer_two_id );
+		wp_delete_post( $this->event_id );
+		wp_delete_post( $this->venue_id );
+
 		// Then...
 		parent::tearDown();
 	}
 
 	public function testVenueQueries() : void {
-		$venue     = tribe_get_venue_object( $this->venue_id );
+		$venue = tribe_get_venue_object( $this->venue_id );
+		codecept_debug( $venue );
 		$global_id = Relay::toGlobalId( 'tribe_venue', $this->venue_id );
 
 		$query = $this->get_query();
@@ -75,7 +75,7 @@ class VenueQueriesTest extends TecGraphQLTestCase {
 		$this->assertQuerySuccessful( $response, $expected );
 	}
 
-	public function testVenueQueryArgs() : void {
+	public function testConnectionArgs() : void {
 		$this->markTestIncomplete(
 			'This test has not been implemented yet. Requires https://github.com/wp-graphql/wp-graphql/pull/2141.'
 		);
@@ -117,6 +117,7 @@ class VenueQueriesTest extends TecGraphQLTestCase {
 					phone
 					province
 					state
+					stateProvince
 					website
 					zip
 				}
@@ -133,51 +134,45 @@ class VenueQueriesTest extends TecGraphQLTestCase {
 				[
 					$this->expectedField(
 						'address',
-						tribe_get_address( $venue->ID ) ?: null,
+						tribe_get_address( $venue->ID ) ?: static::IS_NULL,
 					),
 					$this->expectedField(
 						'city',
-						tribe_get_city( $venue->ID ) ?: null,
+						tribe_get_city( $venue->ID ) ?: static::IS_NULL,
 					),
 					$this->expectedField(
 						'country',
-						tribe_get_country( $venue->ID ) ?: null,
+						tribe_get_country( $venue->ID ) ?: static::IS_NULL,
 					),
 					$this->expectedField(
 						'mapLink',
-						tribe_get_map_link( (string) $venue->ID ) ?: null,
+						tribe_get_map_link( (string) $venue->ID ) ?: static::IS_NULL,
 					),
 					$this->expectedField(
 						'phone',
-						tribe_get_phone( $venue->ID ) ?: null,
+						tribe_get_phone( $venue->ID ) ?: static::IS_NULL,
 					),
 					$this->expectedField(
 						'province',
-						tribe_get_province( $venue->ID ) ?: null,
+						tribe_get_province( $venue->ID ) ?: static::IS_NULL,
 					),
-					$this->expectedField(
-						'hasMap',
-						get_post_meta( $venue->ID, '_VenueShowMap', true ) ?? null,
-					),
-					$this->expectedField(
-						'hasMapLink',
-						get_post_meta( $venue->ID, '_VenueShowMapLink', true ) ?? null,
-					),
+					$this->expectedField( 'hasMap', (bool) get_post_meta( $venue->ID, '_VenueShowMap', true ) ),
+					$this->expectedField( 'hasMapLink', (bool) get_post_meta( $venue->ID, '_VenueShowMapLink', true ) ),
 					$this->expectedField(
 						'state',
-						tribe_get_state( $venue->ID ) ?: null,
+						tribe_get_state( $venue->ID ) ?: static::IS_NULL,
 					),
 					$this->expectedField(
 						'stateProvince',
-						tribe_get_stateprovince( $venue->ID ) ?: null,
+						tribe_get_stateprovince( $venue->ID ) ?: static::IS_NULL,
 					),
 					$this->expectedField(
 						'website',
-						tribe_get_venue_website_url( $venue->ID ) ?: null,
+						tribe_get_venue_website_url( $venue->ID ) ?: static::IS_NULL,
 					),
 					$this->expectedField(
 						'zip',
-						tribe_get_zip( $venue->ID ) ?: null,
+						tribe_get_zip( $venue->ID ) ?: static::IS_NULL,
 					),
 				]
 			),

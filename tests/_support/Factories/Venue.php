@@ -19,7 +19,7 @@ class Venue extends \WP_UnitTest_Factory_For_Post {
 				'_VenueState'         => 'NY',
 				'_VenueZip'           => '10065',
 				'_VenuePhone'         => '1-234-576-8910',
-				'_VenueURL'           => '',
+				'_VenueURL'           => 'http://example.com',
 				'_VenueShowMap'       => true,
 				'_VenueShowMapLink'   => true,
 				'_VenueStateProvince' => 'NY',
@@ -32,7 +32,7 @@ class Venue extends \WP_UnitTest_Factory_For_Post {
 				'_VenueState'         => '',
 				'_VenueZip'           => '75005',
 				'_VenuePhone'         => '+1-234-567-8910',
-				'_VenueURL'           => '',
+				'_VenueURL'           => 'http://example.com',
 				'_VenueShowMap'       => true,
 				'_VenueShowMapLink'   => true,
 				'_VenueStateProvince' => 'Paris',
@@ -42,22 +42,19 @@ class Venue extends \WP_UnitTest_Factory_For_Post {
 	function create_object( $args ) {
 		$args['post_type'] = Main::VENUE_POST_TYPE;
 
-		$title    = 'Venue' . uniqid();
-		$lc_title = strtolower( $title );
-
 		$defaults = [
 			'meta_input' => [
-				'_EventShowMap'       => '1',
-				'_EventShowMapLink'   => '1',
-				'_VenueAddress'       => $lc_title . ' address',
-				'_VenueCity'          => $lc_title . 'city',
-				'_VenueCountry'       => $lc_title . ' country',
-				'_VenueProvince'      => $lc_title . ' province',
-				'_VenueState'         => $lc_title . ' state',
-				'_VenueZip'           => $lc_title . ' zip',
-				'_VenuePhone'         => $lc_title . ' phone',
-				'_VenueURL'           => 'http://' . \Illuminate\Support\Str::slug( $lc_title ) . '.com',
-				'_VenueStateProvince' => $lc_title . ' state_province',
+				'_EventShowMap'       => true,
+				'_EventShowMapLink'   => true,
+				'_VenueAddress'       => $this->locations['new_york']['_VenueAddress'],
+				'_VenueCity'          => $this->locations['new_york']['_VenueCity'],
+				'_VenueCountry'       => $this->locations['new_york']['_VenueCountry'],
+				'_VenueProvince'      => $this->locations['new_york']['_VenueProvince'],
+				'_VenueState'         => $this->locations['new_york']['_VenueState'],
+				'_VenueZip'           => $this->locations['new_york']['_VenueZip'],
+				'_VenuePhone'         => $this->locations['new_york']['_VenuePhone'],
+				'_VenueURL'           => $this->locations['new_york']['_VenueURL'],
+				'_VenueStateProvince' => $this->locations['new_york']['_VenueStateProvince'],
 			],
 		];
 

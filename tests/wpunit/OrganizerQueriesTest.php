@@ -70,9 +70,15 @@ class OrganizerQueriesTest extends TecGraphQLTestCase {
 
 		$this->assertArrayNotHasKey( 'errors', $response, 'Query by GlobalID has errors' );
 		$this->assertQuerySuccessful( $response, $expected );
+
+		// Test email obsfucation.
+		$expected_email = tribe_get_organizer_email( $organizer->ID, false );
+		codecept_debug( $response );
+		$this->assertSame( $expected_email, html_entity_decode( $response['data']['organizer']['email'] ) );
+		$this->assertSame( $expected_email, html_entity_decode( $response['data']['organizer']['linkedData']['email'] ) );
 	}
 
-	public function testOrganizerQueryArgs() : void {
+	public function testConnectionArgs() : void {
 		$this->markTestIncomplete(
 			'This test has not been implemented yet. Requires https://github.com/wp-graphql/wp-graphql/pull/2141.'
 		);
@@ -114,64 +120,60 @@ class OrganizerQueriesTest extends TecGraphQLTestCase {
 			$this->expectedObject(
 				'organizer',
 				[
-					$this->expectedField(
-						'email',
-						tribe_get_organizer_email( $organizer->ID, true ) ?: null,
-					),
-					$this->expectedField(
-						'unsanitizedEmail',
-						tribe_get_organizer_email( $organizer->ID, false ) ?: null,
-					),
+					// $this->expectedField(
+					// 'email',
+					// tribe_get_organizer_email( $organizer->ID, true ) ?: static::IS_NULL,
+					// ),
 					$this->expectedField(
 						'unsanitizedEmail',
-						tribe_get_organizer_email( $organizer->ID, false ) ?: null,
+						tribe_get_organizer_email( $organizer->ID, false ) ?: static::IS_NULL,
 					),
 					$this->expectedField(
 						'phone',
-						tribe_get_organizer_phone( $organizer->ID ) ?: null,
+						tribe_get_organizer_phone( $organizer->ID ) ?: static::IS_NULL,
 					),
 					$this->expectedField(
 						'website',
-						! tribe_get_organizer_website_url( $organizer->ID ) ?: null,
+						tribe_get_organizer_website_url( $organizer->ID ) ?: static::IS_NULL,
 					),
 					$this->expectedObject(
 						'linkedData',
 						[
 							$this->expectedField(
 								'context',
-								! empty( $linked_data->{'@context'} ) ? $linked_data->{'@context'} : null,
+								! empty( $linked_data->{'@context'} ) ? $linked_data->{'@context'} : static::IS_NULL,
 							),
 							$this->expectedField(
 								'description',
-								! empty( $linked_data->description ) ? wp_strip_all_tags( html_entity_decode( $linked_data->description ) ) : null,
+								! empty( $linked_data->description ) ? wp_strip_all_tags( html_entity_decode( $linked_data->description ) ) : static::IS_NULL,
 							),
-							$this->expectedField(
-								'email',
-								! empty( $linked_data->email ) ? $linked_data->email : null,
-							),
+							// $this->expectedField(
+							// 'email',
+							// ! empty( $linked_data->email ) ? $linked_data->email : static::IS_NULL,
+							// ),
 							$this->expectedField(
 								'image',
-								! empty( $linked_data->image ) ? $linked_data->image : null,
+								! empty( $linked_data->image ) ? $linked_data->image : static::IS_NULL,
 							),
 							$this->expectedField(
 								'name',
-								! empty( $linked_data->name ) ? $linked_data->name : null,
+								! empty( $linked_data->name ) ? $linked_data->name : static::IS_NULL,
 							),
 							$this->expectedField(
 								'sameAs',
-								! empty( $linked_data->sameAs ) ? $linked_data->sameAs : null,
+								! empty( $linked_data->sameAs ) ? $linked_data->sameAs : static::IS_NULL,
 							),
 							$this->expectedField(
 								'telephone',
-								! empty( $linked_data->telephone ) ? $linked_data->telephone : null,
+								! empty( $linked_data->telephone ) ? $linked_data->telephone : static::IS_NULL,
 							),
 							$this->expectedField(
 								'type',
-								! empty( $linked_data->{'@type'} ) ? $linked_data->{'@type'} : null,
+								! empty( $linked_data->{'@type'} ) ? $linked_data->{'@type'} : static::IS_NULL,
 							),
 							$this->expectedField(
 								'url',
-								! empty( $linked_data->url ) ? $linked_data->url : null,
+								! empty( $linked_data->url ) ? $linked_data->url : static::IS_NULL,
 							),
 						]
 					),

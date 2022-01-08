@@ -84,7 +84,7 @@ class EventQueriesTest extends TecGraphQLTestCase {
 		$this->assertQuerySuccessful( $response, $expected );
 	}
 
-	public function testEventQueryArgs() : void {
+	public function testPagination() : void {
 		$event_ids = [
 			$this->event_id,
 			$this->factory->event->create( [ 'when' => '+48 hours' ] ),
@@ -219,6 +219,10 @@ class EventQueriesTest extends TecGraphQLTestCase {
 		}
 	}
 
+	public function testConnectionArgs() : void {
+		$this->markTestIncomplete();
+	}
+
 	private function get_query() : string {
 		return '
 			query getEvent( $id: ID!, $idType: EventIdType ) {
@@ -288,8 +292,6 @@ class EventQueriesTest extends TecGraphQLTestCase {
 	private function get_expected_response( $event ) : array {
 		$cost        = tribe_get_formatted_cost( $event->ID );
 		$linked_data = tribe( 'tec.json-ld.event' )->get_data( $event->ID )[ $event->ID ];
-
-		codecept_debug( $linked_data->offers );
 
 		return [
 			$this->expectedObject(
