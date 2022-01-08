@@ -135,28 +135,35 @@ class Utils {
 	 * @param string $type Either post type (e.g. 'tribe_rsvp_tickets) or model type (e.g. 'RsvpTicket' ).
 	 */
 	public static function get_et_provider_for_type( string $type ) : string {
+		$provider = 'default';
 		switch ( $type ) {
 			case 'tribe_rsvp_tickets':
 			case 'RsvpTicket':
 			case 'tribe_rsvp_attendees':
 			case 'RsvpAttendee':
-				return 'rsvp';
+				$provider = 'rsvp';
+				break;
 			case 'tribe_tpp_tickes':
 			case 'PayPalTicket':
 			case 'tribe_tpp_orders':
 			case 'PayPalOrder':
 			case 'tribe_tpp_attendees':
 			case 'PayPalAttendee':
-				return 'tribe-commerce';
+				$provider = 'tribe-commerce';
+				break;
 			case 'tec_tc_ticket':
 			case 'TcTicket':
 			case 'tec_tc_attendee':
 			case 'TcAttendee':
 			case 'tec_tc_order':
 			case 'TcOrder':
-				return 'tickets-commerce';
+				$provider = 'tickets-commerce';
+				break;
+			default:
+				break;
 		}
-		return 'default';
+
+		return $provider;
 	}
 
 	/**
@@ -164,7 +171,7 @@ class Utils {
 	 *
 	 * @param string $post_type the post type name.
 	 */
-	public static function is_tec_post_type( string $post_type ) : ?bool {
+	public static function is_tec_post_type( string $post_type ) : bool {
 		$registered_post_types = self::get_registered_post_types();
 
 		return in_array( $post_type, array_keys( $registered_post_types ), true );
@@ -174,8 +181,8 @@ class Utils {
 	 * Gets an array of post types that can have tickets.
 	 */
 	public static function get_enabled_post_types_for_tickets() : array {
-			// Remove Event post type if its not registered.
-			$types = tribe_get_option( 'ticket-enabled-post-types' ) ?? [];
+		// Remove Event post type if its not registered.
+		$types = tribe_get_option( 'ticket-enabled-post-types' ) ?? [];
 
 		if ( ! TEC::is_tec_loaded() ) {
 			$types = array_diff( $types, [ 'tribe_events' ] );
