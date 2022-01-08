@@ -7,6 +7,7 @@
  */
 
 namespace Helper;
+
 /**
  * Class - Dummy
  */

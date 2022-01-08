@@ -41,7 +41,7 @@ class UtilsTest extends WPGraphQLTestCase {
 
 	public function testEndsWith(): void {
 		$expected = 'value';
-		$actual = Utils::ends_with( 'my_long_value', $expected );
+		$actual   = Utils::ends_with( 'my_long_value', $expected );
 
 		$this->assertTrue( $actual );
 
@@ -52,7 +52,7 @@ class UtilsTest extends WPGraphQLTestCase {
 
 	public function testStartsWith(): void {
 		$expected = 'my';
-		$actual = Utils::starts_with( 'my_long_value', $expected );
+		$actual   = Utils::starts_with( 'my_long_value', $expected );
 
 		$this->assertTrue( $actual );
 	}
@@ -65,7 +65,7 @@ class UtilsTest extends WPGraphQLTestCase {
 	}
 
 	public function testIsTecPostType() : void {
-		$actual = Utils::is_tec_post_type( 'tribe_organizer');
+		$actual = Utils::is_tec_post_type( 'tribe_organizer' );
 
 		$this->assertTrue( $actual, 'Organizer should be a valid post type' );
 
@@ -76,25 +76,25 @@ class UtilsTest extends WPGraphQLTestCase {
 	public function testGetEtProviderForType() : void {
 		// test cpt name.
 		$expected = 'rsvp';
-		$actual = Utils::get_et_provider_for_type( 'tribe_rsvp_tickets' );
+		$actual   = Utils::get_et_provider_for_type( 'tribe_rsvp_tickets' );
 
 		$this->assertEquals( $expected, $actual, 'The provider for `tribe_rsvp_tickets` should be `rsvp`.' );
 
 		// test graphql name.
 		$expected = 'tribe-commerce';
-		$actual = Utils::get_et_provider_for_type( 'PayPalTicket' );
+		$actual   = Utils::get_et_provider_for_type( 'PayPalTicket' );
 
 		$this->assertEquals( $expected, $actual, 'The provider for `PayPalTicket` should be `tribe-commerce`.' );
 
 		// test tickets-commerce.
 		$expected = 'tickets-commerce';
-		$actual = Utils::get_et_provider_for_type( 'TcAttendee' );
+		$actual   = Utils::get_et_provider_for_type( 'TcAttendee' );
 
 		$this->assertEquals( $expected, $actual, 'The provider for `TcAttendee` should be `tickets-commerce`.' );
 
 		// Test bad value.
 		$expected = 'default';
-		$actual = Utils::get_et_provider_for_type( 'Not_a_realType' );
+		$actual   = Utils::get_et_provider_for_type( 'Not_a_realType' );
 		$this->assertEquals( $expected, $actual, 'The default provider should be `default`.' );
 	}
 
@@ -137,21 +137,21 @@ class UtilsTest extends WPGraphQLTestCase {
 		$actual = Utils::get_et_types();
 
 		$expected = [
-			'tribe_rsvp_tickets' => 'RsvpTicket',
-			'tec_tc_ticket'      => 'TcTicket',
-			'tribe_tpp_tickets'  => 'PayPalTicket',
+			'tribe_rsvp_tickets'   => 'RsvpTicket',
+			'tec_tc_ticket'        => 'TcTicket',
+			'tribe_tpp_tickets'    => 'PayPalTicket',
 			'tribe_rsvp_attendees' => 'RsvpAttendee',
 			'tribe_tpp_attendees'  => 'PayPalAttendee',
 			'tec_tc_attendee'      => 'TcAttendee',
-			'tec_tc_order'     => 'TcOrder',
-			'tribe_tpp_orders' => 'PayPalOrder',
+			'tec_tc_order'         => 'TcOrder',
+			'tribe_tpp_orders'     => 'PayPalOrder',
 		];
 
 		$this->assertEquals( $expected, $actual );
 	}
 
 	public function testGetRegisteredTaxonomies() : void {
-		$actual = Utils::get_registered_taxonomies();
+		$actual   = Utils::get_registered_taxonomies();
 		$expected = [ 'tribe_events_cat' => 'EventCategory' ];
 
 		$this->assertEquals( $expected, $actual, 'EventCategory should be a registered taxonomy.' );

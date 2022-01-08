@@ -88,6 +88,8 @@ class VenueQueriesTest extends TecGraphQLTestCase {
 					address
 					city
 					country
+					hasMap
+					hasMapLink
 					linkedData {
 						address {
 							addressCountry
@@ -113,8 +115,6 @@ class VenueQueriesTest extends TecGraphQLTestCase {
 					}
 					mapLink
 					phone
-					showMap
-					showMapLink
 					province
 					state
 					website
@@ -156,11 +156,11 @@ class VenueQueriesTest extends TecGraphQLTestCase {
 						tribe_get_province( $venue->ID ) ?: null,
 					),
 					$this->expectedField(
-						'showMap',
+						'hasMap',
 						get_post_meta( $venue->ID, '_VenueShowMap', true ) ?? null,
 					),
 					$this->expectedField(
-						'showMapLink',
+						'hasMapLink',
 						get_post_meta( $venue->ID, '_VenueShowMapLink', true ) ?? null,
 					),
 					$this->expectedField(
