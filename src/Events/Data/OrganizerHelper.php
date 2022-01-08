@@ -54,17 +54,13 @@ class OrganizerHelper extends DataHelper {
 	 */
 	public static function connection_args() : array {
 		return [
-			'eventId'     => [
+			'eventId'   => [
 				'type'        => 'Int',
-				'description' => __( 'Only venues linked to this event post ID.', 'wp-graphql-tec' ),
+				'description' => __( 'Only organizers linked to this event post ID.', 'wp-graphql-tec' ),
 			],
-			'hasEvents'   => [
+			'hasEvents' => [
 				'type'        => 'Boolean',
-				'description' => __( 'Only venues that have events.', 'wp-graphql-tec' ),
-			],
-			'hasNoEvents' => [
-				'type'        => 'Boolean',
-				'description' => __( 'Only venues that have no events.', 'wp-graphql-tec' ),
+				'description' => __( 'Only organizer that have or do not have events, based on the provided value.', 'wp-graphql-tec' ),
 			],
 		];
 	}

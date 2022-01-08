@@ -86,14 +86,18 @@ class OrganizerConnectionResolver extends PostObjectConnectionResolver {
 		// Event ID.
 		if ( isset( $this->args['where']['eventId'] ) ) {
 			$query_args['event'] = $this->args['where']['eventId'];
+			unset( $this->args['where']['eventId'] );
 		}
 		// Only with events.
-		if ( ! empty( $this->args['where']['hasEvents'] ) ) {
-			$query_args['has_events'] = $this->args['where']['hasEvents'];
-		}
-		// Only with events.
-		if ( ! empty( $this->args['where']['hasNoEvents'] ) ) {
-			$query_args['has_no_events'] = $this->args['where']['hasNoEvents'];
+		// Only with or without events.
+		if ( isset( $this->args['where']['hasEvents'] ) ) {
+			if ( $this->args['where']['hasEvents'] ) {
+				$query_args['has_events'] = true;
+			}
+			if ( false === $this->args['where']['hasEvents'] ) {
+				$query_args['has_no_events'] = true;
+			}
+			unset( $this->args['where']['hasEvents'] );
 		}
 
 		/**
