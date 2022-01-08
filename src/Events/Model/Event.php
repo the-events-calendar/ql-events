@@ -52,78 +52,71 @@ class Event extends Post {
 			parent::init();
 
 			$fields = [
-				'cost'             => fn() : ?string => ! empty( $this->data->cost ) ? $this->data->cost : null,
-				'costMax'          => function() : ?string {
+				'cost'                 => fn() : ?string => ! empty( $this->data->cost ) ? $this->data->cost : null,
+				'costMax'              => function() : ?string {
 					$value = tribe_get_cost( $this->data->ID );
 					$value = ! empty( $value ) ? tribe( 'tec.cost-utils' )->get_maximum_cost( $value ) : null;
 
 					return $value ?: null;
 				},
-				'costMin'          => function() : ?string {
+				'costMin'              => function() : ?string {
 					$value = tribe_get_cost( $this->data->ID );
 					$value = ! empty( $value ) ? tribe( 'tec.cost-utils' )->get_minimum_cost( $value ) : null;
 
 					return $value ?: null;
 				},
-				'currencyPosition' => function() : ?string {
+				'currencyPosition'     => function() : ?string {
 					$value = tribe_get_event_meta( $this->data->ID, '_EventCurrencyPosition', true );
 					return $value ?: null;
 				},
-				'currencySymbol'   => function() : ?string {
+				'currencySymbol'       => function() : ?string {
 					$value = tribe_get_event_meta( $this->data->ID, '_EventCurrencySymbol', true );
 					return $value ?: null;
 				},
-				'duration'         => fn() : ?int => $this->data->duration ?? null,
-				'endDate'          => fn() : ?string => ! empty( $this->data->end_date ) ? $this->data->end_date : null,
-				'endDateUTC'       => fn() : ?string => ! empty( $this->data->end_date_utc ) ? $this->data->end_date_utc : null,
-				'eventUrl'         => function() : ?string {
+				'duration'             => fn() : ?int => $this->data->duration ?? null,
+				'endDate'              => fn() : ?string => ! empty( $this->data->end_date ) ? $this->data->end_date : null,
+				'endDateUTC'           => fn() : ?string => ! empty( $this->data->end_date_utc ) ? $this->data->end_date_utc : null,
+				'eventUrl'             => function() : ?string {
 					return tribe_get_event_meta( $this->data->ID, '_EventURL', true ) ?: null;
 				},
-				'hideFromUpcoming' => function() : ?bool {
-					$value = tribe_get_event_meta( $this->data->ID, '_EventHideFromUpcoming', true );
-					return ! is_null( $value ) ? $value : null;
-				},
-				'id'               => fn() : ?string => ! empty( $this->data->ID ) ? Relay::toGlobalId( $this->data->post_type, (string) $this->data->ID ) : null,
-				'isAllDay'         => fn() : bool => ! empty( $this->data->all_day ),
-				'isFeatured'       => function() : ?bool {
+				'id'                   => fn() : ?string => ! empty( $this->data->ID ) ? Relay::toGlobalId( $this->data->post_type, (string) $this->data->ID ) : null,
+				'isAllDay'             => fn() : bool => ! empty( $this->data->all_day ),
+				'isFeatured'           => function() : ?bool {
 					return tribe( 'tec.featured_events' )->is_featured( $this->data->ID );
 				},
-				'isMultiday'       => fn() : bool => ! empty( $this->data->multiday ),
-				'isSticky'         => fn() : bool => ! empty( $this->data->sticky ),
-				'isPast'           => fn() : bool => tribe_is_past_event( $this->data ),
-				'organizerIds'     => function() : ?array {
-					$organizer_ids = tribe_get_organizer_ids( $this->data->ID ) ?: null;
-					return $organizer_ids;
-				},
-				'origin'           => function() : ?string {
+				'isHiddenFromUpcoming' => fn() : bool => ! empty( tribe_get_event_meta( $this->data->ID, '_EventHideFromUpcoming', true ) ),
+				'isMultiday'           => fn() : bool => ! empty( $this->data->multiday ),
+				'isSticky'             => fn() : bool => ! empty( $this->data->sticky ),
+				'isPast'               => fn() : bool => tribe_is_past_event( $this->data ),
+				'organizerDatabaseIds' => fn() : ?array => tribe_get_organizer_ids( $this->data->ID ) ?: null,
+				'origin'               => function() : ?string {
 					$value = tribe_get_event_meta( $this->data->ID, '_EventOrigin', true );
 					return $value ?: null;
 				},
-				'phone'            => function(): ?string {
-					$value = tribe_get_event_meta( $this->data->ID, '_EventPhone', true );
-					return $value ?: null;
-				},
-				'scheduleDetails'  => function() : ?string {
+				'scheduleDetails'      => function() : ?string {
 					return tribe_events_event_schedule_details( $this->data->ID, '', '', false ) ?: null;
 				},
-				'showMap'          => function() : ?bool {
+				'scheduleDetailsShort' => function() : ?string {
+					return tribe_events_event_short_schedule_details( $this->data->ID, '', '', false ) ?: null;
+				},
+				'hasMap'               => function() : ?bool {
 					$value = tribe_get_event_meta( $this->data->ID, '_EventShowMap', true );
 					return ! is_null( $value ) ? $value : null;
 				},
-				'showMapLink'      => function() : ?bool {
+				'hasMapLink'           => function() : ?bool {
 					$value = tribe_get_event_meta( $this->data->ID, '_EventShowMapLink', true );
 					return ! is_null( $value ) ? $value : null;
 				},
-				'startDate'        => fn() : ?string => ! empty( $this->data->start_date ) ? $this->data->start_date : null,
-				'startDateUTC'     => fn() : ?string => ! empty( $this->data->start_date_utc ) ? $this->data->start_date_utc : null,
-				'timezone'         => function() : ?string {
+				'startDate'            => fn() : ?string => ! empty( $this->data->start_date ) ? $this->data->start_date : null,
+				'startDateUTC'         => fn() : ?string => ! empty( $this->data->start_date_utc ) ? $this->data->start_date_utc : null,
+				'timezone'             => function() : ?string {
 					return Timezones::get_event_timezone_string( $this->data->ID ) ?: null;
 				},
-				'timezoneAbbr'     => function() : ?string {
+				'timezoneAbbr'         => function() : ?string {
 					$value = tribe_get_event_meta( $this->data->ID, '_EventTimezoneAbbr', true );
 					return $value ?: null;
 				},
-				'venueId'          => function() : int {
+				'venueDatabaseId'      => function() : int {
 					return tribe_get_venue_id( $this->data->ID );
 				},
 			];

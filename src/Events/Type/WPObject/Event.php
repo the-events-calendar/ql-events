@@ -37,91 +37,99 @@ class Event {
 		register_graphql_fields(
 			self::$type,
 			[
-				'cost'             => [
+				'cost'                 => [
 					'type'        => 'String',
 					'description' => __( 'The event formatted cost string, as returned by the `tribe_get_cost` function.', 'wp-graphql-tec' ),
 				],
-				'costMax'          => [
+				'costMax'              => [
 					'type'        => 'String',
 					'description' => __( 'The maximum cost for the event.', 'wp-graphql-tec' ),
 				],
-				'costMin'          => [
+				'costMin'              => [
 					'type'        => 'String',
 					'description' => __( 'The minimum cost for the event.', 'wp-graphql-tec' ),
 				],
-				'currencyPosition' => [
+				'currencyPosition'     => [
 					'type'        => CurrencyPositionEnum::$type,
 					'description' => __( 'Where to display the currency symbol in relation to the event cost.', 'wp-graphql-tec' ),
 				],
-				'currencySymbol'   => [
+				'currencySymbol'       => [
 					'type'        => 'String',
 					'description' => __( 'The currency symbol used when displaying the event c0st.', 'wp-graphql-tec' ),
 				],
-				'duration'         => [
+				'duration'             => [
 					'type'        => 'Int',
 					'description' => __( 'The event duration in seconds.', 'wp-graphql-tec' ),
 				],
-				'endDate'          => [
+				'endDate'              => [
 					'type'        => 'String',
 					'description' => __( 'The event end date, in Y-m-d H:i:s format.', 'wp-graphql-tec' ),
 				],
-				'endDateUTC'       => [
+				'endDateUTC'           => [
 					'type'        => 'String',
 					'description' => __( 'The event UTC end date, in Y-m-d H:i:s format.', 'wp-graphql-tec' ),
 				],
-				'eventUrl'         => [
+				'eventUrl'             => [
 					'type'        => 'String',
 					'description' => __( 'The external URL for the event.', 'wp-graphql-tec' ),
 				],
-				'hideFromUpcoming' => [
-					'type'        => 'Boolean',
-					'description' => __( 'Whether the event is hidden from the event list.', 'wp-graphql-tec' ),
-				],
-				'isAllDay'         => [
-					'type'        => 'Boolean',
-					'description' => __( 'Whether the event is an all-day one or not.', 'wp-graphql-tec' ),
-				],
-				'isFeatured'       => [
-					'type'        => 'Boolean',
-					'description' => __( 'Whether the event is a featured one or not.', 'wp-graphql-tec' ),
-				],
-				'isMultiday'       => [
-					'type'        => 'Boolean',
-					'description' => __( 'Whether the event is multi-day or not.', 'wp-graphql-tec' ),
-				],
-				'isPast'           => [
-					'type'        => 'Boolean',
-					'description' => __( 'Whether the event date has passed.', 'wp-graphql-tec' ),
-				],
-				'isSticky'         => [
-					'type'        => 'Boolean',
-					'description' => __( 'Whether the event is sticky in Month view.', 'wp-graphql-tec' ),
-				],
-				'origin'           => [
-					'type'        => 'String',
-					'description' => __( 'The event origin.', 'wp-graphql-tec' ),
-				],
-				'showMap'          => [
+				'hasMap'               => [
 					'type'        => 'Boolean',
 					'description' => __( 'Whether to display the event map.', 'wp-graphql-tec' ),
 				],
-				'showMapLink'      => [
+				'hasMapLink'           => [
 					'type'        => 'Boolean',
 					'description' => __( 'Whether to display a link to the Map.', 'wp-graphql-tec' ),
 				],
-				'startDate'        => [
+				'isAllDay'             => [
+					'type'        => 'Boolean',
+					'description' => __( 'Whether the event is an all-day one or not.', 'wp-graphql-tec' ),
+				],
+				'isHiddenFromUpcoming' => [
+					'type'        => 'Boolean',
+					'description' => __( 'Whether the event is hidden from the event list.', 'wp-graphql-tec' ),
+				],
+				'isFeatured'           => [
+					'type'        => 'Boolean',
+					'description' => __( 'Whether the event is a featured one or not.', 'wp-graphql-tec' ),
+				],
+				'isMultiday'           => [
+					'type'        => 'Boolean',
+					'description' => __( 'Whether the event is multi-day or not.', 'wp-graphql-tec' ),
+				],
+				'isPast'               => [
+					'type'        => 'Boolean',
+					'description' => __( 'Whether the event date has passed.', 'wp-graphql-tec' ),
+				],
+				'isSticky'             => [
+					'type'        => 'Boolean',
+					'description' => __( 'Whether the event is sticky in Month view.', 'wp-graphql-tec' ),
+				],
+				'origin'               => [
+					'type'        => 'String',
+					'description' => __( 'The event origin.', 'wp-graphql-tec' ),
+				],
+				'scheduleDetails'      => [
+					'type'        => 'String',
+					'description' => __( 'The details of the start/end date/time.', 'wp-graphql-tec' ),
+				],
+				'scheduleDetailsShort' => [
+					'type'        => 'String',
+					'description' => __( 'The short details of the start/end date/time.', 'wp-graphql-tec' ),
+				],
+				'startDate'            => [
 					'type'        => 'String',
 					'description' => __( 'The event start date, in Y-m-d H:i:s format.', 'wp-graphql-tec' ),
 				],
-				'startDateUTC'     => [
+				'startDateUTC'         => [
 					'type'        => 'String',
 					'description' => __( 'The event UTC start date, in Y-m-d H:i:s format.', 'wp-graphql-tec' ),
 				],
-				'timezone'         => [
+				'timezone'             => [
 					'type'        => 'String',
 					'description' => __( 'The event timezone string.', 'wp-graphql-tec' ),
 				],
-				'timezoneAbbr'     => [
+				'timezoneAbbr'         => [
 					'type'        => 'String',
 					'description' => __( 'Event timezone abbreviation.', 'wp-graphql-tec' ),
 				],

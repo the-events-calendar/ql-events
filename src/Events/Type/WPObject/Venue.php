@@ -63,11 +63,11 @@ class Venue {
 					'type'        => 'String',
 					'description' => __( 'The venue province.', 'wp-graphql-tec' ),
 				],
-				'showMap'       => [
+				'hasMap'        => [
 					'type'        => 'Boolean',
 					'description' => __( 'Whether to display the event map.', 'wp-graphql-tec' ),
 				],
-				'showMapLink'   => [
+				'hasMapLink'    => [
 					'type'        => 'Boolean',
 					'description' => __( 'Whether to display a link to the Map.', 'wp-graphql-tec' ),
 				],

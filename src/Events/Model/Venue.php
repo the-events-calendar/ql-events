@@ -25,7 +25,7 @@ class Venue extends Post {
 	 * @throws Exception .
 	 */
 	public function __construct( WP_Post $post ) {
-		if ( ! empty( $post->post_type ) || 'tribe_venue' !== $post->post_type ) {
+		if ( empty( $post->post_type ) || 'tribe_venue' !== $post->post_type ) {
 			throw new Exception( __( 'The object returned is not a venue.', 'wp-graphql-tec' ) );
 		}
 
@@ -62,11 +62,11 @@ class Venue extends Post {
 				'mapLink'       => fn() : ?string => ! empty( $this->data->directions_link ) ? $this->data->directions_link : null,
 				'phone'         => fn() : ?string => ! empty( $this->data->phone ) ? $this->data->phone : null,
 				'province'      => fn() : ?string => ! empty( $this->data->province ) ? $this->data->province : null,
-				'showMap'       => function() : bool {
+				'hasMap'        => function() : bool {
 					$value = get_post_meta( $this->data->ID, '_VenueShowMap', true );
 					return ! is_null( $value ) ? $value : null;
 				},
-				'showMapLink'   => function() : bool {
+				'hasMapLink'    => function() : bool {
 					$value = get_post_meta( $this->data->ID, '_VenueShowMapLink', true );
 					return ! is_null( $value ) ? $value : null;
 				},

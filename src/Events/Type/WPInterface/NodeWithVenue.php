@@ -39,25 +39,16 @@ class NodeWithVenue {
 					'venue'           => [
 						'type'        => Venue::$type,
 						'description' => __( 'The venue.', 'wp-graphql-tec' ),
-						'resolve'     => function( $source, array $args, AppContext $context ) {
-							$venue_id = ! empty( $source->venueId ) ? $source->venueId : tribe_get_venue_id( $source->ID );
-
-							return VenueHelper::resolve_object( $venue_id, $context );
-						},
+						'resolve'     => fn ( $source, array $args, AppContext $context ) => VenueHelper::resolve_object( $source->venueDatabaseId, $context ),
 					],
 					'venueDatabaseId' => [
 						'type'        => 'Int',
 						'description' => __( 'The venue database ID.', 'wp-graphql-tec' ),
-						'resolve'     => fn( $source ) => ! empty( $source->venueId ) ? $source->venueId : tribe_get_venue_id( $source->ID ),
 					],
 					'venueId'         => [
 						'type'        => 'ID',
 						'description' => __( 'The venue global ID.', 'wp-graphql-tec' ),
-						'resolve'     => function( $source ) {
-							$venue_id = ! empty( $source->venueId ) ? $source->venueId : tribe_get_venue_id( $source->ID );
-
-							return Relay::toGlobalId( 'tribe_venue', (string) $venue_id );
-						},
+						'resolve'     => fn( $source ) => ! empty( $source->venueDatabaseId ) ? Relay::toGlobalId( 'tribe_venue', (string) $source->venueDatabaseId ) : null,
 					],
 				],
 			]
