@@ -42,11 +42,10 @@ class VenueConnectionResolver extends PostObjectConnectionResolver {
 		 * $post_type = 'post' would become [ 'post ' ], as we check later
 		 * for `in_array()` if the $post_type is not "attachment" or "revision"
 		 */
-		if ( 'revision' === $post_type || 'attachment' === $post_type ) {
+		if ( 'revision' === $post_type ) {
 			$this->post_type = $post_type;
 		} else {
 			$post_type = is_array( $post_type ) ? $post_type : [ $post_type ];
-			unset( $post_type['attachment'] );
 			unset( $post_type['revision'] );
 			$this->post_type = $post_type;
 		}
@@ -85,14 +84,17 @@ class VenueConnectionResolver extends PostObjectConnectionResolver {
 		// Event ID.
 		if ( isset( $this->args['where']['eventId'] ) ) {
 			$query_args['event'] = $this->args['where']['eventId'];
+			unset( $this->args['where']['eventId'] );
 		}
-		// Only with events.
-		if ( ! empty( $this->args['where']['hasEvents'] ) ) {
-			$query_args['has_events'] = $this->args['where']['hasEvents'];
-		}
-		// Only with events.
-		if ( ! empty( $this->args['where']['hasNoEvents'] ) ) {
-			$query_args['has_no_events'] = $this->args['where']['hasNoEvents'];
+		// Only with or without events.
+		if ( isset( $this->args['where']['hasEvents'] ) ) {
+			if ( $this->args['where']['hasEvents'] ) {
+				$query_args['has_events'] = true;
+			}
+			if ( false === $this->args['where']['hasEvents'] ) {
+				$query_args['has_no_events'] = true;
+			}
+			unset( $this->args['where']['hasEvents'] );
 		}
 
 		/**
