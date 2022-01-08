@@ -79,9 +79,65 @@ class OrganizerQueriesTest extends TecGraphQLTestCase {
 	}
 
 	public function testConnectionArgs() : void {
-		$this->markTestIncomplete(
-			'This test has not been implemented yet. Requires https://github.com/wp-graphql/wp-graphql/pull/2141.'
-		);
+		$organizer_ids = [
+			$this->organizer_id,
+			$this->factory->organizer->create(),
+			$this->factory->organizer->create(),
+		];
+
+		$query = '
+			query testConnectionArgs( $where: RootQueryToOrganizerConnectionWhereArgs ){
+				organizers( where: $where ) {
+					nodes {
+						databaseId
+					}
+				}
+			}
+		';
+
+		// Test by eventId.
+		$variables = [
+			'where' => [
+				'eventId' => $this->event_id,
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+
+		$this->assertArrayNotHasKey( 'errors', $response, '`eventId` has errors' );
+		$this->assertCount( 1, $response['data']['organizers']['nodes'], '`eventId` does not return correct amount' );
+		$this->assertSame( $organizer_ids[0], $response['data']['organizers']['nodes'][0]['databaseId'], '`eventId` - node is not the same' );
+
+		// Test by hasEvents.
+		$variables = [
+			'where' => [
+				'hasEvents' => true,
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+
+		$this->assertArrayNotHasKey( 'errors', $response, '`hasEvents` has errors' );
+		$this->assertCount( 1, $response['data']['organizers']['nodes'], '`hasEvents` does not return correct amount' );
+		$this->assertSame( $organizer_ids[0], $response['data']['organizers']['nodes'][0]['databaseId'], '`hasEvents` - node is not the same' );
+
+		$variables = [
+			'where' => [
+				'hasEvents' => false,
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+
+		$this->assertArrayNotHasKey( 'errors', $response, '`! hasEvents` has errors' );
+		$this->assertCount( 2, $response['data']['organizers']['nodes'], '`! hasEvents` does not return correct amount' );
+		$this->assertSame( $organizer_ids[2], $response['data']['organizers']['nodes'][0]['databaseId'], '`! hasEvents` - node 0 is not the same' );
+		$this->assertSame( $organizer_ids[1], $response['data']['organizers']['nodes'][1]['databaseId'], '`! hasEvents` - node 1 is not the same' );
+
+		unset( $organizer_ids[0] );
+		foreach ( $organizer_ids as $id ) {
+			wp_delete_post( $id );
+		}
 	}
 
 	private function get_query() : string {
