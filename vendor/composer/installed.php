@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '9c766ce12cf4b218ee9ae22cc1b32a367629140d',
+    'reference' => '652616c2181f34b3f3ee56ba21110a4efdd4d683',
     'name' => 'justlevine/wp-graphql-tec',
   ),
   'versions' => 
@@ -298,7 +298,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '9c766ce12cf4b218ee9ae22cc1b32a367629140d',
+      'reference' => '652616c2181f34b3f3ee56ba21110a4efdd4d683',
     ),
     'lucatume/wp-browser' => 
     array (
