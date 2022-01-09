@@ -45,7 +45,7 @@ class Event extends \WP_UnitTest_Factory_For_Post {
 		$args['post_type']   = $this->get_post_type();
 		$args['post_status'] = Arr::get( $args, 'post_status', 'publish' );
 		// By default an event will happen tomorrow.
-		$utc_start_time = Arr::get( $args, 'when', '+24 hours' );
+		$utc_start_time = Arr::get( $args, 'when', '+24 hours 9:00' );
 		// By default an event will last 2hrs.
 		$duration = Arr::get( $args, 'duration', '7200' );
 		// By default an event will be on UTC time.
@@ -53,12 +53,12 @@ class Event extends \WP_UnitTest_Factory_For_Post {
 		$timezone   = Arr::get( $args, 'timezone', Timezones::build_timezone_object()->getName() );
 
 		// By defaut an event will use USD.
-		$symbol = '$';
+		$symbol = Arr::get( $args, 'symbol', '$' );
 		// By default an event will be 10-20 Dollars.
-		$cost = [ 10, 20 ];
-		// By default an event currency position will be 'prefix';
+		$cost = Arr::get( $args, 'cost', [ 10, 20 ] );
+		// By default an event currency position will be 'prefix'.
 		$position = 'prefix';
-		// By default the url will be http://example.com
+		// By default the url will be http://example.com.
 		$url = 'http://example.com';
 
 		$utc          = Timezones::build_timezone_object( 'UTC' );
@@ -126,8 +126,7 @@ class Event extends \WP_UnitTest_Factory_For_Post {
 		unset( $args['meta_input'] );
 
 		$args = array_merge( $defaults, $args );
-
-		$id = parent::create_object( $args );
+		$id   = parent::create_object( $args );
 
 		if ( ! empty( $organizers ) ) {
 			foreach ( $organizers as $organizer ) {

@@ -73,7 +73,6 @@ class OrganizerQueriesTest extends TecGraphQLTestCase {
 
 		// Test email obsfucation.
 		$expected_email = tribe_get_organizer_email( $organizer->ID, false );
-		codecept_debug( $response );
 		$this->assertSame( $expected_email, html_entity_decode( $response['data']['organizer']['email'] ) );
 		$this->assertSame( $expected_email, html_entity_decode( $response['data']['organizer']['linkedData']['email'] ) );
 	}
@@ -176,10 +175,6 @@ class OrganizerQueriesTest extends TecGraphQLTestCase {
 			$this->expectedObject(
 				'organizer',
 				[
-					// $this->expectedField(
-					// 'email',
-					// tribe_get_organizer_email( $organizer->ID, true ) ?: static::IS_NULL,
-					// ),
 					$this->expectedField(
 						'unsanitizedEmail',
 						tribe_get_organizer_email( $organizer->ID, false ) ?: static::IS_NULL,
@@ -203,10 +198,6 @@ class OrganizerQueriesTest extends TecGraphQLTestCase {
 								'description',
 								! empty( $linked_data->description ) ? wp_strip_all_tags( html_entity_decode( $linked_data->description ) ) : static::IS_NULL,
 							),
-							// $this->expectedField(
-							// 'email',
-							// ! empty( $linked_data->email ) ? $linked_data->email : static::IS_NULL,
-							// ),
 							$this->expectedField(
 								'image',
 								! empty( $linked_data->image ) ? $linked_data->image : static::IS_NULL,

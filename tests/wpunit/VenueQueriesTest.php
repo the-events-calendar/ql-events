@@ -41,8 +41,7 @@ class VenueQueriesTest extends TecGraphQLTestCase {
 	}
 
 	public function testVenueQueries() : void {
-		$venue = tribe_get_venue_object( $this->venue_id );
-		codecept_debug( $venue );
+		$venue     = tribe_get_venue_object( $this->venue_id );
 		$global_id = Relay::toGlobalId( 'tribe_venue', $this->venue_id );
 
 		$query = $this->get_query();
@@ -51,8 +50,6 @@ class VenueQueriesTest extends TecGraphQLTestCase {
 			'id'     => $this->venue_id,
 			'idType' => 'DATABASE_ID',
 		];
-		codecept_debug( $variables );
-		codecept_debug( $venue );
 
 		$response = $this->graphql( compact( 'query', 'variables' ) );
 
@@ -68,7 +65,6 @@ class VenueQueriesTest extends TecGraphQLTestCase {
 			'idType' => 'ID',
 		];
 		$response  = $this->graphql( compact( 'query', 'variables' ) );
-		codecept_debug( $response );
 		$this->assertArrayNotHasKey( 'errors', $response, 'Query by GlobalID has errors' );
 		$this->assertQuerySuccessful( $response, $expected );
 	}

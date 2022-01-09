@@ -220,7 +220,414 @@ class EventQueriesTest extends TecGraphQLTestCase {
 	}
 
 	public function testConnectionArgs() : void {
-		$this->markTestIncomplete();
+		wp_set_current_user( $this->admin->ID );
+		$cat1      = $this->factory()->term->create( [ 'taxonomy' => 'tribe_events_cat' ] );
+		$event_ids = [
+			$this->event_id, // 0
+			$this->factory->event->create( // 1
+				[
+					'cost'       => 0,
+					'when'       => '+3 days 9:00',
+					'meta_input' => [
+						'_EventAllDay'    => true,
+						'_tribe_featured' => true,
+					],
+				]
+			),
+			$this->factory->event->create( // 2
+				[
+					'cost'       => 20,
+					'when'       => '-10 days 9:00',
+					'duration'   => '127800',
+					'meta_input' => [
+						'_EventHideFromUpcoming' => true,
+					],
+					'menu_order' => -1,
+				]
+			),
+			$this->factory->event->create( // 3
+				[
+					'organizers' => $this->organizer_two_id,
+					'timezone'   => 'Europe/Moscow',
+					'currency'   => 'EUR',
+					'tax_input'  => [
+						'tribe_events_cat' => [ $cat1 ],
+					],
+				],
+			),
+		];
+
+		$query = '
+			query testConnectionArgs( $where: RootQueryToEventConnectionWhereArgs ) {
+				events( where: $where ) {
+					nodes {
+						cost
+						databaseId
+						endDate
+						isAllDay
+						isFeatured
+						isHiddenFromUpcoming
+						isMultiday
+						isSticky
+						startDate
+						timezone
+						eventCategories {
+							nodes{
+								databaseId
+							}
+						}
+						organizerDatabaseIds
+						venueDatabaseId
+					}
+				}
+			}
+		';
+
+		// @todo: Test by cost.
+
+		// Test `endsAfter`.
+		$variables = [
+			'where' => [
+				'endsAfter' => [
+					'dateTime' => '+2 days',
+				],
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+		$this->assertArrayNotHasKey( 'errors', $response, '`endsAfter` has errors' );
+		$this->assertCount( 1, $response['data']['events']['nodes'], '`endsAfter` does not return correct amount' );
+		$this->assertSame( $event_ids[1], $response['data']['events']['nodes'][0]['databaseId'], '`endsAfter` - node is not the same' );
+
+		// Test `endsBefore`.
+		$variables = [
+			'where' => [
+				'endsBefore' => [
+					'dateTime' => 'today',
+				],
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+		$this->assertArrayNotHasKey( 'errors', $response, '`endsBefore` has errors' );
+		$this->assertCount( 1, $response['data']['events']['nodes'], '`endsBefore` does not return correct amount' );
+		$this->assertSame( $event_ids[2], $response['data']['events']['nodes'][0]['databaseId'], '`endsBefore` - node is not the same' );
+
+		// Test `endsBetween`.
+		$variables = [
+			'where' => [
+				'endsBetween' => [
+					'startDateTime' => '+24 hours 9:00',
+					'endDateTime'   => '+24 hours 12:00',
+				],
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+		$this->assertArrayNotHasKey( 'errors', $response, '`endsBetween` has errors' );
+		$this->assertCount( 2, $response['data']['events']['nodes'], '`endsBetween` does not return correct amount' );
+		$this->assertSame( $event_ids[3], $response['data']['events']['nodes'][0]['databaseId'], '`endsBetween` - node 0 is not the same' );
+		$this->assertSame( $event_ids[0], $response['data']['events']['nodes'][1]['databaseId'], '`endsBetween` - node 1 is not the same' );
+
+		// Test `endsOnOrBefore`.
+		$variables = [
+			'where' => [
+				'endsOnOrBefore' => [
+					'dateTime' => '+26 hours 11:00',
+				],
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+		$this->assertArrayNotHasKey( 'errors', $response, '`endsOnOrBefore` has errors' );
+		$this->assertCount( 3, $response['data']['events']['nodes'], '`endsOnOrBefore` does not return correct amount' );
+		$this->assertSame( $event_ids[3], $response['data']['events']['nodes'][0]['databaseId'], '`endsOnOrBefore` - node 0 is not the same' );
+		$this->assertSame( $event_ids[0], $response['data']['events']['nodes'][1]['databaseId'], '`endsOnOrBefore` - node 1 is not the same' );
+		$this->assertSame( $event_ids[2], $response['data']['events']['nodes'][2]['databaseId'], '`endsOnOrBefore` - node 2 is not the same' );
+
+		// Test `eventDateOverlaps`.
+		$variables = [
+			'where' => [
+				'eventDateOverlaps' => [
+					'startDateTime' => '+24 hours 9:00',
+					'endDateTime'   => '+48 hours',
+				],
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+		$this->assertArrayNotHasKey( 'errors', $response, '`eventDateOverlaps` has errors' );
+		$this->assertCount( 2, $response['data']['events']['nodes'], '`eventDateOverlaps` does not return correct amount' );
+		$this->assertSame( $event_ids[3], $response['data']['events']['nodes'][0]['databaseId'], '`eventDateOverlaps` - node 0 is not the same' );
+		$this->assertSame( $event_ids[0], $response['data']['events']['nodes'][1]['databaseId'], '`eventDateOverlaps` - node is not the same' );
+
+		// Test `isAllDay`.
+		$variables = [
+			'where' => [
+				'isAllDay' => true,
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+		$this->assertArrayNotHasKey( 'errors', $response, '`isAllDay` has errors' );
+		$this->assertCount( 1, $response['data']['events']['nodes'], '`isAllDay` does not return correct amount' );
+		$this->assertSame( $event_ids[1], $response['data']['events']['nodes'][0]['databaseId'], '`isAllDay` - node 0 is not the same' );
+
+		// Test `isFeatured`.
+		$variables = [
+			'where' => [
+				'isFeatured' => true,
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+		$this->assertArrayNotHasKey( 'errors', $response, '`isFeatured` has errors' );
+		$this->assertCount( 1, $response['data']['events']['nodes'], '`isFeatured` does not return correct amount' );
+		$this->assertSame( $event_ids[1], $response['data']['events']['nodes'][0]['databaseId'], '`isFeatured` - node 0 is not the same' );
+
+		// Test `isHidden`.
+		$variables = [
+			'where' => [
+				'isHidden' => true,
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+		$this->assertArrayNotHasKey( 'errors', $response, '`isHidden` has errors' );
+		$this->assertCount( 1, $response['data']['events']['nodes'], '`isHidden` does not return correct amount' );
+		$this->assertSame( $event_ids[2], $response['data']['events']['nodes'][0]['databaseId'], '`isHidden` - node 0 is not the same' );
+
+		// Test `isMultiday`.
+		$variables = [
+			'where' => [
+				'isMultiday' => true,
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+		$this->assertArrayNotHasKey( 'errors', $response, '`isMultiday` has errors' );
+		$this->assertCount( 1, $response['data']['events']['nodes'], '`isMultiday` does not return correct amount' );
+		$this->assertSame( $event_ids[2], $response['data']['events']['nodes'][0]['databaseId'], '`isMultiday` - node 0 is not the same' );
+
+		// Test `isSticky`.
+		$variables = [
+			'where' => [
+				'isSticky' => true,
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+		$this->assertArrayNotHasKey( 'errors', $response, '`isSticky` has errors' );
+		$this->assertCount( 1, $response['data']['events']['nodes'], '`isSticky` does not return correct amount' );
+		$this->assertSame( $event_ids[2], $response['data']['events']['nodes'][0]['databaseId'], '`isSticky` - node 0 is not the same' );
+
+		// Test `runsBetween`.
+		$variables = [
+			'where' => [
+				'runsBetween' => [
+					'startDateTime' => 'today',
+					'endDateTime'   => '+2 days',
+				],
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+		$this->assertArrayNotHasKey( 'errors', $response, '`runsBetween` has errors' );
+		$this->assertCount( 2, $response['data']['events']['nodes'], '`runsBetween` does not return correct amount' );
+		$this->assertSame( $event_ids[3], $response['data']['events']['nodes'][0]['databaseId'], '`runsBetween` - node 0 is not the same' );
+		$this->assertSame( $event_ids[0], $response['data']['events']['nodes'][1]['databaseId'], '`runsBetween` - node 1 is not the same' );
+
+		// Test `startsAfter`.
+		$variables = [
+			'where' => [
+				'startsAfter' => [
+					'dateTime' => '+2 days',
+				],
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+		$this->assertArrayNotHasKey( 'errors', $response, '`startsAfter` has errors' );
+		$this->assertCount( 1, $response['data']['events']['nodes'], '`startsAfter` does not return correct amount' );
+		$this->assertSame( $event_ids[1], $response['data']['events']['nodes'][0]['databaseId'], '`startsAfter` - node 0 is not the same' );
+
+		// Test `startsBefore`.
+		$variables = [
+			'where' => [
+				'startsBefore' => [
+					'dateTime' => '-8 days',
+				],
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+		$this->assertArrayNotHasKey( 'errors', $response, '`startsAfter` has errors' );
+		$this->assertCount( 1, $response['data']['events']['nodes'], '`startsAfter` does not return correct amount' );
+		$this->assertSame( $event_ids[2], $response['data']['events']['nodes'][0]['databaseId'], '`startsAfter` - node 0 is not the same' );
+
+		// Test `startsOnDate`.
+		$variables = [
+			'where' => [
+				'startsOnDate' => [
+					'dateTime' => '+3 days 9:00',
+				],
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+		$this->assertArrayNotHasKey( 'errors', $response, '`startsOnDate` has errors' );
+		$this->assertCount( 1, $response['data']['events']['nodes'], '`startsOnDate` does not return correct amount' );
+		$this->assertSame( $event_ids[1], $response['data']['events']['nodes'][0]['databaseId'], '`startsOnDate` - node 0 is not the same' );
+
+		// Test `startsOnOrAfter`.
+		$variables = [
+			'where' => [
+				'startsOnOrAfter' => [
+					'dateTime' => '+2 days',
+				],
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+		$this->assertArrayNotHasKey( 'errors', $response, '`startsOnOrAfter` has errors' );
+		$this->assertCount( 1, $response['data']['events']['nodes'], '`startsOnOrAfter` does not return correct amount' );
+		$this->assertSame( $event_ids[1], $response['data']['events']['nodes'][0]['databaseId'], '`startsOnOrAfter` - node 0 is not the same' );
+
+		// Test `timezone`.
+		$variables = [
+			'where' => [
+				'timezone' => 'Europe/Moscow',
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+		$this->assertArrayNotHasKey( 'errors', $response, '`timezone` has errors' );
+		$this->assertCount( 1, $response['data']['events']['nodes'], '`timezone` does not return correct amount' );
+		$this->assertSame( $event_ids[3], $response['data']['events']['nodes'][0]['databaseId'], '`timezone` - node 0 is not the same' );
+
+		// Test `categoryId`.
+		$variables = [
+			'where' => [
+				'categoryId' => $cat1,
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+		$this->assertArrayNotHasKey( 'errors', $response, '`categoryId` has errors' );
+		$this->assertCount( 1, $response['data']['events']['nodes'], '`categoryId` does not return correct amount' );
+		$this->assertSame( $event_ids[3], $response['data']['events']['nodes'][0]['databaseId'], '`categoryId` - node 0 is not the same' );
+
+		// Test `categoryIn`.
+		$variables = [
+			'where' => [
+				'categoryIn' => [ $cat1 ],
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+		$this->assertArrayNotHasKey( 'errors', $response, '`categoryIn` has errors' );
+		$this->assertCount( 1, $response['data']['events']['nodes'], '`categoryIn` does not return correct amount' );
+		$this->assertSame( $event_ids[3], $response['data']['events']['nodes'][0]['databaseId'], '`categoryIn` - node 0 is not the same' );
+
+		// Test `categoryName`.
+		$variables = [
+			'where' => [
+				'categoryName' => get_term( $cat1, 'tribe_events_cat' )->name,
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+		$this->assertArrayNotHasKey( 'errors', $response, '`categoryName` has errors' );
+		$this->assertCount( 1, $response['data']['events']['nodes'], '`categoryName` does not return correct amount' );
+		$this->assertSame( $event_ids[3], $response['data']['events']['nodes'][0]['databaseId'], '`categoryName` - node 0 is not the same' );
+
+		// Test `categoryNotIn`.
+		$variables = [
+			'where' => [
+				'categoryNotIn' => $cat1,
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+		$this->assertArrayNotHasKey( 'errors', $response, '`categoryNotIn` has errors' );
+		$this->assertCount( 3, $response['data']['events']['nodes'], '`categoryNotIn` does not return correct amount' );
+
+		// Test `organizerId`.
+		$variables = [
+			'where' => [
+				'organizerId' => $this->organizer_one_id,
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+		$this->assertArrayNotHasKey( 'errors', $response, '`organizerId` has errors' );
+		$this->assertCount( 1, $response['data']['events']['nodes'], '`organizerId` does not return correct amount' );
+		$this->assertSame( $event_ids[0], $response['data']['events']['nodes'][0]['databaseId'], '`organizerId` - node 0 is not the same' );
+
+		// Test `organizerIn`.
+		$variables = [
+			'where' => [
+				'organizerIn' => $this->organizer_one_id,
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+		$this->assertArrayNotHasKey( 'errors', $response, '`organizerIn` has errors' );
+		$this->assertCount( 1, $response['data']['events']['nodes'], '`organizerIn` does not return correct amount' );
+		$this->assertSame( $event_ids[0], $response['data']['events']['nodes'][0]['databaseId'], '`organizerIn` - node 0 is not the same' );
+
+		// Test `organizerName`.
+		$variables = [
+			'where' => [
+				'organizerName' => tribe_get_organizer( $this->organizer_one_id ),
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+		$this->assertArrayNotHasKey( 'errors', $response, '`organizerName` has errors' );
+		$this->assertCount( 1, $response['data']['events']['nodes'], '`organizerName` does not return correct amount' );
+		$this->assertSame( $event_ids[0], $response['data']['events']['nodes'][0]['databaseId'], '`organizerName` - node 0 is not the same' );
+
+		// Test `venueId`.
+		$variables = [
+			'where' => [
+				'venueId' => $this->venue_id,
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+		$this->assertArrayNotHasKey( 'errors', $response, '`venueId` has errors' );
+		$this->assertCount( 1, $response['data']['events']['nodes'], '`venueId` does not return correct amount' );
+		$this->assertSame( $event_ids[0], $response['data']['events']['nodes'][0]['databaseId'], '`venueId` - node 0 is not the same' );
+
+		// Test `venueIn`.
+		$variables = [
+			'where' => [
+				'venueIn' => $this->venue_id,
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+		$this->assertArrayNotHasKey( 'errors', $response, '`venueIn` has errors' );
+		$this->assertCount( 1, $response['data']['events']['nodes'], '`venueIn` does not return correct amount' );
+		$this->assertSame( $event_ids[0], $response['data']['events']['nodes'][0]['databaseId'], '`venueIn` - node 0 is not the same' );
+
+		// Test `venueName`.
+		$variables = [
+			'where' => [
+				'venueName' => tribe_get_venue( $this->venue_id ),
+			],
+		];
+
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+		$this->assertArrayNotHasKey( 'errors', $response, '`venueName` has errors' );
+		$this->assertCount( 1, $response['data']['events']['nodes'], '`venueName` does not return correct amount' );
+		$this->assertSame( $event_ids[0], $response['data']['events']['nodes'][0]['databaseId'], '`venueName` - node 0 is not the same' );
+
+		unset( $event_ids[0] );
+		foreach ( $event_ids as $id ) {
+			wp_delete_post( $id );
+		}
 	}
 
 	private function get_query() : string {
