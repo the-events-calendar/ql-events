@@ -44,11 +44,10 @@ class EventConnectionResolver extends AbstractConnectionResolver {
 		 * $post_type = 'post' would become [ 'post ' ], as we check later
 		 * for `in_array()` if the $post_type is not "attachment" or "revision"
 		 */
-		if ( 'revision' === $post_type || 'attachment' === $post_type ) {
+		if ( 'revision' === $post_type ) {
 			$this->post_type = $post_type;
 		} else {
 			$post_type = is_array( $post_type ) ? $post_type : [ $post_type ];
-			unset( $post_type['attachment'] );
 			unset( $post_type['revision'] );
 			$this->post_type = $post_type;
 		}
@@ -194,17 +193,8 @@ class EventConnectionResolver extends AbstractConnectionResolver {
 		/**
 		 * If the post_type is "attachment" set the default "post_status" $query_arg to "inherit"
 		 */
-		if ( 'attachment' === $this->post_type || 'revision' === $this->post_type ) {
+		if ( 'revision' === $this->post_type ) {
 			$query_args['post_status'] = 'inherit';
-
-			if ( isset( $query_args['post_parent'] ) ) {
-
-				/**
-				 * Unset the "post_parent" for attachments, as we don't really care if they
-				 * have a post_parent set by default
-				 */
-				unset( $query_args['post_parent'] );
-			}
 		}
 
 		/**
@@ -686,7 +676,9 @@ class EventConnectionResolver extends AbstractConnectionResolver {
 					);
 					break;
 			}
+			unset( $this->query_args[ $key ] );
 		}
+
 
 		return $query;
 	}

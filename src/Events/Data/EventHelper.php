@@ -170,10 +170,6 @@ class EventHelper extends DataHelper {
 				'type'        => 'String',
 				'description' => __( 'Use Organizer slug.', 'wp-graphql-tec' ),
 			],
-			'organizerNotIn'    => [
-				'type'        => [ 'list_of' => 'ID' ],
-				'description' => __( 'Array of organizer IDs, used to display objects from one organizer OR another.', 'wp-graphql-tec' ),
-			],
 			// Venue.
 			'venueId'           => [
 				'type'        => 'Int',
@@ -186,10 +182,6 @@ class EventHelper extends DataHelper {
 			'venueName'         => [
 				'type'        => 'String',
 				'description' => __( 'Use Venue slug.', 'wp-graphql-tec' ),
-			],
-			'venueNotIn'        => [
-				'type'        => [ 'list_of' => 'ID' ],
-				'description' => __( 'Array of venue IDs, used to display objects from one venue OR another.', 'wp-graphql-tec' ),
 			],
 		];
 	}
