@@ -116,8 +116,8 @@ class Event extends Post {
 					$value = tribe_get_event_meta( $this->data->ID, '_EventTimezoneAbbr', true );
 					return $value ?: null;
 				},
-				'venueDatabaseId'      => function() : int {
-					return tribe_get_venue_id( $this->data->ID );
+				'venueDatabaseId'      => function() : ?int {
+					return tribe_get_venue_id( $this->data->ID ) ?: null;
 				},
 			];
 
