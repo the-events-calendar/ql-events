@@ -152,7 +152,7 @@ abstract class DataHelper {
 			return $args;
 		}
 
-		$args = static::process_where_args( $args );
+		$args['where'] = static::process_where_args( $args['where'] );
 
 		return apply_filters( 'graphql_tec_' . static::$name . '_processed_args', $args );
 	}
