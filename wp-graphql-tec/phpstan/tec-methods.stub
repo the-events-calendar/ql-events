@@ -1,0 +1,71 @@
+<?php
+
+	/**
+	 * Indicates if one or more of the tickets available for this event (but not
+	 * all) have sold out.
+	 *
+	 * This is useful to indicate if for example 2 out of three ticket types
+	 * have soldout but one still has stock remaining.
+	 *
+	 * @param int|null $event
+	 *
+	 * @return bool
+	 */
+	function tribe_events_partially_soldout( $event = null ){}
+	
+	/**
+	 * Determines if the event has sold out of tickets.
+	 *
+	 * Note that this will also return true if the event has no tickets
+	 * whatsoever, and so it may be best to test with tribe_events_has_tickets()
+	 * before using this to avoid ambiguity.
+	 *
+	 * @param int|null $event
+	 *
+	 * @return bool
+	 */
+	function tribe_events_has_soldout( $event = null ) {}
+
+		/**
+	 * Counts the total number of tickets still available for sale for a specific event.
+	 *
+	 * @param int|null $event
+	 *
+	 * @return int `0` if no tickets available, `-1` if Unlimited, else integer value.
+	 */
+	function tribe_events_count_available_tickets( $event = null ) {}
+
+	/**
+	 * Returns true if the event contains one or more tickets which are not
+	 * subject to any inventory limitations.
+	 *
+	 * @param int|null $event
+	 *
+	 * @return bool
+	 */
+	function tribe_events_has_unlimited_stock_tickets( $event = null ) {}
+
+	/**
+	 * Detect if an Event is Past
+	 *
+	 * Returns true if the current time is past the event end time
+	 *
+	 * @param mixed|null $event
+	 *
+	 * @return bool
+	 */
+	function tribe_is_past_event( $event = null ) {}
+
+	/**
+	 * Get Options
+	 *
+	 * Retrieve specific key from options array, optionally provide a default return value
+	 *
+	 * @category Events
+	 * @param string $optionName Name of the option to retrieve.
+	 * @param bool|string $default    Value to return if no such option is found.
+	 *
+	 * @return mixed Value of the option if found.
+	 * @todo Abstract this function out of template tags or otherwise secure it from other namespace conflicts.
+	 */
+	function tribe_get_option( $optionName, $default = '' ) {}
