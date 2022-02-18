@@ -5,4 +5,3 @@
  * fatal errors when the autoloader is loaded twice
  */
 define( 'GRAPHQL_DEBUG', true );
-define( 'WPGRAPHQL_WOOCOMMERCE_AUTOLOAD', getenv( 'WPGRAPHQL_WOOCOMMERCE_AUTOLOAD' ) );
