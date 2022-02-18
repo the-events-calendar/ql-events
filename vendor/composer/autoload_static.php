@@ -21,7 +21,9 @@ class ComposerStaticInit8e59707a5d3582830b47ec9f532e7191
     );
 
     public static $classMap = array (
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'QL_Events' => __DIR__ . '/../..' . '/includes/class-ql-events.php',
+        'WPGraphQL\\Extensions\\QL_Events\\Type\\WPUnion\\Linked_Data_Union' => __DIR__ . '/../..' . '/includes/types/union/class-linked-data-union.php',
         'WPGraphQL\\QL_Events\\Connection\\Attendees' => __DIR__ . '/../..' . '/includes/connection/class-attendees.php',
         'WPGraphQL\\QL_Events\\Connection\\Events' => __DIR__ . '/../..' . '/includes/connection/class-events.php',
         'WPGraphQL\\QL_Events\\Connection\\Organizers' => __DIR__ . '/../..' . '/includes/connection/class-organizers.php',

@@ -1,46 +1,43 @@
 <?php
 
-use QL_Events\Test\Factories\Event;
-use QL_Events\Test\Factories\Venue;
-use QL_Events\Test\Factories\Organizer;
+class EventQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
+    public function expectedEventData( $id ) {
+		$event = tribe_get_event( $id );
 
-class EventQueriesTest extends \Codeception\TestCase\WPTestCase {
-    private $admin;
-    private $customer;
-    private $helper;
+		$expected = array(
+			$this->expectedField( 'event.id', $this->toRelayId( 'post', $id ) ),
+			$this->expectedField( 'event.databaseId', $event->ID ),
+			$this->expectedField( 'event.allDay', $event->all_day ),
+			$this->expectedField( 'event.startDate', $event->start_date ),
+			$this->expectedField( 'event.endDate', $event->end_date ),
+			$this->expectedField( 'event.duration', $event->duration ),
+			$this->expectedField( 'event.cost', $event->cost ),
+		);
 
-    public function setUp() {
-        // before
-        parent::setUp();
+		foreach ( $event->organizers as $organizer ) {
+			$expected[] = $this->expectedNode( 'event.organizers.nodes', array( 'databaseId' => $organizer->ID ) );
+		}
 
-        $this->admin                = $this->factory->user->create( array( 'role' => 'admin' ) );
-		$this->customer             = $this->factory->user->create( array( 'role' => 'customer' ) );
-        $this->helper               = $this->getModule('\Helper\Wpunit')->event();
-        $this->factory()->event     = new Event();
-        $this->factory()->venue     = new Venue();
-        $this->factory()->organizer = new Organizer();
-    }
+		foreach ( $event->venues as $venue ) {
+			$expected[] = $this->expectedNode( 'event.venues.nodes', array( 'databaseId' => $venue->ID ) );
+		}
 
-    public function tearDown() {
-        // your tear down methods here
+		return $expected;
+	}
 
-        // then
-        parent::tearDown();
-    }
-
-    // tests
+	// tests
     public function testEventsQueries() {
-        $organizer_one = $this->factory()->organizer->create();
-        $organizer_two = $this->factory()->organizer->create();
-        $venue_id     = $this->factory()->venue->create();
-        $event_id     = $this->factory()->event->create(
+        $organizer_one = $this->factory->organizer->create();
+        $organizer_two = $this->factory->organizer->create();
+        $venue_id      = $this->factory->venue->create();
+        $event_id      = $this->factory->event->create(
             array(
-                'venue' => $venue_id,
+                'venue'      => $venue_id,
                 'organizers' => array( $organizer_one, $organizer_two ),
             )
         );
 
-        // Create test query
+        // Create test query.
         $query = '
             query($id: ID!) {
                 event(id: $id) {
@@ -64,10 +61,12 @@ class EventQueriesTest extends \Codeception\TestCase\WPTestCase {
                     featured
                     venue {
                         id
+						databaseId
                     }
                     organizers {
                         nodes {
                             id
+							databaseId
                         }
                     }
                 }
@@ -76,24 +75,15 @@ class EventQueriesTest extends \Codeception\TestCase\WPTestCase {
 
         /**
 		 * Assertion One
+		 *
+		 * Assert "Event" field types and values.
 		 */
-        $variables = array( 'id' => $this->helper->to_relay_id( $event_id ) );
-		$actual    = graphql(
-            array(
-                'query'     => $query,
-                'variables' => $variables,
-            )
-        );
-		$expected  = array(
-            'data' => array(
-                'event' => $this->helper->print_query( $event_id ),
-            ),
-        );
+        $variables = array(
+			'id' => $this->toRelayId( 'post', $event_id ),
+		);
+		$response  = $this->graphql( compact( 'query', 'variables' ) );
+		$expected  = $this->expectedEventData( $event_id );
 
-		// use --debug flag to view.
-		codecept_debug( $actual );
-
-		$this->assertEqualSets( $expected, $actual );
+		$this->assertQuerySuccessful( $response, $expected );
     }
-
 }

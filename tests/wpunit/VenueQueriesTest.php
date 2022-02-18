@@ -2,29 +2,28 @@
 
 use QL_Events\Test\Factories\Venue;
 
-class VenueQueriesTest extends \Codeception\TestCase\WPTestCase
-{
+class VenueQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
+    public function expectedVenueData( $id ) {
+		$venue = tribe_get_venue_object( $id );
 
-    public function setUp() {
-        // before
-        parent::setUp();
+		$expected = array(
+			$this->expectedField( 'venue.id', $this->toRelayId( 'post', $id ) ),
+			$this->expectedField( 'venue.databaseId', $venue->ID ),
+			$this->expectedField( 'venue.address', $venue->address ),
+			$this->expectedField( 'venue.country', $venue->country ),
+			$this->expectedField( 'venue.city', $venue->city ),
+			$this->expectedField( 'venue.stateProvince', $venue->state_province ),
+			$this->expectedField( 'venue.state', $venue->state ),
+			$this->expectedField( 'venue.province', $venue->province ),
+			$this->expectedField( 'venue.zip', $venue->zip ),
+		);
 
-        $this->admin            = $this->factory->user->create( array( 'role' => 'admin' ) );
-		$this->customer         = $this->factory->user->create( array( 'role' => 'customer' ) );
-        $this->helper           = $this->getModule('\Helper\Wpunit')->venue();
-        $this->factory()->venue = new Venue();
-    }
+		return $expected;
+	}
 
-    public function tearDown() {
-        // your tear down methods here
-
-        // then
-        parent::tearDown();
-    }
-
-    // tests
+	// tests
     public function testVenueQuery() {
-        $venue_id = $this->factory()->venue->create();
+        $venue_id = $this->factory->venue->create();
 
         // Create test query
         $query = '
@@ -48,23 +47,12 @@ class VenueQueriesTest extends \Codeception\TestCase\WPTestCase
         /**
 		 * Assertion One
 		 */
-        $variables = array( 'id' => $this->helper->to_relay_id( $venue_id ) );
-		$actual    = graphql(
-            array(
-                'query'     => $query,
-                'variables' => $variables,
-            )
-        );
-		$expected  = array(
-            'data' => array(
-                'venue' => $this->helper->print_query( $venue_id ),
-            ),
-        );
+        $this->loginAs(1); // Login in as admin since Organizer is not a public post type
+        $variables = array( 'id' => $this->toRelayId( 'post', $venue_id ) );
+		$response  = $this->graphql( compact( 'query', 'variables' ) );
+		$expected  = $this->expectedVenueData( $venue_id );
 
-		// use --debug flag to view.
-		codecept_debug( $actual );
-
-		$this->assertEqualSets( $expected, $actual );
+		$this->assertQuerySuccessful( $response, $expected );
     }
 
 }

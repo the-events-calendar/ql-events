@@ -1,32 +1,23 @@
 <?php
 
-use QL_Events\Test\Factories\Organizer;
+class OrganizerQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
+	public function expectedOrganizerData( $id ) {
+		$organizer = tribe_get_organizer_object( $id );
 
-class OrganizerQueriesTest extends \Codeception\TestCase\WPTestCase {
-    private $admin;
-    private $customer;
-    private $helper;
+		$expected = array(
+			$this->expectedField( 'organizer.id', $this->toRelayId( 'post', $id ) ),
+			$this->expectedField( 'organizer.databaseId', $organizer->ID ),
+			$this->expectedField( 'organizer.phone', $organizer->phone ),
+			$this->expectedField( 'organizer.website', $organizer->website ),
+			$this->expectedField( 'organizer.email', $organizer->email ),
+		);
 
-    public function setUp() {
-        // before
-        parent::setUp();
+		return $expected;
+	}
 
-        $this->admin                = $this->factory->user->create( array( 'role' => 'admin' ) );
-		$this->customer             = $this->factory->user->create( array( 'role' => 'customer' ) );
-        $this->helper               = $this->getModule('\Helper\Wpunit')->organizer();
-        $this->factory()->organizer = new Organizer();
-    }
-
-    public function tearDown() {
-        // your tear down methods here
-
-        // then
-        parent::tearDown();
-    }
-
-    // tests
+	// tests
     public function testOrganizerQuery() {
-        $organizer_id = $this->factory()->organizer->create();
+        $organizer_id = $this->factory->organizer->create();
 
         // Create test query
         $query = '
@@ -42,23 +33,12 @@ class OrganizerQueriesTest extends \Codeception\TestCase\WPTestCase {
         /**
 		 * Assertion One
 		 */
-        $variables = array( 'id' => $this->helper->to_relay_id( $organizer_id ) );
-		$actual    = graphql(
-            array(
-                'query'     => $query,
-                'variables' => $variables,
-            )
-        );
-		$expected  = array(
-            'data' => array(
-                'organizer' => $this->helper->print_query( $organizer_id ),
-            ),
-        );
+		$this->loginAs(1); // Login in as admin since Organizer is not a public post type
+        $variables = array( 'id' => $this->toRelayId( 'post', $organizer_id ) );
+		$response = $this->graphql( compact( 'query', 'variables' ) );
+		$expected  = $this->expectedOrganizerData( $organizer_id );
 
-		// use --debug flag to view.
-		codecept_debug( $actual );
-
-		$this->assertEqualSets( $expected, $actual );
+		$this->assertQuerySuccessful( $response, $expected );
     }
 
 }

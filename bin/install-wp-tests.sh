@@ -14,23 +14,23 @@ if [[ -z "$TEST_DB_NAME" ]]; then
 else
 	DB_NAME=$TEST_DB_NAME
 fi
-if [[ -z "$TEST_DB_USER" ]]; then 
+if [[ -z "$TEST_DB_USER" ]]; then
 	echo "TEST_DB_USER not found"
 	print_usage_instruction
 else
 	DB_USER=$TEST_DB_USER
 fi
-if [[ -z "$TEST_DB_PASSWORD" ]]; then 
+if [[ -z "$TEST_DB_PASSWORD" ]]; then
 	DB_PASS=""
 else
 	DB_PASS=$TEST_DB_PASSWORD
 fi
-if [[ -z "$TEST_DB_HOST" ]]; then 
+if [[ -z "$TEST_DB_HOST" ]]; then
 	DB_HOST=localhost
 else
 	DB_HOST=$TEST_DB_HOST
 fi
-if [ -z "$SKIP_DB_CREATE" ]; then 
+if [ -z "$SKIP_DB_CREATE" ]; then
 	SKIP_DB_CREATE=false
 fi
 
@@ -196,7 +196,7 @@ setup_the_events_calendar() {
 setup_wpgraphql() {
 	if [ ! -d $WP_CORE_DIR/wp-content/plugins/wp-graphql ]; then
 		echo "Cloning WPGraphQL"
-		wp plugin install https://github.com/wp-graphql/wp-graphql/archive/master.zip
+		wp plugin install wp-graphql
 	fi
 	echo "Activating WPGraphQL"
 	wp plugin activate wp-graphql

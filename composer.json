@@ -14,7 +14,9 @@
         "php": ">=5.6.0"
     },
     "require-dev": {
-        "lucatume/wp-browser": ">=2.2.1 <2.2.8"
+        "lucatume/wp-browser": ">=2.2.1 <2.2.8",
+        "wp-cli/wp-cli-bundle": "*",
+        "wp-graphql/wp-graphql-testcase": "^2.1"
     },
     "config": {
         "optimize-autoloader": true

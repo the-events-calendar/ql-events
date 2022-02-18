@@ -45,11 +45,12 @@ class Ticket_Connection_Resolver {
 					$connection_type = 'paypal_tickets';
 					break;
 				default:
+					$connection_type = '';
 					break;
 			}
 		}
 
-		if ( $connection_type ) {
+		if ( ! empty( $connection_type ) ) {
 			$query_args['post_parent'] = $source->ID;
 			$query_args                = apply_filters(
 				"graphql_{$connection_type}_connection_query_args",

@@ -6,7 +6,9 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'QL_Events' => $baseDir . '/includes/class-ql-events.php',
+    'WPGraphQL\\Extensions\\QL_Events\\Type\\WPUnion\\Linked_Data_Union' => $baseDir . '/includes/types/union/class-linked-data-union.php',
     'WPGraphQL\\QL_Events\\Connection\\Attendees' => $baseDir . '/includes/connection/class-attendees.php',
     'WPGraphQL\\QL_Events\\Connection\\Events' => $baseDir . '/includes/connection/class-events.php',
     'WPGraphQL\\QL_Events\\Connection\\Organizers' => $baseDir . '/includes/connection/class-organizers.php',
