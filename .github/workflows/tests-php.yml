@@ -249,7 +249,7 @@ jobs:
       # ------------------------------------------------------------------------------
       - name: Run suite tests
         if: steps.skip.outputs.value != 1
-        run: ${TRIC_BIN} run ${{ matrix.suite }} --ext DotReporter
+        run: ${TRIC_BIN} run ${{ matrix.suite }} --ext DotReporter --debug
       # ------------------------------------------------------------------------------
       # Upload artifacts (On failure)
       # ------------------------------------------------------------------------------
