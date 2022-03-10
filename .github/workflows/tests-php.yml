@@ -229,7 +229,7 @@ jobs:
         run: |
           ${TRIC_BIN} init ql-events
           ${TRIC_BIN} use ql-events
-          ${TRIC_BIN} composer install
+          ${TRIC_BIN} composer install --ignore-platform-reqs
       # ------------------------------------------------------------------------------
       # Init WordPress container
       # ------------------------------------------------------------------------------
