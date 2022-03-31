@@ -67,6 +67,15 @@ class Core_Schema_Filters {
 
 		if ( \QL_Events::is_ticket_events_loaded() ) {
 			add_filter(
+				'graphql_wp_object_type_config',
+				array(
+					self::class,
+					'assign_ticket_interface'
+				),
+				10,
+				2
+			);
+			add_filter(
 				'graphql_post_object_connection_query_args',
 				array(
 					'\WPGraphQL\QL_Events\Data\Connection\Ticket_Connection_Resolver',
@@ -200,5 +209,15 @@ class Core_Schema_Filters {
 			);
 		}
 		return $fields;
+	}
+
+	public static function assign_ticket_interface( $config ) {
+		switch( $config['name'] ) {
+			case 'RSVPTicket':
+			case 'PayPalTicket':
+				$config['interfaces'][] = 'Ticket';
+				break;
+		}
+		return $config;
 	}
 }

@@ -18,6 +18,9 @@ class Type_Registry {
 	 * @param \WPGraphQL\Registry\TypeRegistry $type_registry  Instance of the WPGraphQL TypeRegistry.
 	 */
 	public function init( \WPGraphQL\Registry\TypeRegistry $type_registry ) {
+		// ET Interfaces
+		\WPGraphQL\QL_Events\Type\WPInterface\Ticket_Interface::register_interface( $type_registry );
+
 		// TEC Object fields.
 		\WPGraphQL\QL_Events\Type\WPObject\Event_Type::register_fields();
 		\WPGraphQL\QL_Events\Type\WPObject\Event_Linked_Data_Type::register();

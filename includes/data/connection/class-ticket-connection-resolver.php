@@ -40,9 +40,11 @@ class Ticket_Connection_Resolver {
 			switch ( $info->fieldName ) {
 				case 'rsvpTickets':
 					$connection_type = 'rsvp_tickets';
+					$query_args['post__in'] = $rsvp->get_tickets_ids( $source->ID );
 					break;
 				case 'paypalTickets':
 					$connection_type = 'paypal_tickets';
+					$query_args['post__in'] = $paypal->get_tickets_ids( $source->ID );
 					break;
 				default:
 					$connection_type = '';
@@ -51,7 +53,6 @@ class Ticket_Connection_Resolver {
 		}
 
 		if ( ! empty( $connection_type ) ) {
-			$query_args['post_parent'] = $source->ID;
 			$query_args                = apply_filters(
 				"graphql_{$connection_type}_connection_query_args",
 				$query_args,
