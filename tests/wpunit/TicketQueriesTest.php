@@ -93,6 +93,8 @@ class TicketQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 		$paypal_one = $this->factory->ticket->create_paypal_ticket( $event_one );
 		$paypal_two = $this->factory->ticket->create_paypal_ticket( $event_two );
 
+		// Login as admin
+		$this->loginAs( 1 );
 
 		// Query tickets.
 		$query = '
@@ -154,6 +156,9 @@ class TicketQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 		// Generate tickets.
 		$rsvp_id  = $this->factory->ticket->create_rsvp_ticket( $event_id );
 		$paypal_id = $this->factory->ticket->create_paypal_ticket( $event_id );
+
+		// Login as admin
+		$this->loginAs( 1 );
 
 		// Query tickets.
 		$query     = '
