@@ -47,9 +47,6 @@ class Type_Registry {
 		if ( \QL_Events::is_ticket_events_plus_loaded() ) {
 			\WPGraphQL\QL_Events\Type\WPObject\WooAttendee_Type::register_fields();
 			\WPGraphQL\QL_Events\Type\WPObject\Ticket_Linked_Data_Type::register();
-
-			// Event Tickets Plus Connections.
-			\WPGraphQL\QL_Events\Connection\Tickets_Plus::register_connections();
 		}
 	}
 }

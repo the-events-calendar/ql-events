@@ -215,6 +215,7 @@ class Core_Schema_Filters {
 		switch( $config['name'] ) {
 			case 'RSVPTicket':
 			case 'PayPalTicket':
+			case 'SimpleProduct':
 				$config['interfaces'][] = 'Ticket';
 				break;
 		}

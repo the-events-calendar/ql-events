@@ -14,19 +14,62 @@ use Tribe__Tickets__RSVP as RSVP;
 use WPGraphQL\Connection\PostObjects;
 use WPGraphQL\WooCommerce\Connection\Products;
 use WPGraphQL\WooCommerce\Data\Factory;
-use \WPGraphQL\Data\Connection\PostObjectConnectionResolver;
+use WPGraphQL\Data\Connection\PostObjectConnectionResolver;
 
 /**
  * Class - Tickets
  */
 class Tickets extends PostObjects {
+
+	private static function get_event_to_ticket_resolver( $ticket_classes ) {
+		return function( $source, $args, $context, $info ) use ( $ticket_classes ) {
+			// Get ticket post-types.
+			$ticket_post_types = array();
+			foreach ( $ticket_classes as $ticket_class ) {
+				$ticket_post_types[] = tribe( $ticket_class )->ticket_object;
+			}
+
+			// Create connection resolver.
+			$resolver = new PostObjectConnectionResolver(
+				$source,
+				$args,
+				$context,
+				$info,
+				'any'
+			);
+
+			// Set query args to connection resolver.
+			$meta_query = count( $ticket_classes ) > 1 ? array( 'relation' => 'OR' ) : array();
+			foreach( $ticket_classes as $ticket_class ) {
+				$meta_query[] = array(
+					'key'     => tribe( $ticket_class )->get_event_key(),
+					'value'   => $source->ID,
+					'compare' => '=',
+				);
+			}
+			$resolver->set_query_arg( 'meta_query', $meta_query );
+			$resolver->set_query_arg( 'tribe_suppress_query_filters', true );
+			$resolver->set_query_arg( 'tribe_suppress_query_filters', 'any' );
+
+			// Resolve connection and return results.
+			$connection = $resolver->get_connection();
+			return $connection;
+		};
+	}
 	/**
 	 * Registers the various connections from other Types to Tickets
 	 */
 	public static function register_connections() {
 		if ( \QL_Events::is_ticket_events_loaded() ) {
-			$rsvp = tribe( 'tickets.rsvp' );
-			$paypal = tribe( 'tickets.commerce.paypal' );
+			$post_object_object     = get_post_type_object( tribe( 'tickets.rsvp' )->ticket_object );
+			$available_ticket_types = array(
+				'tickets.rsvp',
+				'tickets.commerce.paypal',
+			);
+
+			if ( \QL_Events::is_ticket_events_plus_loaded() ) {
+				$available_ticket_types[] = 'tickets-plus.commerce.woo';
+			}
 
 			// From RootQuery to Tickets.
 			register_graphql_connection(
@@ -34,7 +77,7 @@ class Tickets extends PostObjects {
 					'fromType'       => 'RootQuery',
 					'toType'         => 'Ticket',
 					'fromFieldName'  => 'tickets',
-					'connectionArgs' => self::get_connection_args( [], get_post_type_object( $rsvp->ticket_object ) ),
+					'connectionArgs' => self::get_connection_args( [], $post_object_object ),
 					'resolve'        => function( $source, $args, $context, $info ) {
 						$ticket_types = array_values( tribe_tickets()->ticket_types() );
 						$resolver     = new PostObjectConnectionResolver( $source, $args, $context, $info, $ticket_types );
@@ -51,50 +94,44 @@ class Tickets extends PostObjects {
 					'fromType'       => 'Event',
 					'toType'         => 'Ticket',
 					'fromFieldName'  => 'tickets',
-					'connectionArgs' => self::get_connection_args( [], get_post_type_object( $rsvp->ticket_object ) ),
-					'resolve'        => function( $source, $args, $context, $info ) {
-						$ticket_types = array_values( tribe_tickets()->ticket_types() );
-						$resolver     = new PostObjectConnectionResolver( $source, $args, $context, $info, $ticket_types );
-
-						$meta_query = array( 'relation' => 'OR' );
-						foreach( tribe_tickets()->ticket_to_event_keys() as $meta_key ) {
-							$meta_query[] = array(
-								'key'     => $meta_key,
-								'value'   => $source->ID,
-								'compare' => '=',
-								'type'    => 'NUMERIC',
-							);
-						}
-
-						$resolver->set_query_arg( 'meta_query', $meta_query );
-
-						$connection = $resolver->get_connection();
-						return $connection;
-					},
+					'connectionArgs' => self::get_connection_args( [], $post_object_object ),
+					'resolve'        => self::get_event_to_ticket_resolver( $available_ticket_types ),
 				)
 			);
 			// From Event to RSVPTickets.
 			register_graphql_connection(
-				self::get_connection_config(
-					get_post_type_object( $rsvp->ticket_object ),
-					array(
-						'fromType'      => 'Event',
-						'toType'        => 'RSVPTicket',
-						'fromFieldName' => 'rsvpTickets',
-					)
+				array(
+					'fromType'       => 'Event',
+					'toType'         => 'RSVPTicket',
+					'fromFieldName'  => 'rsvpTickets',
+					'connectionArgs' => self::get_connection_args( [], $post_object_object ),
+					'resolve'        => self::get_event_to_ticket_resolver( array( 'tickets.rsvp' ) ),
 				)
 			);
+
 			// From Event to PayPalTickets.
 			register_graphql_connection(
-				self::get_connection_config(
-					get_post_type_object( $paypal->ticket_object ),
-					array(
-						'fromType'      => 'Event',
-						'toType'        => 'PayPalTicket',
-						'fromFieldName' => 'paypalTickets',
-					)
+				array(
+					'fromType'       => 'Event',
+					'toType'         => 'PayPalTicket',
+					'fromFieldName'  => 'paypalTickets',
+					'connectionArgs' => self::get_connection_args( [], $post_object_object ),
+					'resolve'        => self::get_event_to_ticket_resolver( array( 'tickets.commerce.paypal' ) ),
 				)
 			);
+
+			if ( \QL_Events::is_ticket_events_plus_loaded() ) {
+				// From Event to WooTicket.
+				register_graphql_connection(
+					array(
+						'fromType'       => 'Event',
+						'toType'         => 'Product',
+						'fromFieldName'  => 'wooTickets',
+						'connectionArgs' => Products::get_connection_args(),
+						'resolve'        => self::get_event_to_ticket_resolver( array( 'tickets-plus.commerce.woo' ) ),
+					)
+				);
+			}
 		}
 	}
 }

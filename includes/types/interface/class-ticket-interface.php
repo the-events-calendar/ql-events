@@ -37,6 +37,8 @@ class Ticket_Interface {
 							return $type_registry->get_type( 'RSVPTicket' );
 						case tribe( 'tickets.commerce.paypal' )->ticket_object:
 							return $type_registry->get_type( 'PayPalTicket' );
+						case tribe( 'tickets-plus.commerce.woo' )->ticket_object:
+							return $type_registry->get_type( 'SimpleProduct' );
 						default:
 							throw new UserError(
 								sprintf(
@@ -148,7 +150,27 @@ class Ticket_Interface {
 	 */
 	public static function get_fields() {
 		return array(
-
+			'id'           => array(
+				'type'        => array( 'non_null' => 'ID' ),
+				'description' => __( 'Ticket Global ID.', 'ql-events' ),
+				'resolve'     => function( $source ) {
+					return $source->id;
+				},
+			),
+			'ticketId'        => array(
+				'type'        => array( 'non_null' => 'Int' ),
+				'description' => __( 'Ticket database ID', 'ql-events' ),
+				'resolve'     => function( $source ) {
+					return $source->ID;
+				},
+			),
+			'databaseId'        => array(
+				'type'        => array( 'non_null' => 'Int' ),
+				'description' => __( 'Ticket database ID', 'ql-events' ),
+				'resolve'     => function( $source ) {
+					return $source->ID;
+				},
+			)
 		);
 	}
 }

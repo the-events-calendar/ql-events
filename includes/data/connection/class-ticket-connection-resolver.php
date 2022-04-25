@@ -52,6 +52,8 @@ class Ticket_Connection_Resolver {
 			}
 		}
 
+		unset( $query_args['perm'] );
+
 		if ( ! empty( $connection_type ) ) {
 			$query_args                = apply_filters(
 				"graphql_{$connection_type}_connection_query_args",

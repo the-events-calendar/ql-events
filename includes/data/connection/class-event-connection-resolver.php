@@ -32,12 +32,17 @@ class Event_Connection_Resolver {
 	 * @return mixed
 	 */
 	public static function get_query_args( $query_args, $source, $args, $context, $info ) {
+		$query_args['tribe_suppress_query_filters'] = true;
+		unset( $query_args['perm'] );
+		//wp_send_json( $query_args );
 		/**
 		 * Collect the input_fields and sanitize them to prepare them for sending to the WP_Query
 		 */
-		$input_fields = [];
 		if ( ! empty( $args['where'] ) ) {
-			$input_fields = self::sanitize_input_fields( $args['where'] );
+			$query_args = array_merge(
+				$query_args,
+				self::sanitize_input_fields( $args['where'] )
+			);
 		}
 
 		/**
