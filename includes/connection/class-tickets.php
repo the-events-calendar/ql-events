@@ -35,7 +35,7 @@ class Tickets extends PostObjects {
 				$args,
 				$context,
 				$info,
-				'any'
+				$ticket_post_types
 			);
 
 			// Set query args to connection resolver.
@@ -49,7 +49,6 @@ class Tickets extends PostObjects {
 			}
 			$resolver->set_query_arg( 'meta_query', $meta_query );
 			$resolver->set_query_arg( 'tribe_suppress_query_filters', true );
-			$resolver->set_query_arg( 'tribe_suppress_query_filters', 'any' );
 
 			// Resolve connection and return results.
 			$connection = $resolver->get_connection();
