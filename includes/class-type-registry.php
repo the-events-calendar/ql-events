@@ -59,9 +59,6 @@ class Type_Registry {
 			Type\WPObject\Ticket_Field\Radio::register();
 			Type\WPObject\Ticket_Field\Text::register();
 			Type\WPObject\Ticket_Field\URL::register();
-
-			// Event Tickets Plus Connections.
-			Connection\Tickets_Plus::register_connections();
 		}
 	}
 }
