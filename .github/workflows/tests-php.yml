@@ -227,7 +227,6 @@ jobs:
       - name: Set up QL Events
         if: steps.skip.outputs.value != 1
         run: |
-          ${TRIC_BIN} init ql-events
           ${TRIC_BIN} use ql-events
           ${TRIC_BIN} composer install --ignore-platform-reqs
       # ------------------------------------------------------------------------------
