@@ -238,7 +238,7 @@ jobs:
           mv ${GITHUB_WORKSPACE}/wp-graphql ${GITHUB_WORKSPACE}/../wp-graphql
           docker network prune -f
           ${TRIC_BIN} use wp-graphql
-          ${TRIC_BIN} composer install --no-dev
+          ${TRIC_BIN} composer install --ignore-platform-reqs --no-dev
           ${TRIC_BIN} npm install
           ${TRIC_BIN} npm run build
       # ------------------------------------------------------------------------------
