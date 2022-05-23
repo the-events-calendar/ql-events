@@ -222,6 +222,26 @@ jobs:
           ${TRIC_BIN} npm install
           ${TRIC_BIN} npm run build
       # ------------------------------------------------------------------------------
+      # Clone and init WPGraphQL
+      # ------------------------------------------------------------------------------
+      - name: Clone WPGraphQL
+        uses: actions/checkout@v2
+        if: steps.skip.outputs.value != 1
+        with:
+          fetch-depth: 1
+          repository: wp-graphql/wp-graphql
+          path: wp-graphql
+          submodules: recursive
+      - name: Init WPGraphQL
+        if: steps.skip.outputs.value != 1
+        run: |
+          mv ${GITHUB_WORKSPACE}/wp-graphql ${GITHUB_WORKSPACE}/../wp-graphql
+          docker network prune -f
+          ${TRIC_BIN} use wp-graphql
+          ${TRIC_BIN} composer install --no-dev
+          ${TRIC_BIN} npm install
+          ${TRIC_BIN} npm run build
+      # ------------------------------------------------------------------------------
       # Set up QL Events
       # ------------------------------------------------------------------------------
       - name: Set up QL Events
