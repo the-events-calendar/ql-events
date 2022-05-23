@@ -138,8 +138,8 @@ class Core_Schema_Filters {
 
 		if ( \QL_Events::is_ticket_events_loaded() ) {
 			$ticket_types = array(
-				'RSVP'   => Tribe__Tickets__RSVP::get_instance(),
-				'PayPal' => Tribe__Tickets__Commerce__PayPal__Main::get_instance(),
+				'RSVP'   => \Tribe__Tickets__RSVP::get_instance(),
+				'PayPal' => \Tribe__Tickets__Commerce__PayPal__Main::get_instance(),
 			);
 
 			foreach ( $ticket_types as $key => $instance ) {
