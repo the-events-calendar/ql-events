@@ -169,6 +169,7 @@ jobs:
       - name: Set up ET Common
         if: steps.skip.outputs.value != 1
         run: |
+          mv ${GITHUB_WORKSPACE}/event-tickets ${GITHUB_WORKSPACE}/../event-tickets
           docker network prune -f
           ${TRIC_BIN} use event-tickets/common
           ${TRIC_BIN} composer install --no-dev
@@ -181,10 +182,15 @@ jobs:
       - name: Init ET
         if: steps.skip.outputs.value != 1
         run: |
-          mv ${GITHUB_WORKSPACE}/event-tickets ${GITHUB_WORKSPACE}/../event-tickets
           docker network prune -f
           ${TRIC_BIN} use event-tickets
           ${TRIC_BIN} composer install --no-dev
+      - name: Set up ET (npm)
+        if: steps.skip.outputs.value != 1 && matrix.suite == 'acceptance'
+        run: |
+          ${TRIC_BIN} nvm use
+          ${TRIC_BIN} npm install
+          ${TRIC_BIN} npm run build
       # ------------------------------------------------------------------------------
       # Clone and init WPGraphQL
       # ------------------------------------------------------------------------------
