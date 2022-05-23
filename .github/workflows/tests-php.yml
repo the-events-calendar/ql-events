@@ -117,28 +117,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GH_BOT_TOKEN }}
         continue-on-error: true
-      - name: Fetch head branch from ET
-        uses: octokit/request-action@v2.x
-        if: steps.skip.outputs.value != 1
-        id: fetch-et-head-branch
-        with:
-          route: GET /repos/{owner}/{repo}/branches/${{ github.head_ref }}
-          owner: the-events-calendar
-          repo: event-tickets
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_BOT_TOKEN }}
-        continue-on-error: true
-      - name: Fetch base branch from ET
-        uses: octokit/request-action@v2.x
-        id: fetch-et-base-branch
-        if: steps.skip.outputs.value != 1 && steps.fetch-et-head-branch.outcome != 'success'
-        with:
-          route: GET /repos/{owner}/{repo}/branches/${{ github.base_ref }}
-          owner: the-events-calendar
-          repo: event-tickets
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_BOT_TOKEN }}
-        continue-on-error: true
       # ------------------------------------------------------------------------------
       # Set TEC branch
       # ------------------------------------------------------------------------------
@@ -178,18 +156,6 @@ jobs:
           ${TRIC_BIN} use the-events-calendar/common
           ${TRIC_BIN} composer install --no-dev
       # ------------------------------------------------------------------------------
-      # Set ET branch
-      # ------------------------------------------------------------------------------
-      - name: Set ET with head branch
-        if: steps.skip.outputs.value != 1 && steps.fetch-et-head-branch.outcome == 'success'
-        run: echo "ET_BRANCH=${{ github.head_ref }}" >> $GITHUB_ENV
-      - name: Set ET with base branch
-        if: steps.skip.outputs.value != 1 && steps.fetch-et-head-branch.outcome != 'success' && steps.fetch-et-base-branch.outcome == 'success'
-        run: echo "ET_BRANCH=${{ github.base_ref }}" >> $GITHUB_ENV
-      - name: Set ET with master branch
-        if: steps.skip.outputs.value != 1 && steps.fetch-et-head-branch.outcome != 'success' && steps.fetch-et-base-branch.outcome != 'success'
-        run: echo "ET_BRANCH=master" >> $GITHUB_ENV
-      # ------------------------------------------------------------------------------
       # Clone and init ET
       # ------------------------------------------------------------------------------
       - name: Clone ET
@@ -198,8 +164,6 @@ jobs:
         with:
           fetch-depth: 1
           repository: the-events-calendar/event-tickets
-          ref: ${{ env.ET_BRANCH }}
-          token: ${{ secrets.GH_BOT_TOKEN }}
           path: event-tickets
           submodules: recursive
       - name: Init ET
