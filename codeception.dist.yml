@@ -45,16 +45,14 @@ modules:
             domain: '%WP_DOMAIN%'
             adminEmail: 'admin@%WP_DOMAIN%'
             title: 'Test'
-            plugins: 
+            plugins:
                 - the-events-calendar/the-events-calendar.php
                 - event-tickets/event-tickets.php
-                - events-pro/events-calendar-pro.php
                 - wp-graphql/wp-graphql.php
                 - ql-events/ql-events.php
-            activatePlugins: 
+            activatePlugins:
                 - the-events-calendar/the-events-calendar.php
                 - event-tickets/event-tickets.php
-                - events-pro/events-calendar-pro.php
                 - wp-graphql/wp-graphql.php
                 - ql-events/ql-events.php
             configFile: 'tests/_data/config.php'
