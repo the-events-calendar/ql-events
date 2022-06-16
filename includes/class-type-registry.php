@@ -20,6 +20,8 @@ class Type_Registry {
 	public function init( \WPGraphQL\Registry\TypeRegistry $type_registry ) {
 		// ET Interfaces.
 		Type\WPInterface\Ticket_Interface::register_interface( $type_registry );
+		Type\WPInterface\Attendee_Interface::register_interface( $type_registry );
+		Type\WPInterface\Order_Interface::register_interface( $type_registry );
 
 		// TEC Object fields.
 		Type\WPObject\Event_Type::register_fields();
@@ -31,6 +33,7 @@ class Type_Registry {
 
 		// TEC Connections.
 		Connection\Organizers::register_connections();
+		Connection\Attendees::register_connections();
 
 		// Register type fields if Event Tickets in installed and loaded.
 		if ( QL_Events::is_ticket_events_loaded() ) {
@@ -42,9 +45,13 @@ class Type_Registry {
 
 			// Event Tickets Connections.
 			Connection\Tickets::register_connections();
+
+			// ET Mutations.
+			Mutation\Register_Attendee::register_mutation();
 		}
 
 		if ( QL_Events::is_ticket_events_plus_loaded() ) {
+			Type\WPObject\WooOrder_Type::register_fields();
 			Type\WPObject\WooAttendee_Type::register_fields();
 			Type\WPObject\Ticket_Linked_Data_Type::register();
 
@@ -59,6 +66,9 @@ class Type_Registry {
 			Type\WPObject\Ticket_Field\Radio::register();
 			Type\WPObject\Ticket_Field\Text::register();
 			Type\WPObject\Ticket_Field\URL::register();
+
+			// ET Plus Mutations.
+			Mutation\Register_WooAttendee::register_mutation();
 		}
 	}
 }

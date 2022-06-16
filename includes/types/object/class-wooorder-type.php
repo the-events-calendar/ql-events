@@ -1,8 +1,8 @@
 <?php
 /**
- * WPObject Type - PayPalOrder
+ * WPObject Type - Order
  *
- * Registers "PayPalOrder" WPObject type fields
+ * Reregisters some "Order" WPObject type fields
  *
  * @package \WPGraphQL\QL_Events\Type\WPObject
  * @since   0.0.1
@@ -14,16 +14,16 @@ use WPGraphQL\AppContext;
 use WPGraphQL\Data\DataSource;
 
 /**
- * Class - Attendee_Type
+ * Class - WooOrder_Type
  */
-class PayPalOrder_Type {
+class WooOrder_Type {
 	/**
-	 * Registers "Attendee" type fields.
+	 * Registers "Order" type fields.
 	 */
 	public static function register_fields() {
-		deregister_graphql_field( 'PayPalOrder', 'databaseId' );
+		deregister_graphql_field( 'Order', 'databaseId' );
 		register_graphql_fields(
-			'PayPalOrder',
+			'Order',
 			[
 				'databaseId' => [
 					'type'        => [ 'non_null' => 'Int' ],

@@ -225,6 +225,16 @@ class Core_Schema_Filters {
 			case 'SimpleProduct':
 				$config['interfaces'][] = 'Ticket';
 				break;
+
+			case 'PayPalOrder':
+			case 'Order':
+				$config['interfaces'][] = 'TECOrder';
+				break;
+
+			case 'RSVPAttendee':
+			case 'PayPalAttendee':
+			case 'WooAttendee':
+				$config['interfaces'][] = 'Attendee';
 		}
 
 		return $config;
