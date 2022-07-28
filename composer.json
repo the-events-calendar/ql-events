@@ -10,9 +10,6 @@
           "role": "Lead Developer"
         }
     ],
-    "require": {
-        "php": ">=5.6.0"
-    },
     "require-dev": {
         "lucatume/wp-browser": "*",
         "wp-cli/wp-cli-bundle": "*",
