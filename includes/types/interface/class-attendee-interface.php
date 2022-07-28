@@ -26,18 +26,18 @@ class Attendee_Interface {
 	 * @param \WPGraphQL\Registry\TypeRegistry $type_registry  Instance of the WPGraphQL TypeRegistry.
 	 */
 	public static function register_interface( &$type_registry ) {
-		register_graphql_interface_type(
-			'Attendee',
-			[
-				'description' => __( 'Attendee object', 'ql-events' ),
-				'fields'      => self::get_fields(),
-				'resolveType' => function ( $value ) use ( &$type_registry ) {
-					switch ( $value->post_type ) {
-						case tribe( 'tickets.rsvp' )->attendee_object:
+        register_graphql_interface_type(
+            'Attendee',
+            [
+                'description' => __('Attendee object', 'ql-events'),
+                'fields'      => self::get_fields(),
+                'resolveType' => function ( $value ) use ( &$type_registry ) {
+					switch ( true ) {
+						case $value->post_type === tribe( 'tickets.rsvp' )->attendee_object:
 							return $type_registry->get_type( 'RSVPAttendee' );
-						case tribe( 'tickets.commerce.paypal' )->attendee_object:
+						case $value->post_type === tribe( 'tickets.commerce.paypal' )->attendee_object:
 							return $type_registry->get_type( 'PayPalAttendee' );
-						case tribe( 'tickets-plus.commerce.woo' )->attendee_object:
+						case \QL_Events::is_ticket_events_plus_loaded() && $value->post_type === tribe( 'tickets-plus.commerce.woo' )->attendee_object:
 							return $type_registry->get_type( 'WooAttendee' );
 						default:
 							throw new UserError(

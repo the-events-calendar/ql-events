@@ -4,36 +4,33 @@ class EventQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
     public function expectedEventData( $id ) {
 		$event = tribe_get_event( $id );
 
-		$expected = array(
+		$expected = [
 			$this->expectedField( 'event.id', $this->toRelayId( 'post', $id ) ),
 			$this->expectedField( 'event.databaseId', $event->ID ),
 			$this->expectedField( 'event.allDay', $event->all_day ),
 			$this->expectedField( 'event.startDate', $event->start_date ),
 			$this->expectedField( 'event.endDate', $event->end_date ),
-			$this->expectedField( 'event.duration', floatval( $event->duration ) ),
-			$this->expectedField( 'event.cost', $event->cost ?: self::IS_NULL ),
-		);
+		];
 
-		// TODO: Add admins test.
-		// foreach ( $event->organizers as $organizer ) {
-		// 	$expected[] = $this->expectedNode(
-		// 		'event.organizers.nodes',
-		// 		array(
-		// 			'id'         => $this->toRelayId( 'post', $organizer->ID ),
-		// 			'databaseId' => $organizer->ID
-		// 		)
-		// 	);
-		// }
+		foreach ( $event->organizers as $organizer ) {
+			$expected[] = $this->expectedNode(
+				'event.organizers.nodes',
+				array(
+					'id'         => $this->toRelayId( 'post', $organizer->ID ),
+					'databaseId' => $organizer->ID
+				)
+			);
+		}
 
-		// foreach ( $event->venues as $venue ) {
-		// 	$expected[] = $this->expectedNode(
-		// 		'event.venues.nodes',
-		// 		array(
-		// 			'id'         => $this->toRelayId( 'post', $venue->ID ),
-		// 			'databaseId' => $venue->ID
-		// 		)
-		// 	);
-		// }
+		foreach ( $event->venues as $venue ) {
+			$expected[] = $this->expectedField(
+				'event.venues',
+				array(
+					'id'         => $this->toRelayId( 'post', $venue->ID ),
+					'databaseId' => $venue->ID
+				)
+			);
+		}
 
 		return $expected;
 	}
@@ -75,12 +72,12 @@ class EventQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
                     origin
                     featured
                     venue {
-                        id
+						id
 						databaseId
                     }
                     organizers {
                         nodes {
-                            id
+							id
 							databaseId
                         }
                     }

@@ -23,6 +23,9 @@ class Type_Registry {
 		Type\WPInterface\Attendee_Interface::register_interface( $type_registry );
 		Type\WPInterface\Order_Interface::register_interface( $type_registry );
 
+		// TEC Input types.
+		\WPGraphQL\QL_Events\Type\WPInputObject\Meta_Data_Input::register();
+
 		// TEC Object fields.
 		Type\WPObject\Event_Type::register_fields();
 		Type\WPObject\Event_Linked_Data_Type::register();

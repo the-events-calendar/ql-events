@@ -20,7 +20,7 @@ class QLEventsTestCase extends \Tests\WPGraphQL\TestCase\WPGraphQLTestCase {
 		$factories = array(
 			'Event',
 			'Organizer',
-			'RSVPAttendee',
+			'RsvpAttendee',
 			'Venue',
 			'Ticket'
 		);
