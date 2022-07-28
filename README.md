@@ -1,5 +1,6 @@
 # QL Events
-[![Build Status](https://travis-ci.org/simplur/ql-events.svg?branch=develop)](https://travis-ci.org/simplur/ql-events) [![Coverage Status](https://coveralls.io/repos/github/simplur/ql-events/badge.svg?branch=develop)](https://coveralls.io/github/simplur/ql-events?branch=develop)
+[![Codeception Tests](https://github.com/the-events-calendar/ql-events/actions/workflows/tests-php.yml/badge.svg)](https://github.com/the-events-calendar/ql-events/actions/workflows/tests-php.yml)
+[![Coding-Standards](https://github.com/the-events-calendar/ql-events/actions/workflows/lint.yml/badge.svg)](https://github.com/the-events-calendar/ql-events/actions/workflows/lint.yml)
 
 ## Quick Install
 1. Install & activate [The Events Calendar/The Events Calendar Pro](https://theeventscalendar.com/)
@@ -11,7 +12,7 @@
 ## What does this plugin do?
 It adds *The Events Calendar*'s and some of it's extension's functionality to the WPGraphQL schema.
 
-## Unit Tests 
+## Unit Tests
 Until the documentation is in full effect, it's recommended that a [GraphiQL](https://github.com/graphql/graphiql)-based tool like [WPGraphiQL](https://github.com/wp-graphql/wp-graphiql) be used to view the GraphQL schema, an alternative to this is viewing the unit tests located in `tests/wpunit` directory. Which are constantly updated along with the project. If you're interested in contributing when I begin accepting contribution or simply want to run the tests. Follow the instruction below.
 
 ### Prerequisties
@@ -70,7 +71,7 @@ Until the documentation is in full effect, it's recommended that a [GraphiQL](ht
 To run test use the command `vendor/bin/codecept run [suite [test [:test-function]]]`.
 If you use the command with at least a `suite` specified, **Codeception** will run all tests, however this is not recommended. Running a suite `vendor/bin/codecept run wpunit` or a test `vendor/bin/codecept run VenueQueriesTest` is recommended. Running a single `test-function` like `vendor/bin/codecept run EventQueriesTest:testEventQuery` is also possible.
 
-To learn more about the usage of Codeception with WordPress view the [Documentation](https://codeception.com/for/wordpress)  
+To learn more about the usage of Codeception with WordPress view the [Documentation](https://codeception.com/for/wordpress)
 
 ## Functional and Acceptance Tests (Docker/Docker-Compose required)
 It's possible to run functional and acceptance tests, but is very limited at the moment. The script docker entrypoint script runs all three suites (acceptance, functional, and wpunit) at once. This will change eventually, however as of right now, this is the limitation.
