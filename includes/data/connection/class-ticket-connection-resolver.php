@@ -39,11 +39,11 @@ class Ticket_Connection_Resolver {
 			// @codingStandardsIgnoreLine
 			switch ( $info->fieldName ) {
 				case 'rsvpTickets':
-					$connection_type = 'rsvp_tickets';
+					$connection_type        = 'rsvp_tickets';
 					$query_args['post__in'] = $rsvp->get_tickets_ids( $source->ID );
 					break;
 				case 'paypalTickets':
-					$connection_type = 'paypal_tickets';
+					$connection_type        = 'paypal_tickets';
 					$query_args['post__in'] = $paypal->get_tickets_ids( $source->ID );
 					break;
 				default:
@@ -55,8 +55,8 @@ class Ticket_Connection_Resolver {
 		unset( $query_args['perm'] );
 
 		if ( ! empty( $connection_type ) ) {
-			$query_args                = apply_filters(
-				"graphql_{$connection_type}_connection_query_args",
+			$query_args = apply_filters(
+				"ql_events_{$connection_type}_connection_query_args",
 				$query_args,
 				$source,
 				$args,
@@ -88,20 +88,20 @@ class Ticket_Connection_Resolver {
 				$woocommerce = tribe( 'tickets-plus.commerce.woo' );
 
 				if ( ! empty( $args['meta_query'] ) ) {
-					$query_args['meta_query'] = array(); // WPCS: slow query ok.
+					$query_args['meta_query'] = []; // phpcs:ignore slow query ok.
 				}
-				$query_args['meta_query'][] = array(
+				$query_args['meta_query'][] = [
 					'key'   => $woocommerce->event_key,
 					'value' => $source->ID,
 					'type'  => 'NUMERIC',
-				);
+				];
 
 				unset( $query_args['perm'] );
 			}
 		}
 
 		$query_args = apply_filters(
-			'graphql_wootickets_connection_query_args',
+			'ql_events_wootickets_connection_query_args',
 			$query_args,
 			$source,
 			$args,
@@ -128,12 +128,12 @@ class Ticket_Connection_Resolver {
 		if ( $source instanceof Post ) {
 			// @codingStandardsIgnoreLine
 			if ( 'wooTickets' === $info->fieldName ) {
-				$default_visibility = array(
+				$default_visibility = [
 					'taxonomy' => 'product_visibility',
 					'field'    => 'slug',
-					'terms'    => array( 'exclude-from-catalog', 'exclude-from-search' ),
+					'terms'    => [ 'exclude-from-catalog', 'exclude-from-search' ],
 					'operator' => 'IN',
-				);
+				];
 			}
 		}
 

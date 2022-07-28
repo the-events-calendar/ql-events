@@ -25,11 +25,11 @@ class Organizers extends PostObjects {
 		register_graphql_connection(
 			self::get_connection_config(
 				get_post_type_object( Main::ORGANIZER_POST_TYPE ),
-				array(
+				[
 					'fromType'      => 'Event',
 					'toType'        => 'Organizer',
 					'fromFieldName' => 'organizers',
-				)
+				]
 			)
 		);
 	}

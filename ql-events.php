@@ -12,25 +12,15 @@
  * @author      kidunot89
  */
 
+namespace WPGraphQL\QL_Events;
+
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
 /**
- * If the codeception remote coverage file exists, require it.
- *
- * This file should only exist locally or when CI bootstraps the environment for testing
- */
-if ( file_exists( __DIR__ . '/c3.php' ) ) {
-	// Get tests output directory.
-	$test_dir = __DIR__ . '/tests/output';
-	define( 'C3_CODECOVERAGE_ERROR_LOG_FILE', $test_dir . '/c3_error.log' );
-	require_once __DIR__ . '/c3.php';
-}
-
-/**
  * Setups QL Events constants
  */
-function ql_events_constants() {
+function constants() {
 	// Plugin version.
 	if ( ! defined( 'QL_EVENTS_VERSION' ) ) {
 		define( 'QL_EVENTS_VERSION', '0.0.1' );
@@ -54,10 +44,27 @@ function ql_events_constants() {
 }
 
 /**
+ * Returns path to plugin "includes" directory.
+ *
+ * @return string
+ */
+function get_includes_directory() {
+	return trailingslashit( QL_EVENTS_PLUGIN_DIR ) . 'includes/';
+}
+
+/**
+ * Returns path to plugin "vendor" directory.
+ *
+ * @return string
+ */
+function get_vendor_directory() {
+	return trailingslashit( QL_EVENTS_PLUGIN_DIR ) . 'vendor/';
+}
+
+/**
  * Checks if QL Events required plugins are installed and activated
  */
-function ql_events_dependencies_not_ready() {
-	$deps = [];
+function dependencies_not_ready( &$deps = []) {
 	if ( ! class_exists( 'WPGraphQL' ) ) {
 		$deps[] = 'WPGraphQL';
 	}
@@ -65,18 +72,16 @@ function ql_events_dependencies_not_ready() {
 		$deps[] = 'The Events Calendar';
 	}
 
-	return $deps;
+	return empty( $deps );
 }
 
 /**
  * Initializes QL Events
  */
-function ql_events_init() {
-	ql_events_constants();
-
-	$not_ready = ql_events_dependencies_not_ready();
-	if ( empty( $not_ready ) ) {
-		require_once QL_EVENTS_PLUGIN_DIR . 'includes/class-ql-events.php';
+function init() {
+	constants();
+	if ( dependencies_not_ready( $not_ready ) ) {
+		require get_includes_directory() . 'class-ql-events.php';
 		return QL_Events::instance();
 	}
 
@@ -103,4 +108,4 @@ function ql_events_init() {
 
 	return false;
 }
-add_action( 'graphql_init', 'ql_events_init' );
+add_action( 'graphql_init', 'WPGraphQL\QL_Events\init' );

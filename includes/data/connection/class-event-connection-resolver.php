@@ -34,7 +34,7 @@ class Event_Connection_Resolver {
 	public static function get_query_args( $query_args, $source, $args, $context, $info ) {
 		$query_args['tribe_suppress_query_filters'] = true;
 		unset( $query_args['perm'] );
-		//wp_send_json( $query_args );
+
 		/**
 		 * Collect the input_fields and sanitize them to prepare them for sending to the WP_Query
 		 */
@@ -48,12 +48,9 @@ class Event_Connection_Resolver {
 		/**
 		 * Merge the input_fields with the default query_args
 		 */
-		// if ( ! empty( $input_fields ) ) {
-		// 	$query_args = array_merge( $query_args, $input_fields );
-		// }
 
 		return apply_filters(
-			'graphql_' . Main::POSTTYPE . '_connection_query_args',
+			'ql_events_' . Main::POSTTYPE . '_connection_query_args',
 			$query_args,
 			$source,
 			$args,
@@ -76,40 +73,40 @@ class Event_Connection_Resolver {
 	 * @return array
 	 */
 	private static function sanitize_input_fields( $args ) {
-		$query_args = array();
+		$query_args = [];
 
 		if ( ! empty( $args['startDateQuery'] ) ) {
-			$query_args['meta_query']   = array(); // WPCS: slow query ok.
+			$query_args['meta_query']   = []; // phpcs:ignore slow query ok.
 			$query_args['meta_query'][] = self::date_query_input_to_meta_query( $args['startDateQuery'], '_EventStartDate' );
 		}
 
 		if ( ! empty( $args['endDateQuery'] ) ) {
 			if ( ! isset( $query_args['meta_query'] ) ) {
-				$query_args['meta_query'] = array(); // WPCS: slow query ok.
+				$query_args['meta_query'] = []; // phpcs:ignore slow query ok.
 			}
 			$query_args['meta_query'][] = self::date_query_input_to_meta_query( $args['endDateQuery'], '_EventEndDate' );
 		}
 
 		if ( ! empty( $args['venuesIn'] ) ) {
 			if ( ! isset( $query_args['meta_query'] ) ) {
-				$query_args['meta_query'] = array(); // WPCS: slow query ok.
+				$query_args['meta_query'] = []; // phpcs:ignore slow query ok.
 			}
-			$query_args['meta_query'][] = array(
+			$query_args['meta_query'][] = [
 				'key'     => '_EventVenueID',
 				'value'   => $args['venuesIn'],
 				'compare' => 'IN',
-			);
+			];
 		}
 
 		if ( ! empty( $args['venuesNotIn'] ) ) {
 			if ( ! isset( $query_args['meta_query'] ) ) {
-				$query_args['meta_query'] = array(); // WPCS: slow query ok.
+				$query_args['meta_query'] = []; // phpcs:ignore slow query ok.
 			}
-			$query_args['meta_query'][] = array(
+			$query_args['meta_query'][] = [
 				'key'     => '_EventVenueID',
 				'value'   => $args['venuesNotIn'],
 				'compare' => 'NOT IN',
-			);
+			];
 		}
 
 		return $query_args;
@@ -168,35 +165,35 @@ class Event_Connection_Resolver {
 			case $after:
 				$date = isset( $date_query_input['after']['year'] )
 					? sprintf( '%4d', $date_query_input['after']['year'] )
-					: date( 'Y' );
+					: gmdate( 'Y' );
 
 				$date .= isset( $date_query_input['after']['month'] )
 					? sprintf( '-%02d', $date_query_input['after']['month'] )
-					: '-' . date( 'm' );
+					: '-' . gmdate( 'm' );
 
 				$date .= isset( $date_query_input['after']['day'] )
 					? sprintf( '-%02d', $date_query_input['after']['day'] )
-					: '-' . date( 'd' );
+					: '-' . gmdate( 'd' );
 
 				$compare = '>';
 				break;
 			case $before:
 				$date = isset( $date_query_input['before']['year'] )
 					? sprintf( '%4d', $date_query_input['before']['year'] )
-					: date( 'Y' );
+					: gmdate( 'Y' );
 
 				$date .= isset( $date_query_input['before']['month'] )
 					? sprintf( '-%02d', $date_query_input['before']['month'] )
-					: '-' . date( 'm' );
+					: '-' . gmdate( 'm' );
 
 				$date .= isset( $date_query_input['before']['day'] )
 					? sprintf( '-%02d', $date_query_input['before']['day'] )
-					: '-' . date( 'd' );
+					: '-' . gmdate( 'd' );
 
 				$compare = '<';
 				break;
 			default:
-				$date = date( 'Y-m-d' );
+				$date = gmdate( 'Y-m-d' );
 		}
 
 		// Get compare value.
@@ -210,11 +207,11 @@ class Event_Connection_Resolver {
 			}
 		}
 
-		return array(
+		return [
 			'key'     => $meta_key,
 			'value'   => $date,
 			'compare' => isset( $compare ) ? $compare : '=',
 			'type'    => isset( $type ) ? $type : 'DATE',
-		);
+		];
 	}
 }

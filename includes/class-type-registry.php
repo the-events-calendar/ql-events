@@ -18,35 +18,35 @@ class Type_Registry {
 	 * @param \WPGraphQL\Registry\TypeRegistry $type_registry  Instance of the WPGraphQL TypeRegistry.
 	 */
 	public function init( \WPGraphQL\Registry\TypeRegistry $type_registry ) {
-		// ET Interfaces
-		\WPGraphQL\QL_Events\Type\WPInterface\Ticket_Interface::register_interface( $type_registry );
+		// ET Interfaces.
+		Type\WPInterface\Ticket_Interface::register_interface( $type_registry );
 
 		// TEC Object fields.
-		\WPGraphQL\QL_Events\Type\WPObject\Event_Type::register_fields();
-		\WPGraphQL\QL_Events\Type\WPObject\Event_Linked_Data_Type::register();
-		\WPGraphQL\QL_Events\Type\WPObject\Organizer_Type::register_fields();
-		\WPGraphQL\QL_Events\Type\WPObject\Organizer_Linked_Data_Type::register();
-		\WPGraphQL\QL_Events\Type\WPObject\Venue_Type::register_fields();
-		\WPGraphQL\QL_Events\Type\WPObject\Venue_Linked_Data_Type::register();
+		Type\WPObject\Event_Type::register_fields();
+		Type\WPObject\Event_Linked_Data_Type::register();
+		Type\WPObject\Organizer_Type::register_fields();
+		Type\WPObject\Organizer_Linked_Data_Type::register();
+		Type\WPObject\Venue_Type::register_fields();
+		Type\WPObject\Venue_Linked_Data_Type::register();
 
 		// TEC Connections.
-		\WPGraphQL\QL_Events\Connection\Organizers::register_connections();
+		Connection\Organizers::register_connections();
 
 		// Register type fields if Event Tickets in installed and loaded.
-		if ( \QL_Events::is_ticket_events_loaded() ) {
-			\WPGraphQL\QL_Events\Type\WPObject\PayPalAttendee_Type::register_fields();
-			\WPGraphQL\QL_Events\Type\WPObject\PayPalOrder_Type::register_fields();
-			\WPGraphQL\QL_Events\Type\WPObject\PayPalTicket_Type::register_fields();
-			\WPGraphQL\QL_Events\Type\WPObject\RSVPAttendee_Type::register_fields();
-			\WPGraphQL\QL_Events\Type\WPObject\RSVPTicket_Type::register_fields();
+		if ( QL_Events::is_ticket_events_loaded() ) {
+			Type\WPObject\PayPalAttendee_Type::register_fields();
+			Type\WPObject\PayPalOrder_Type::register_fields();
+			Type\WPObject\PayPalTicket_Type::register_fields();
+			Type\WPObject\RSVPAttendee_Type::register_fields();
+			Type\WPObject\RSVPTicket_Type::register_fields();
 
 			// Event Tickets Connections.
-			\WPGraphQL\QL_Events\Connection\Tickets::register_connections();
+			Connection\Tickets::register_connections();
 		}
 
-		if ( \QL_Events::is_ticket_events_plus_loaded() ) {
-			\WPGraphQL\QL_Events\Type\WPObject\WooAttendee_Type::register_fields();
-			\WPGraphQL\QL_Events\Type\WPObject\Ticket_Linked_Data_Type::register();
+		if ( QL_Events::is_ticket_events_plus_loaded() ) {
+			Type\WPObject\WooAttendee_Type::register_fields();
+			Type\WPObject\Ticket_Linked_Data_Type::register();
 		}
 	}
 }

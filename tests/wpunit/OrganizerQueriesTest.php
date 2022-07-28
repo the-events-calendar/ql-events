@@ -23,6 +23,8 @@ class OrganizerQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
         $query = '
             query($id: ID!) {
                 organizer(id: $id) {
+					id
+					databaseId
                     email
                     website
                     phone

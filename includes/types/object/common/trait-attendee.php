@@ -21,8 +21,8 @@ trait Attendee {
 	 * @return array
 	 */
 	public static function fields() {
-		return array(
-			'event'               => array(
+		return [
+			'event'               => [
 				'type'        => 'Event',
 				'description' => __( 'Event attendee is excepted to attend.', 'ql-events' ),
 				'resolve'     => function( $source, array $args, AppContext $context ) {
@@ -31,39 +31,39 @@ trait Attendee {
 						? DataSource::resolve_post_object( $event_id, $context )
 						: null;
 				},
-			),
-			'checkedIn'           => array(
+			],
+			'checkedIn'           => [
 				'type'        => 'Boolean',
 				'description' => __( 'Has attendee checked into the event.', 'ql-events' ),
 				'resolve'     => function( $source, array $args, AppContext $context ) {
 					$checked_in = get_post_meta( $source->ID, self::manager()->checkin_key, true );
 					return ! empty( $checked_in ) ? $checked_in : false;
 				},
-			),
-			'securityCode'        => array(
+			],
+			'securityCode'        => [
 				'type'        => 'String',
 				'description' => __( 'Security code on attendee\'s ticket.', 'ql-events' ),
 				'resolve'     => function( $source, array $args, AppContext $context ) {
 					$security_code = get_post_meta( $source->ID, self::manager()->security_code, true );
 					return ! empty( $security_code ) ? $security_code : null;
 				},
-			),
-			'paidPrice'           => array(
+			],
+			'paidPrice'           => [
 				'type'        => 'String',
 				'description' => __( 'Security code on attendee\'s ticket.', 'ql-events' ),
 				'resolve'     => function( $source, array $args, AppContext $context ) {
 					$paid_price = get_post_meta( $source->ID, '_paid_price', true );
 					return ! empty( $paid_price ) ? $paid_price : 'free';
 				},
-			),
-			'priceCurrencySymbol' => array(
+			],
+			'priceCurrencySymbol' => [
 				'type'        => 'String',
 				'description' => __( 'Security code on attendee\'s ticket.', 'ql-events' ),
 				'resolve'     => function( $source, array $args, AppContext $context ) {
 					$price_currency_symbol = get_post_meta( $source->ID, '_price_currency_symbol', true );
 					return ! empty( $price_currency_symbol ) ? $price_currency_symbol : null;
 				},
-			),
-		);
+			],
+		];
 	}
 }

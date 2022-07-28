@@ -21,8 +21,6 @@ trait Order {
 	 * @return array
 	 */
 	public static function fields() {
-		return array(
-
-		);
+		return [];
 	}
 }

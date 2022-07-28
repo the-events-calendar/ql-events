@@ -164,6 +164,7 @@ class TicketQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 		$query     = '
 			query($id: ID!) {
 				event(id: $id) {
+					id
 					databaseId
 					tickets {
 						nodes {
@@ -185,7 +186,8 @@ class TicketQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 
 		// Assert response is correct.
 		$expected = array(
-			$this->expectedField( 'event.id', $event_id ),
+			$this->expectedField( 'event.id', $this->toRelayId( 'post', $event_id ) ),
+			$this->expectedField( 'event.databaseId', $event_id ),
 			$this->expectedNode(
 				'event.tickets.nodes',
 				array(

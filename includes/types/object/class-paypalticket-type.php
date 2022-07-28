@@ -23,7 +23,7 @@ class PayPalTicket_Type {
 	public static function register_fields() {
 		register_graphql_fields(
 			'PayPalTicket',
-			array()
+			[]
 		);
 	}
 }

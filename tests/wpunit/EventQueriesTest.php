@@ -10,17 +10,30 @@ class EventQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 			$this->expectedField( 'event.allDay', $event->all_day ),
 			$this->expectedField( 'event.startDate', $event->start_date ),
 			$this->expectedField( 'event.endDate', $event->end_date ),
-			$this->expectedField( 'event.duration', $event->duration ),
-			$this->expectedField( 'event.cost', $event->cost ),
+			$this->expectedField( 'event.duration', floatval( $event->duration ) ),
+			$this->expectedField( 'event.cost', $event->cost ?: self::IS_NULL ),
 		);
 
-		foreach ( $event->organizers as $organizer ) {
-			$expected[] = $this->expectedNode( 'event.organizers.nodes', array( 'databaseId' => $organizer->ID ) );
-		}
+		// TODO: Add admins test.
+		// foreach ( $event->organizers as $organizer ) {
+		// 	$expected[] = $this->expectedNode(
+		// 		'event.organizers.nodes',
+		// 		array(
+		// 			'id'         => $this->toRelayId( 'post', $organizer->ID ),
+		// 			'databaseId' => $organizer->ID
+		// 		)
+		// 	);
+		// }
 
-		foreach ( $event->venues as $venue ) {
-			$expected[] = $this->expectedNode( 'event.venues.nodes', array( 'databaseId' => $venue->ID ) );
-		}
+		// foreach ( $event->venues as $venue ) {
+		// 	$expected[] = $this->expectedNode(
+		// 		'event.venues.nodes',
+		// 		array(
+		// 			'id'         => $this->toRelayId( 'post', $venue->ID ),
+		// 			'databaseId' => $venue->ID
+		// 		)
+		// 	);
+		// }
 
 		return $expected;
 	}
@@ -41,6 +54,8 @@ class EventQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
         $query = '
             query($id: ID!) {
                 event(id: $id) {
+					id
+					databaseId
                     allDay
                     startDate
                     endDate

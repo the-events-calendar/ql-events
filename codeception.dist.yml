@@ -1,58 +1,53 @@
 paths:
-    tests: '%TESTS_DIR%'
-    output: '%TESTS_OUTPUT%'
-    data: '%TESTS_DATA%'
-    support: '%TESTS_SUPPORT%'
-    envs: '%TESTS_ENVS%'
+  tests: '%TESTS_DIR%'
+  output: '%TESTS_OUTPUT%'
+  data: '%TESTS_DATA%'
+  support: '%TESTS_SUPPORT%'
+  envs: '%TESTS_ENVS%'
 params:
-    - env
+  - env
 actor_suffix: Tester
 settings:
-    bootstrap: _bootstrap.php
-    colors: true
-    memory_limit: 1024M
+  colors: true
+  memory_limit: 1024M
+bootstrap: _bootstrap.php
 coverage:
-    enabled: true
-    remote: false
-    work_dir: /var/www/html/wp-content/plugins/ql-events
-    c3_url: http://localhost/wp-content/plugins/ql-events/ql-events.php
-    whitelist:
-      include:
-        - ql-events.php
-        - class-inflect.php
-        - includes/*.php
+  enabled: true
+  include:
+    - ql-events.php
+    - includes/*.php
 extensions:
-    enabled:
-        - Codeception\Extension\RunFailed
-    commands:
-        - Codeception\Command\GenerateWPUnit
-        - Codeception\Command\GenerateWPRestApi
-        - Codeception\Command\GenerateWPRestController
-        - Codeception\Command\GenerateWPRestPostTypeController
-        - Codeception\Command\GenerateWPAjax
-        - Codeception\Command\GenerateWPCanonical
-        - Codeception\Command\GenerateWPXMLRPC
+  enabled:
+    - Codeception\Extension\RunFailed
+  commands:
+    - Codeception\Command\GenerateWPUnit
+    - Codeception\Command\GenerateWPRestApi
+    - Codeception\Command\GenerateWPRestController
+    - Codeception\Command\GenerateWPRestPostTypeController
+    - Codeception\Command\GenerateWPAjax
+    - Codeception\Command\GenerateWPCanonical
+    - Codeception\Command\GenerateWPXMLRPC
 modules:
-    enabled: [WPLoader, \Helper\Wpunit]
-    config:
-        WPLoader:
-            wpRootFolder: '%WP_ROOT_FOLDER%'
-            dbName: '%WP_TEST_DB_NAME%'
-            dbHost: '%WP_TEST_DB_HOST%'
-            dbUser: '%WP_TEST_DB_USER%'
-            dbPassword: '%WP_TEST_DB_PASSWORD%'
-            tablePrefix: test_
-            domain: '%WP_DOMAIN%'
-            adminEmail: 'admin@%WP_DOMAIN%'
-            title: 'Test'
-            plugins:
-                - the-events-calendar/the-events-calendar.php
-                - event-tickets/event-tickets.php
-                - wp-graphql/wp-graphql.php
-                - ql-events/ql-events.php
-            activatePlugins:
-                - the-events-calendar/the-events-calendar.php
-                - event-tickets/event-tickets.php
-                - wp-graphql/wp-graphql.php
-                - ql-events/ql-events.php
-            configFile: 'tests/_data/config.php'
+  enabled: [WPLoader, \Helper\Wpunit]
+  config:
+    WPLoader:
+      wpRootFolder: '%WP_ROOT_FOLDER%'
+      dbName: '%WP_TEST_DB_NAME%'
+      dbHost: '%WP_TEST_DB_HOST%'
+      dbUser: '%WP_TEST_DB_USER%'
+      dbPassword: '%WP_TEST_DB_PASSWORD%'
+      tablePrefix: test_
+      domain: '%WP_DOMAIN%'
+      adminEmail: 'admin@%WP_DOMAIN%'
+      title: 'Test'
+      plugins:
+        - the-events-calendar/the-events-calendar.php
+        - event-tickets/event-tickets.php
+        - wp-graphql/wp-graphql.php
+        - ql-events/ql-events.php
+      activatePlugins:
+        - the-events-calendar/the-events-calendar.php
+        - event-tickets/event-tickets.php
+        - wp-graphql/wp-graphql.php
+        - ql-events/ql-events.php
+      configFile: 'tests/_data/config.php'

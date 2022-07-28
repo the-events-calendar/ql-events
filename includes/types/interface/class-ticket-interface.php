@@ -26,12 +26,12 @@ class Ticket_Interface {
 	 * @param \WPGraphQL\Registry\TypeRegistry $type_registry  Instance of the WPGraphQL TypeRegistry.
 	 */
 	public static function register_interface( &$type_registry ) {
-        register_graphql_interface_type(
-            'Ticket',
-            array(
-                'description' => __('Ticket object', 'wp-graphql-woocommerce'),
-                'fields'      => self::get_fields(),
-                'resolveType' => function ( $value ) use ( &$type_registry ) {
+		register_graphql_interface_type(
+			'Ticket',
+			[
+				'description' => __( 'Ticket object', 'ql-events' ),
+				'fields'      => self::get_fields(),
+				'resolveType' => function ( $value ) use ( &$type_registry ) {
 					switch ( $value->post_type ) {
 						case tribe( 'tickets.rsvp' )->ticket_object:
 							return $type_registry->get_type( 'RSVPTicket' );
@@ -48,34 +48,34 @@ class Ticket_Interface {
 								)
 							);
 					}
-                },
-            )
-        );
+				},
+			]
+		);
 
 		register_graphql_field(
 			'RootQuery',
 			'ticket',
-			array(
+			[
 				'type'        => 'Ticket',
-				'args'        => array(
-					'id'        => array(
-						'type'        => array( 'non_null' => 'ID' ),
+				'args'        => [
+					'id'        => [
+						'type'        => [ 'non_null' => 'ID' ],
 						'description' => __( 'The globally unique identifier of the object.', 'ql-events' ),
-					),
-					'idType'    => array(
-						'type'        =>  'RSVPTicketIdType',
+					],
+					'idType'    => [
+						'type'        => 'RSVPTicketIdType',
 						'description' => __( 'Type of unique identifier to fetch by. Default is Global ID', 'ql-events' ),
-					),
+					],
 					'asPreview' => [
 						'type'        => 'Boolean',
 						'description' => __( 'Whether to return the node as a preview instance', 'ql-events' ),
 					],
-				),
+				],
 				'description' => __( 'Query ticket', 'ql-events' ),
 				'resolve'     => function( $source, array $args, AppContext $context ) {
-					$idType  = isset( $args['idType'] ) ? $args['idType'] : 'global_id';
+					$id_type = isset( $args['idType'] ) ? $args['idType'] : 'global_id';
 					$post_id = null;
-					switch ( $idType ) {
+					switch ( $id_type ) {
 						case 'slug':
 							return $context->node_resolver->resolve_uri(
 								$args['id'],
@@ -108,7 +108,7 @@ class Ticket_Interface {
 						default:
 							$id_components = Relay::fromGlobalId( $args['id'] );
 							if ( ! isset( $id_components['id'] ) || ! absint( $id_components['id'] ) ) {
-								throw new UserError( __( 'The ID input is invalid. Make sure you set the proper idType for your input.', 'wp-graphql' ) );
+								throw new UserError( __( 'The ID input is invalid. Make sure you set the proper idType for your input.', 'ql-events' ) );
 							}
 							$post_id = absint( $id_components['id'] );
 							break;
@@ -128,20 +128,24 @@ class Ticket_Interface {
 
 					return absint( $post_id ) ? $context->get_loader( 'post' )->load_deferred( $post_id )->then(
 						function ( $post ) use ( $post_type_object ) {
-							if ( ! isset( $post->post_type ) || ! in_array( $post->post_type, [
-								'revision',
-								$post_type_object->name,
-							], true ) ) {
+							if ( ! isset( $post->post_type ) || ! in_array(
+								$post->post_type,
+								[
+									'revision',
+									$post_type_object->name,
+								],
+								true
+							) ) {
 								return null;
 							}
 
 							return $post;
 						}
 					) : null;
-				}
-			)
+				},
+			]
 		);
-    }
+	}
 
 	/**
 	 * Defines Ticket fields. All child type must have these fields as well.
@@ -149,28 +153,28 @@ class Ticket_Interface {
 	 * @return array
 	 */
 	public static function get_fields() {
-		return array(
-			'id'           => array(
-				'type'        => array( 'non_null' => 'ID' ),
+		return [
+			'id'         => [
+				'type'        => [ 'non_null' => 'ID' ],
 				'description' => __( 'Ticket Global ID.', 'ql-events' ),
 				'resolve'     => function( $source ) {
 					return $source->id;
 				},
-			),
-			'ticketId'        => array(
-				'type'        => array( 'non_null' => 'Int' ),
+			],
+			'ticketId'   => [
+				'type'        => [ 'non_null' => 'Int' ],
 				'description' => __( 'Ticket database ID', 'ql-events' ),
 				'resolve'     => function( $source ) {
 					return $source->ID;
 				},
-			),
-			'databaseId'        => array(
-				'type'        => array( 'non_null' => 'Int' ),
+			],
+			'databaseId' => [
+				'type'        => [ 'non_null' => 'Int' ],
 				'description' => __( 'Ticket database ID', 'ql-events' ),
 				'resolve'     => function( $source ) {
 					return $source->ID;
 				},
-			)
-		);
+			],
+		];
 	}
 }

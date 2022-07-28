@@ -25,11 +25,11 @@ class Attendees extends PostObjects {
 		register_graphql_connection(
 			self::get_connection_config(
 				get_post_type_object( RSVP::ATTENDEE_OBJECT ),
-				array(
+				[
 					'fromType'      => 'Event',
 					'toType'        => 'Attendee',
 					'fromFieldName' => 'attendees',
-				)
+				]
 			)
 		);
 	}

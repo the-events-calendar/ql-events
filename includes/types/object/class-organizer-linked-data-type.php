@@ -20,54 +20,54 @@ class Organizer_Linked_Data_Type {
 	public static function register() {
 		register_graphql_object_type(
 			'OrganizerLinkedData',
-			array(
+			[
 				'description' => __( 'Organizer JSON-LD data', 'ql-events' ),
-				'fields'      => array(
-					'type'        => array(
+				'fields'      => [
+					'type'        => [
 						'type'    => 'String',
 						'resolve' => function( $source ) {
 							return ! empty( $source->{'@type'} ) ? $source->{'@type'} : null;
 						},
-					),
-					'name'        => array(
+					],
+					'name'        => [
 						'type'    => 'String',
 						'resolve' => function( $source ) {
-							return ! empty( $source->name ) ? strip_tags( html_entity_decode( $source->name ) ) : null;
+							return ! empty( $source->name ) ? wp_strip_all_tags( html_entity_decode( $source->name ) ) : null;
 						},
-					),
-					'description' => array(
+					],
+					'description' => [
 						'type'    => 'String',
 						'resolve' => function( $source ) {
-							return ! empty( $source->description ) ? strip_tags( html_entity_decode( $source->description ) ) : null;
+							return ! empty( $source->description ) ? wp_strip_all_tags( html_entity_decode( $source->description ) ) : null;
 						},
-					),
-					'url'         => array(
+					],
+					'url'         => [
 						'type'    => 'String',
 						'resolve' => function( $source ) {
 							return ! empty( $source->url ) ? $source->url : null;
 						},
-					),
-					'telephone'   => array(
+					],
+					'telephone'   => [
 						'type'    => 'String',
 						'resolve' => function( $source ) {
 							return ! empty( $source->telephone ) ? $source->telephone : null;
 						},
-					),
-					'email'       => array(
+					],
+					'email'       => [
 						'type'    => 'String',
 						'resolve' => function( $source ) {
 							return ! empty( $source->email ) ? esc_attr( $source->email ) : null;
 						},
-					),
-					'sameAs'      => array(
+					],
+					'sameAs'      => [
 						'type'    => 'String',
 						'resolve' => function( $source ) {
 							//@codingStandardsIgnoreLine.
 							return ! empty( $source->sameAs ) ? $source->sameAs : null;
 						},
-					),
-				),
-			)
+					],
+				],
+			]
 		);
 	}
 }

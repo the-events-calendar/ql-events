@@ -5,11 +5,12 @@
  * @package WPGraphQL\QL_Events
  * @since 0.0.1
  */
+namespace WPGraphQL\QL_Events;
 
 // Exit if accessed directly.
 defined( 'ABSPATH' ) || exit;
 
-if ( ! class_exists( 'QL_Events' ) ) :
+if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 	/**
 	 * Class QL_Events
 	 */
@@ -57,12 +58,12 @@ if ( ! class_exists( 'QL_Events' ) ) :
 		 */
 		public static function get_post_types() {
 			return apply_filters(
-				'register_ql_events_post_types',
-				array(
+				'ql_events_register_post_types',
+				[
 					'tribe_events',
 					'tribe_venue',
 					'tribe_organizer',
-				)
+				]
 			);
 		}
 
@@ -73,10 +74,10 @@ if ( ! class_exists( 'QL_Events' ) ) :
 		 */
 		public static function get_taxonomies() {
 			return apply_filters(
-				'register_ql_events_taxonomies',
-				array(
+				'ql_events_register_taxonomies',
+				[
 					'tribe_events_cat',
-				)
+				]
 			);
 		}
 
@@ -89,10 +90,10 @@ if ( ! class_exists( 'QL_Events' ) ) :
 			if ( ! class_exists( '\Tribe__Tickets__Main' ) ) {
 				return false;
 			}
-			if ( ! tribe_isset_var ( 'tickets.rsvp' ) ) {
+			if ( ! tribe_isset_var( 'tickets.rsvp' ) ) {
 				return false;
 			}
-			if ( ! tribe_isset_var ( 'tickets.commerce.paypal' ) ) {
+			if ( ! tribe_isset_var( 'tickets.commerce.paypal' ) ) {
 				return false;
 			}
 			return true;
@@ -110,7 +111,7 @@ if ( ! class_exists( 'QL_Events' ) ) :
 					&& class_exists( 'Tribe__Tickets_Plus__Main' )
 					&& tribe_check_plugin( 'Tribe__Tickets_Plus__Main' );
 
-				return apply_filters( 'tribe_event_tickets_plus_can_run', $tickets_plus_can_run );
+				return apply_filters( 'tribe_event_tickets_plus_can_run', $tickets_plus_can_run ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 			}
 
 			return false;
@@ -150,27 +151,47 @@ if ( ! class_exists( 'QL_Events' ) ) :
 		 * @return void
 		 */
 		private function constants() {
-
 		}
 
 		/**
-		 * Include required files.
-		 * Uses composer's autoload
+		 * Include plugin files.
 		 *
 		 * @access private
 		 * @since  0.0.1
 		 * @return void
 		 */
 		private function includes() {
-			/**
-			 * Autoload Required Classes
-			 */
-			if ( defined( 'QL_EVENTS_AUTOLOAD' ) && false !== QL_EVENTS_AUTOLOAD ) {
-				require_once QL_EVENTS_PLUGIN_DIR . 'vendor/autoload.php';
-			}
+			require get_includes_directory() . 'types/interface/class-ticket-interface.php';
+			require get_includes_directory() . 'types/object/common/trait-attendee.php';
+			require get_includes_directory() . 'types/object/common/trait-order.php';
+			require get_includes_directory() . 'types/object/common/trait-ticket.php';
+			require get_includes_directory() . 'types/object/class-event-linked-data-type.php';
+			require get_includes_directory() . 'types/object/class-event-type.php';
+			require get_includes_directory() . 'types/object/class-organizer-linked-data-type.php';
+			require get_includes_directory() . 'types/object/class-organizer-type.php';
+			require get_includes_directory() . 'types/object/class-paypalattendee-type.php';
+			require get_includes_directory() . 'types/object/class-paypalorder-type.php';
+			require get_includes_directory() . 'types/object/class-paypalticket-type.php';
+			require get_includes_directory() . 'types/object/class-rsvpattendee-type.php';
+			require get_includes_directory() . 'types/object/class-rsvpticket-type.php';
+			require get_includes_directory() . 'types/object/class-ticket-linked-data-type.php';
+			require get_includes_directory() . 'types/object/class-venue-linked-data-type.php';
+			require get_includes_directory() . 'types/object/class-venue-type.php';
+			require get_includes_directory() . 'types/object/class-wooattendee-type.php';
 
-			// Required non-autoloaded classes.
-			require_once QL_EVENTS_PLUGIN_DIR . 'class-inflect.php';
+			require get_includes_directory() . 'data/connection/class-attendee-connection-resolver.php';
+			require get_includes_directory() . 'data/connection/class-event-connection-resolver.php';
+			require get_includes_directory() . 'data/connection/class-organizer-connection-resolver.php';
+			require get_includes_directory() . 'data/connection/class-ticket-connection-resolver.php';
+			require get_includes_directory() . 'data/class-factory.php';
+
+			require get_includes_directory() . 'connection/class-attendees.php';
+			require get_includes_directory() . 'connection/class-events.php';
+			require get_includes_directory() . 'connection/class-organizers.php';
+			require get_includes_directory() . 'connection/class-tickets.php';
+
+			require get_includes_directory() . 'class-core-schema-filters.php';
+			require get_includes_directory() . 'class-type-registry.php';
 		}
 
 		/**
@@ -182,7 +203,7 @@ if ( ! class_exists( 'QL_Events' ) ) :
 
 			// Initialize QL Events type registry.
 			$registry = new \WPGraphQL\QL_Events\Type_Registry();
-			add_action( 'graphql_register_types', array( $registry, 'init' ), 10, 1 );
+			add_action( 'graphql_register_types', [ $registry, 'init' ], 10, 1 );
 		}
 	}
 endif;

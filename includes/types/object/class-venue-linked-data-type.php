@@ -20,116 +20,116 @@ class Venue_Linked_Data_Type {
 	public static function register() {
 		register_graphql_object_type(
 			'AddressLinkedData',
-			array(
+			[
 				'description' => __( 'Address JSON-LD data', 'ql-events' ),
-				'fields'      => array(
-					'type'            => array(
+				'fields'      => [
+					'type'            => [
 						'type'    => 'String',
 						'resolve' => function( $source ) {
 							return ! empty( $source->{'@type'} ) ? $source->{'@type'} : null;
 						},
-					),
-					'streetAddress'   => array(
+					],
+					'streetAddress'   => [
 						'type'    => 'String',
 						'resolve' => function( $source ) {
 							//@codingStandardsIgnoreLine.
 							return ! empty( $source->streetAddress ) ? $source->streetAddress : null;
 						},
-					),
-					'addressLocality' => array(
+					],
+					'addressLocality' => [
 						'type'    => 'String',
 						'resolve' => function( $source ) {
 							//@codingStandardsIgnoreLine.
 							return ! empty( $source->addressLocality ) ? $source->addressLocality : null;
 						},
-					),
-					'addressRegion'   => array(
+					],
+					'addressRegion'   => [
 						'type'    => 'String',
 						'resolve' => function( $source ) {
 							//@codingStandardsIgnoreLine.
 							return ! empty( $source->addressRegion ) ? $source->addressRegion : null;
 						},
-					),
-					'postalCode'      => array(
+					],
+					'postalCode'      => [
 						'type'    => 'String',
 						'resolve' => function( $source ) {
 							//@codingStandardsIgnoreLine.
 							return ! empty( $source->postalCode ) ? $source->postalCode : null;
 						},
-					),
-					'addressCountry'  => array(
+					],
+					'addressCountry'  => [
 						'type'    => 'String',
 						'resolve' => function( $source ) {
 							//@codingStandardsIgnoreLine.
 							return ! empty( $source->addressCountry ) ? $source->addressCountry : null;
 						},
-					),
-				),
-			)
+					],
+				],
+			]
 		);
 
 		register_graphql_object_type(
 			'VenueLinkedData',
-			array(
+			[
 				'description' => __( 'Venue JSON-LD data', 'ql-events' ),
-				'fields'      => array(
-					'type'        => array(
+				'fields'      => [
+					'type'        => [
 						'type'    => 'String',
 						'resolve' => function( $source ) {
 							return ! empty( $source->{'@type'} ) ? $source->{'@type'} : null;
 						},
-					),
-					'name'        => array(
+					],
+					'name'        => [
 						'type'    => 'String',
 						'resolve' => function( $source ) {
-							return ! empty( $source->name ) ? strip_tags( html_entity_decode( $source->name ) ) : null;
+							return ! empty( $source->name ) ? wp_strip_all_tags( html_entity_decode( $source->name ) ) : null;
 						},
-					),
-					'description' => array(
+					],
+					'description' => [
 						'type'    => 'String',
 						'resolve' => function( $source ) {
-							return ! empty( $source->description ) ? strip_tags( html_entity_decode( $source->description ) ) : null;
+							return ! empty( $source->description ) ? wp_strip_all_tags( html_entity_decode( $source->description ) ) : null;
 						},
-					),
-					'url'         => array(
+					],
+					'url'         => [
 						'type'    => 'String',
 						'resolve' => function( $source ) {
 							return ! empty( $source->url ) ? $source->url : null;
 						},
-					),
-					'name'        => array(
+					],
+					'name'        => [
 						'type'    => 'String',
 						'resolve' => function( $source ) {
 							return ! empty( $source->name ) ? $source->name : null;
 						},
-					),
-					'description' => array(
+					],
+					'description' => [
 						'type'    => 'String',
 						'resolve' => function( $source ) {
 							return ! empty( $source->description ) ? $source->description : null;
 						},
-					),
-					'address'     => array(
+					],
+					'address'     => [
 						'type'    => 'AddressLinkedData',
 						'resolve' => function( $source ) {
 							return ! empty( $source->address ) ? $source->address : null;
 						},
-					),
-					'telephone'   => array(
+					],
+					'telephone'   => [
 						'type'    => 'String',
 						'resolve' => function( $source ) {
 							return ! empty( $source->telephone ) ? $source->telephone : null;
 						},
-					),
-					'sameAs'          => array(
+					],
+					'sameAs'      => [
 						'type'    => 'String',
 						'resolve' => function( $source ) {
 							//@codingStandardsIgnoreLine.
 							return ! empty( $source->sameAs ) ? $source->sameAs : null;
 						},
-					),
-				),
-			)
+					],
+				],
+			]
 		);
 	}
 }

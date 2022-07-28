@@ -29,6 +29,8 @@ class VenueQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
         $query = '
             query($id: ID!) {
                 venue(id: $id) {
+					id
+					databaseId
                     country
                     address
                     city

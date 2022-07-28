@@ -1,5 +1,15 @@
 name: 'Codeception Tests'
-on: [ pull_request ]
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+    paths:
+      - '**.php'
+
 jobs:
   test:
     strategy:

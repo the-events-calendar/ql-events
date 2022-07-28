@@ -41,22 +41,22 @@ class Attendee_Connection_Resolver {
 					// @codingStandardsIgnoreLine
 					if ( 'attendees' === $info->fieldName ) {
 						if ( ! isset( $query_args['meta_query'] ) ) {
-							$query_args['meta_query'] = array(); // WPCS: slow query ok.
+							$query_args['meta_query'] = []; // phpcs:ignore slow query ok.
 						}
-						$query_args['meta_query'][] = array(
+						$query_args['meta_query'][] = [
 							'key'     => RSVP::ATTENDEE_EVENT_KEY,
 							'value'   => $source->ID,
 							'compare' => '=',
-						);
+						];
 					}
 					break;
 			}
 			// @codingStandardsIgnoreLine
-			
+
 		}
 
 		$query_args = apply_filters(
-			'graphql_rsvp_attendee_connection_query_args',
+			'ql_events_rsvp_attendee_connection_query_args',
 			$query_args,
 			$source,
 			$args,
