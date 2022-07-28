@@ -86,7 +86,16 @@ if ( ! class_exists( 'QL_Events' ) ) :
 		 * @return bool
 		 */
 		public static function is_ticket_events_loaded() {
-			return class_exists( '\Tribe__Tickets__Main' );
+			if ( ! class_exists( '\Tribe__Tickets__Main' ) ) {
+				return false;
+			}
+			if ( ! tribe_isset_var ( 'tickets.rsvp' ) ) {
+				return false;
+			}
+			if ( ! tribe_isset_var ( 'tickets.commerce.paypal' ) ) {
+				return false;
+			}
+			return true;
 		}
 
 		/**
