@@ -15,10 +15,6 @@ node_modules/
 .github_changelog_generator
 !vendor/
 vendor/*
-!vendor/autoload.php
-!vendor/composer
-vendor/composer/installed.json
-vendor/composer/*/
 !tests
 tests/*.suite.yml
 build/
@@ -26,7 +22,6 @@ coverage/*
 schema.graphql
 phpunit.xml
 docker-output
-composer.lock
 c3.php
 .log/
 php-coveralls.phar

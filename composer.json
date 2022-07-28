@@ -17,7 +17,7 @@
         "lucatume/wp-browser": "*",
         "wp-cli/wp-cli-bundle": "*",
         "wp-graphql/wp-graphql-testcase": "^2.3",
-        "automattic/vipwpcs": "^2.2",
+        "squizlabs/php_codesniffer": "^3.5",
         "wp-coding-standards/wpcs": "^2.3"
     },
     "config": {

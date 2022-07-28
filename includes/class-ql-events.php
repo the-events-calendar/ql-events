@@ -5,6 +5,7 @@
  * @package WPGraphQL\QL_Events
  * @since 0.0.1
  */
+
 namespace WPGraphQL\QL_Events;
 
 // Exit if accessed directly.

@@ -63,8 +63,12 @@ function get_vendor_directory() {
 
 /**
  * Checks if QL Events required plugins are installed and activated
+ *
+ * @param array $deps  Unloaded dependencies list.
+ *
+ * @return bool
  */
-function dependencies_not_ready( &$deps = []) {
+function dependencies_not_ready( &$deps = [] ) {
 	if ( ! class_exists( 'WPGraphQL' ) ) {
 		$deps[] = 'WPGraphQL';
 	}
