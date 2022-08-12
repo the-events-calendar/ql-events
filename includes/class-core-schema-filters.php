@@ -35,65 +35,74 @@ class Core_Schema_Filters {
 	 * Register filters
 	 */
 	public static function add_filters() {
-		add_action( 'register_post_type_args', array( __CLASS__, 'register_post_types' ), 10, 2 );
-		add_action( 'register_taxonomy_args', array( __CLASS__, 'register_taxonomies' ), 10, 2 );
+		add_action( 'register_post_type_args', [ __CLASS__, 'register_post_types' ], 10, 2 );
+		add_action( 'register_taxonomy_args', [ __CLASS__, 'register_taxonomies' ], 10, 2 );
 
 		add_filter(
 			'graphql_input_fields',
-			array( __CLASS__, 'events_where_args' ),
+			[ __CLASS__, 'events_where_args' ],
 			10,
 			2
 		);
 
 		add_filter(
 			'graphql_post_object_connection_query_args',
-			array(
+			[
 				'\WPGraphQL\QL_Events\Data\Connection\Event_Connection_Resolver',
 				'get_query_args',
-			),
+			],
 			10,
 			5
 		);
 
 		add_filter(
 			'graphql_post_object_connection_query_args',
-			array(
+			[
 				'\WPGraphQL\QL_Events\Data\Connection\Organizer_Connection_Resolver',
 				'get_query_args',
-			),
+			],
 			10,
 			5
 		);
 
-		if ( \QL_Events::is_ticket_events_loaded() ) {
+		if ( QL_Events::is_ticket_events_loaded() ) {
+			add_filter(
+				'graphql_wp_object_type_config',
+				[
+					self::class,
+					'assign_ticket_interface',
+				],
+				10,
+				2
+			);
 			add_filter(
 				'graphql_post_object_connection_query_args',
-				array(
+				[
 					'\WPGraphQL\QL_Events\Data\Connection\Ticket_Connection_Resolver',
 					'get_ticket_args',
-				),
+				],
 				10,
 				5
 			);
 		}
 
-		if ( \QL_Events::is_ticket_events_plus_loaded() ) {
+		if ( QL_Events::is_ticket_events_plus_loaded() ) {
 			add_filter(
 				'graphql_product_connection_query_args',
-				array(
+				[
 					'\WPGraphQL\QL_Events\Data\Connection\Ticket_Connection_Resolver',
 					'get_ticket_plus_args',
-				),
+				],
 				10,
 				5
 			);
 
 			add_filter(
 				'graphql_product_connection_catalog_visibility',
-				array(
+				[
 					'\WPGraphQL\QL_Events\Data\Connection\Ticket_Connection_Resolver',
 					'get_ticket_plus_default_visibility',
-				),
+				],
 				10,
 				6
 			);
@@ -127,11 +136,11 @@ class Core_Schema_Filters {
 			$args['graphql_plural_name'] = 'Venues';
 		}
 
-		if ( \QL_Events::is_ticket_events_loaded() ) {
-			$ticket_types = array(
+		if ( QL_Events::is_ticket_events_loaded() ) {
+			$ticket_types = [
 				'RSVP'   => tribe( 'tickets.rsvp' ),
 				'PayPal' => tribe( 'tickets.commerce.paypal' ),
-			);
+			];
 
 			foreach ( $ticket_types as $key => $instance ) {
 				if ( $instance::ATTENDEE_OBJECT === $post_type ) {
@@ -155,7 +164,7 @@ class Core_Schema_Filters {
 			}
 		}
 
-		if ( \QL_Events::is_ticket_events_plus_loaded() ) {
+		if ( QL_Events::is_ticket_events_plus_loaded() ) {
 			if ( 'tribe_wooticket' === $post_type ) {
 				$args['show_in_graphql']     = true;
 				$args['graphql_single_name'] = 'WooAttendee';
@@ -192,13 +201,32 @@ class Core_Schema_Filters {
 	 *
 	 * @return array
 	 */
-	public static function events_where_args( $fields = array(), $type_name ) {
+	public static function events_where_args( $fields = [], $type_name ) {
 		if ( self::ends_with( $type_name, 'ToEventConnectionWhereArgs' ) ) {
 			$fields = array_merge(
 				$fields,
-				\WPGraphQL\QL_Events\Connection\Events::where_args()
+				Connection\Events::where_args()
 			);
 		}
 		return $fields;
+	}
+
+	/**
+	 * Filter callback for inject WPObject types with the "Ticket" interface.
+	 *
+	 * @param array $config  WPObject type config.
+	 *
+	 * @return array
+	 */
+	public static function assign_ticket_interface( $config ) {
+		switch ( $config['name'] ) {
+			case 'RSVPTicket':
+			case 'PayPalTicket':
+			case 'SimpleProduct':
+				$config['interfaces'][] = 'Ticket';
+				break;
+		}
+
+		return $config;
 	}
 }

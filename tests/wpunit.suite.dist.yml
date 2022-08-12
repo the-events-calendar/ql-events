@@ -10,3 +10,5 @@ modules:
     disabled:
         - WPDb
         - WPBrowser
+        - WPFilesystem
+        - REST

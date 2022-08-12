@@ -1,37 +1,49 @@
 {
-    "name": "simplur/ql-events",
-    "description": "The Events Calendar bindings for wp-graphql",
+    "name": "the-events-calendar/ql-events",
+    "description": "The Events Calendar bindings for WPGraphQL",
     "version": "0.0.1",
     "type": "wordpress-plugin",
     "authors": [
         {
-            "name": "kidunot89",
-            "email": "kidunot89@gmail.com",
-            "role": "Lead developer"
+          "name": "Geoff Taylor",
+          "email": "geoff@axistaylor.com",
+          "role": "Lead Developer"
         }
     ],
-    "require": {
-        "php": ">=5.6.0"
-    },
     "require-dev": {
-        "lucatume/wp-browser": ">=2.2.1 <2.2.8"
+        "lucatume/wp-browser": "*",
+        "wp-cli/wp-cli-bundle": "*",
+        "wp-graphql/wp-graphql-testcase": "^2.3",
+        "squizlabs/php_codesniffer": "^3.5",
+        "wp-coding-standards/wpcs": "^2.3"
     },
     "config": {
         "optimize-autoloader": true
-    },
-    "autoload": {
-        "psr-4": {
-            "WPGraphQL\\Extensions\\QL_Events\\": "includes/"
-        },
-        "classmap": [
-            "includes/"
-        ]
     },
     "scripts": {
         "install-wp-tests": "bash bin/install-wp-tests.sh",
         "test": "vendor/bin/codecept run",
         "functional-test": "vendor/bin/codecept run functional",
         "acceptance-test": "vendor/bin/codecept run acceptance",
-        "wpunit-test": "vendor/bin/codecept run wpunit"
+        "wpunit-test": "vendor/bin/codecept run wpunit",
+        "lint": "vendor/bin/phpcs -vp ."
+    },
+    "archive": {
+        "name": "wp-graphql-wooocommerce",
+        "exclude": [
+            "/.*",
+            "/bin",
+            "/plugin-build",
+            "/tests",
+            "!/vendor",
+            "/codeception.dist.yml",
+            "/codeception.tric.yml",
+            "/codeception.yml",
+            "/composer.json",
+            "/composer.lock",
+            "/docker-composer.yml",
+            "/Dockerfile",
+            "/README.md"
+        ]
     }
 }

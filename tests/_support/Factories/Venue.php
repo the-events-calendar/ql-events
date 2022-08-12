@@ -12,9 +12,9 @@ class Venue extends \WP_UnitTest_Factory_For_Post {
 	protected $locations
 		= [
 			'new_york' => [
-				'_VenueAddress	'   => '939 Lexington Ave',
-				'_VenueCity	'      => 'New York',
-				'_VenueCountry	'   => 'United States',
+				'_VenueAddress'       => '939 Lexington Ave',
+				'_VenueCity'          => 'New York',
+				'_VenueCountry'       => 'United States',
 				'_VenueProvince'      => '',
 				'_VenueState'         => 'NY',
 				'_VenueZip'           => '10065',
@@ -56,7 +56,7 @@ class Venue extends \WP_UnitTest_Factory_For_Post {
 				'_VenueState'         => $lc_title . ' state',
 				'_VenueZip'           => $lc_title . ' zip',
 				'_VenuePhone'         => $lc_title . ' phone',
-				'_VenueURL'           => 'http://' . str_slug( $lc_title ) . '.com',
+				'_VenueURL'           => 'http://' . slugify( $lc_title ) . '.com',
 				'_VenueStateProvince' => $lc_title . ' state_province',
 			],
 		];

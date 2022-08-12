@@ -23,166 +23,173 @@ class Event_Type {
 	 */
 	public static function register_fields() {
 		self::register_core_fields();
+
+		// TODO: Add TEC pro installation/activation check here.
 		self::register_pro_fields();
 	}
 
+	/**
+	 * Registers TEC core "Event" type fields.
+	 *
+	 * @return void
+	 */
 	public static function register_core_fields() {
 		register_graphql_fields(
 			'Event',
-			array(
-				'allDay'           => array(
+			[
+				'allDay'           => [
 					'type'        => 'Boolean',
 					'description' => __( 'Does the event last all day?', 'ql-events' ),
 					'resolve'     => function( $source ) {
 						$value = get_post_meta( $source->ID, '_EventAllDay', true );
 						return ! is_null( $value ) ? $value : null;
 					},
-				),
-				'startDate'        => array(
+				],
+				'startDate'        => [
 					'type'        => 'String',
 					'description' => __( 'Event start date', 'ql-events' ),
 					'resolve'     => function( $source ) {
 						$value = get_post_meta( $source->ID, '_EventStartDate', true );
 						return ! empty( $value ) ? $value : null;
 					},
-				),
-				'endDate'          => array(
+				],
+				'endDate'          => [
 					'type'        => 'String',
 					'description' => __( 'Event end date', 'ql-events' ),
 					'resolve'     => function( $source ) {
 						$value = get_post_meta( $source->ID, '_EventEndDate', true );
 						return ! empty( $value ) ? $value : null;
 					},
-				),
-				'duration'         => array(
+				],
+				'duration'         => [
 					'type'        => 'Float',
 					'description' => __( 'Event duration', 'ql-events' ),
 					'resolve'     => function( $source ) {
 						$value = get_post_meta( $source->ID, '_EventDuration', true );
 						return ! empty( $value ) ? $value : null;
 					},
-				),
-				'venue'            => array(
+				],
+				'venue'            => [
 					'type'        => 'Venue',
 					'description' => __( 'Event venue', 'ql-events' ),
 					'resolve'     => function( $source, array $args, AppContext $context ) {
 						$venue_id = get_post_meta( $source->ID, '_EventVenueID', true );
 						return ! empty( $venue_id ) ? DataSource::resolve_post_object( $venue_id, $context ) : null;
 					},
-				),
-				'showMapLink'      => array(
+				],
+				'showMapLink'      => [
 					'type'        => 'Boolean',
 					'description' => __( 'Show event map link?', 'ql-events' ),
 					'resolve'     => function( $source ) {
 						$value = get_post_meta( $source->ID, '_EventShowMapLink', true );
 						return ! is_null( $value ) ? $value : null;
 					},
-				),
-				'showMap'          => array(
+				],
+				'showMap'          => [
 					'type'        => 'Boolean',
 					'description' => __( 'Show event map?', 'ql-events' ),
 					'resolve'     => function( $source ) {
 						$value = get_post_meta( $source->ID, '_EventShowMap', true );
 						return ! is_null( $value ) ? $value : null;
 					},
-				),
-				'currencySymbol'   => array(
+				],
+				'currencySymbol'   => [
 					'type'        => 'String',
 					'description' => __( 'Event currency symbol', 'ql-events' ),
 					'resolve'     => function( $source ) {
 						$value = get_post_meta( $source->ID, '_EventCurrencySymbol', true );
 						return ! empty( $value ) ? $value : null;
 					},
-				),
-				'currencyPosition' => array(
+				],
+				'currencyPosition' => [
 					'type'        => 'String',
 					'description' => __( 'Event currency position', 'ql-events' ),
 					'resolve'     => function( $source ) {
 						$value = get_post_meta( $source->ID, '_EventCurrencyPosition', true );
 						return ! empty( $value ) ? $value : null;
 					},
-				),
-				'cost'             => array(
+				],
+				'cost'             => [
 					'type'        => 'String',
 					'description' => __( 'Event cost', 'ql-events' ),
 					'resolve'     => function( $source ) {
 						$value = get_post_meta( $source->ID, '_EventCost', true );
 						return ! empty( $value ) ? $value : null;
 					},
-				),
-				'costMin'          => array(
+				],
+				'costMin'          => [
 					'type'        => 'String',
 					'description' => __( 'Event minimum cost', 'ql-events' ),
 					'resolve'     => function( $source ) {
 						$value = get_post_meta( $source->ID, '_EventCostMin', true );
 						return ! empty( $value ) ? $value : null;
 					},
-				),
-				'costMax'          => array(
+				],
+				'costMax'          => [
 					'type'        => 'String',
 					'description' => __( 'Event maximum cost', 'ql-events' ),
 					'resolve'     => function( $source ) {
 						$value = get_post_meta( $source->ID, '_EventCostMax', true );
 						return ! empty( $value ) ? $value : null;
 					},
-				),
-				'url'              => array(
+				],
+				'url'              => [
 					'type'        => 'String',
 					'description' => __( 'Event URL', 'ql-events' ),
 					'resolve'     => function( $source ) {
 						$value = get_post_meta( $source->ID, '_EventURL', true );
 						return ! empty( $value ) ? $value : null;
 					},
-				),
-				'phone'            => array(
+				],
+				'phone'            => [
 					'type'        => 'String',
 					'description' => __( 'Event contact phone', 'ql-events' ),
 					'resolve'     => function( $source ) {
 						$value = get_post_meta( $source->ID, '_EventPhone', true );
 						return ! empty( $value ) ? $value : null;
 					},
-				),
-				'hideFromUpcoming' => array(
+				],
+				'hideFromUpcoming' => [
 					'type'        => 'Boolean',
 					'description' => __( 'Hide from event listing?', 'ql-events' ),
 					'resolve'     => function( $source ) {
 						$value = get_post_meta( $source->ID, '_EventHideFromUpcoming', true );
 						return ! is_null( $value ) ? $value : null;
 					},
-				),
-				'timezone'         => array(
+				],
+				'timezone'         => [
 					'type'        => 'String',
 					'description' => __( 'Event timezone', 'ql-events' ),
 					'resolve'     => function( $source ) {
 						$value = get_post_meta( $source->ID, '_EventTimezone', true );
 						return ! empty( $value ) ? $value : null;
 					},
-				),
-				'timezoneAbbr'     => array(
+				],
+				'timezoneAbbr'     => [
 					'type'        => 'String',
 					'description' => __( 'Event timezone abbreviation', 'ql-events' ),
 					'resolve'     => function( $source ) {
 						$value = get_post_meta( $source->ID, '_EventTimezoneAbbr', true );
 						return ! empty( $value ) ? $value : null;
 					},
-				),
-				'origin'           => array(
+				],
+				'origin'           => [
 					'type'        => 'String',
 					'description' => __( 'Event origin', 'ql-events' ),
 					'resolve'     => function( $source ) {
 						$value = get_post_meta( $source->ID, '_EventOrigin', true );
 						return ! empty( $value ) ? $value : null;
 					},
-				),
-				'featured'         => array(
+				],
+				'featured'         => [
 					'type'        => 'Boolean',
 					'description' => __( 'Is event featured?', 'ql-events' ),
 					'resolve'     => function( $source ) {
 						$value = get_post_meta( $source->ID, '_tribe_featured', true );
 						return ! is_null( $value ) ? $value : null;
 					},
-				),
-				'linkedData'       => array(
+				],
+				'linkedData'       => [
 					'type'        => 'EventLinkedData',
 					'description' => __( 'Event JSON-LD object', 'ql-events' ),
 					'resolve'     => function( $source ) {
@@ -190,16 +197,21 @@ class Event_Type {
 						$data     = $instance->get_data( $source->ID );
 						return ! empty( $data[ $source->ID ] ) ? $data[ $source->ID ] : null;
 					},
-				),
-			)
+				],
+			]
 		);
 	}
 
+	/**
+	 * Registers TEC pro "Event" type fields.
+	 *
+	 * @return void
+	 */
 	public static function register_pro_fields() {
 		register_graphql_fields(
 			'Event',
-			array(
-				'recurring'        => array(
+			[
+				'recurring'      => [
 					'type'        => 'Boolean',
 					'description' => __( 'Is this a recurring event?', 'ql-events' ),
 					'resolve'     => function( $source ) {
@@ -209,12 +221,12 @@ class Event_Type {
 
 						return tribe_is_recurring_event( $source->ID );
 					},
-				),
-				'startDates'       => array(
-					'type'        => array( 'list_of' => 'String' ),
-					'args'        => array(
-						'filter' => array( 'type' => 'DateQueryInput' ),
-					),
+				],
+				'startDates'     => [
+					'type'        => [ 'list_of' => 'String' ],
+					'args'        => [
+						'filter' => [ 'type' => 'DateQueryInput' ],
+					],
 					'description' => __( 'Recurrence events start dates', 'ql-events' ),
 					'resolve'     => function( $source, array $args ) {
 						if ( ! is_callable( '\tribe_get_recurrence_start_dates' ) ) {
@@ -235,7 +247,7 @@ class Event_Type {
 									$right_date = strtotime( $query['value'] );
 
 									$compare = $query['compare'];
-									switch( $compare ) {
+									switch ( $compare ) {
 										case '=':
 											return $left_date === $right_date;
 										case '>':
@@ -248,13 +260,13 @@ class Event_Type {
 						}
 
 						return $dates;
-					}
-				),
-				'recurrenceText'    => array(
+					},
+				],
+				'recurrenceText' => [
 					'type'        => 'String',
-					'args'        => array(
-						'format' => array( 'type' => 'PostObjectFieldFormatEnum' )
-					),
+					'args'        => [
+						'format' => [ 'type' => 'PostObjectFieldFormatEnum' ],
+					],
 					'description' => __( 'Recurrence text', 'ql-events' ),
 					'resolve'     => function( $source, array $args ) {
 						if ( ! is_callable( '\tribe_get_recurrence_text' ) ) {
@@ -263,13 +275,13 @@ class Event_Type {
 
 						$text = tribe_get_recurrence_text( $source->ID );
 						if ( ! empty( $args['format'] ) && 'raw' === $args['format'] ) {
-							$text = strip_tags( html_entity_decode( $text ) );
+							$text = wp_strip_all_tags( html_entity_decode( $text ) );
 						}
 
 						return $text;
-					}
-				),
-			)
+					},
+				],
+			]
 		);
 	}
 }

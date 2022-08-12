@@ -48,8 +48,8 @@ class PayPalAttendee_Type {
 			'PayPalAttendee',
 			array_merge(
 				self::fields(),
-				array(
-					'ticket'             => array(
+				[
+					'ticket'             => [
 						'type'        => 'PayPalTicket',
 						'description' => __( 'The ticket the attendee has purchased.', 'ql-events' ),
 						'resolve'     => function( $source, array $args, AppContext $context ) {
@@ -58,8 +58,8 @@ class PayPalAttendee_Type {
 								? DataSource::resolve_post_object( $ticket_id, $context )
 								: null;
 						},
-					),
-					'order'              => array(
+					],
+					'order'              => [
 						'type'        => 'PayPalOrder',
 						'description' => __( 'Attendee\'s ticket order.', 'ql-events' ),
 						'resolve'     => function( $source, array $args, AppContext $context ) {
@@ -68,48 +68,48 @@ class PayPalAttendee_Type {
 								? DataSource::resolve_post_object( $order_id, $context )
 								: null;
 						},
-					),
-					'fullName'           => array(
+					],
+					'fullName'           => [
 						'type'        => 'String',
 						'description' => __( 'Full name of the tickets PayPal "buyer"', 'ql-events' ),
 						'resolve'     => function( $source, array $args, AppContext $context ) {
 							$full_name = get_post_meta( $source->ID, self::manager()->full_name, true );
 							return ! empty( $full_name ) ? $full_name : null;
 						},
-					),
-					'email'              => array(
+					],
+					'email'              => [
 						'type'        => 'String',
 						'description' => __( 'email of the tickets PayPal "buyer"', 'ql-events' ),
 						'resolve'     => function( $source, array $args, AppContext $context ) {
 							$email = get_post_meta( $source->ID, self::manager()->email, true );
 							return ! empty( $email ) ? $email : null;
 						},
-					),
-					'ticketName'         => array(
+					],
+					'ticketName'         => [
 						'type'        => 'String',
 						'description' => __( 'Name of purchased ticket', 'ql-events' ),
 						'resolve'     => function( $source, array $args, AppContext $context ) {
 							$name = get_post_meta( $source->ID, self::manager()->deleted_product, true );
 							return ! empty( $name ) ? $name : null;
 						},
-					),
-					'attendeeStatus'     => array(
+					],
+					'attendeeStatus'     => [
 						'type'        => 'String',
 						'description' => __( 'Attendee\'s PayPal status', 'ql-events' ),
 						'resolve'     => function( $source, array $args, AppContext $context ) {
 							$status = get_post_meta( $source->ID, self::manager()->attendee_tpp_key, true );
 							return ! empty( $status ) ? $status : null;
 						},
-					),
-					'showOnAttendeeList' => array(
+					],
+					'showOnAttendeeList' => [
 						'type'        => 'Boolean',
 						'description' => __( 'Whether attendee should appear on the attendee list.', 'ql-events' ),
 						'resolve'     => function( $source, array $args, AppContext $context ) {
 							$show = get_post_meta( $source->ID, self::manager()->attendee_optout_key, true );
 							return ! empty( $show ) ? $show : null;
 						},
-					),
-				)
+					],
+				]
 			)
 		);
 	}

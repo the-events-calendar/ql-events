@@ -49,8 +49,8 @@ class WooAttendee_Type {
 			'WooAttendee',
 			array_merge(
 				self::fields(),
-				array(
-					'ticket'    => array(
+				[
+					'ticket'    => [
 						'type'        => 'Product',
 						'description' => __( 'The ticket the attendee has purchased.', 'ql-events' ),
 						'resolve'     => function( $source, array $args, AppContext $context ) {
@@ -59,8 +59,8 @@ class WooAttendee_Type {
 								? Factory::resolve_crud_object( $ticket_id, $context )
 								: null;
 						},
-					),
-					'order'     => array(
+					],
+					'order'     => [
 						'type'        => 'Order',
 						'description' => __( 'Attendee\'s ticket order.', 'ql-events' ),
 						'resolve'     => function( $source, array $args, AppContext $context ) {
@@ -69,8 +69,8 @@ class WooAttendee_Type {
 								? Factory::resolve_crud_object( $order_id, $context )
 								: null;
 						},
-					),
-					'orderItem' => array(
+					],
+					'orderItem' => [
 						'type'        => 'LineItem',
 						'description' => __( 'Order item for Attendee\'s ticket.', 'ql-events' ),
 						'resolve'     => function( $source, array $args, AppContext $context ) {
@@ -79,8 +79,8 @@ class WooAttendee_Type {
 								? \WC()->order_factory::get_order_item( $line_item_key )
 								: null;
 						},
-					),
-				)
+					],
+				]
 			)
 		);
 	}

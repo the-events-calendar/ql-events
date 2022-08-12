@@ -20,23 +20,23 @@ class Events {
 	 * Filters
 	 */
 	public static function where_args() {
-		return array(
-			'venuesIn'       => array(
-				'type'        => array( 'list_of' => 'Int' ),
+		return [
+			'venuesIn'       => [
+				'type'        => [ 'list_of' => 'Int' ],
 				'description' => __( 'Filter the connection based on event venue ID', 'ql-events' ),
-			),
-			'venuesNotIn'    => array(
-				'type'        => array( 'list_of' => 'Int' ),
+			],
+			'venuesNotIn'    => [
+				'type'        => [ 'list_of' => 'Int' ],
 				'description' => __( 'Filter the connection based on event venue ID', 'ql-events' ),
-			),
-			'startDateQuery' => array(
+			],
+			'startDateQuery' => [
 				'type'        => 'DateQueryInput',
 				'description' => __( 'Filter the connection based on event start dates', 'ql-events' ),
-			),
-			'endDateQuery'   => array(
+			],
+			'endDateQuery'   => [
 				'type'        => 'DateQueryInput',
 				'description' => __( 'Filter the connection based on event end dates', 'ql-events' ),
-			),
-		);
+			],
+		];
 	}
 }

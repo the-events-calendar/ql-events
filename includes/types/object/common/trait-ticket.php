@@ -21,8 +21,6 @@ trait Ticket {
 	 * @return array
 	 */
 	public static function fields() {
-		return array(
-
-		);
+		return [];
 	}
 }

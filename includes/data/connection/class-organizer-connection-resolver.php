@@ -42,7 +42,7 @@ class Organizer_Connection_Resolver {
 		}
 
 		$query_args = apply_filters(
-			'graphql_' . Main::ORGANIZER_POST_TYPE . '_connection_query_args',
+			'ql_events_' . Main::ORGANIZER_POST_TYPE . '_connection_query_args',
 			$query_args,
 			$source,
 			$args,

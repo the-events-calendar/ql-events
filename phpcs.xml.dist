@@ -1,39 +1,33 @@
 <?xml version="1.0"?>
-<ruleset name="WordPress Coding Standards based custom ruleset for your plugin">
+<ruleset name="WordPress Coding Standards for QL-Events">
+	<config name="installed_paths" value="vendor/wp-coding-standards/wpcs" />
 	<description>Generally-applicable sniffs for WordPress plugins.</description>
-
-	<!-- What to scan -->
-	<file>.</file>
-	<exclude-pattern>/vendor/</exclude-pattern>
-	<exclude-pattern>/node_modules/</exclude-pattern>
-	<exclude-pattern>/tests/</exclude-pattern>
 
 	<!-- How to scan -->
 	<!-- Usage instructions: https://github.com/squizlabs/PHP_CodeSniffer/wiki/Usage -->
 	<!-- Annotated ruleset: https://github.com/squizlabs/PHP_CodeSniffer/wiki/Annotated-ruleset.xml -->
-	<arg value="sp"/> <!-- Show sniff and progress -->
 	<arg name="basepath" value="./"/><!-- Strip the file paths down to the relevant bit -->
-	<arg name="colors"/>
 	<arg name="extensions" value="php"/>
-	<arg name="parallel" value="8"/><!-- Enables parallel processing when available for faster results. -->
+	<arg name="colors"/>
+	<arg value="sp"/> <!-- Show sniff and progress -->
 
+	<arg name="parallel" value="8"/><!-- Enables parallel processing when available for faster results. -->
 	<!-- Rules: Check PHP version compatibility -->
 	<!-- https://github.com/PHPCompatibility/PHPCompatibility#sniffing-your-code-for-compatibility-with-specific-php-versions -->
-	<config name="testVersion" value="5.3-"/>
-	<!-- https://github.com/PHPCompatibility/PHPCompatibilityWP -->
-	<rule ref="PHPCompatibilityWP"/>
+	<config name="testVersion" value="7.0-"/>
 
 	<!-- Rules: WordPress Coding Standards -->
 	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards -->
+	<rule ref="WordPress-Core" />
+	<rule ref="WordPress-Docs" />
+	<rule ref="WordPress-Extra" />
+
 	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties -->
-	<config name="minimum_supported_wp_version" value="4.6"/>
-	<rule ref="WordPress">
-		<exclude name="WordPress.VIP"/>
-	</rule>
+	<config name="minimum_supported_wp_version" value="4.9"/>
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<!-- Value: replace the function, class, and variable prefixes used. Separate multiple prefixes with a comma. -->
-			<property name="prefixes" type="array" value="WPGraphQL\QL_Events"/>
+			<property name="prefixes" type="array" value="WPGraphQL\QL_Events,QL_EVENTS,QL_Events,ql_events_"/>
 		</properties>
 	</rule>
 	<rule ref="WordPress.WP.I18n">
@@ -47,4 +41,16 @@
 			<property name="blank_line_check" value="true"/>
 		</properties>
 	</rule>
+
+	<!-- Enforce Short array syntax `[]`  -->
+	<rule ref="WordPress">
+		<exclude name="Generic.Arrays.DisallowShortArraySyntax"/>
+	</rule>
+	<rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
+
+	<!-- What to scan -->
+	<file>includes/</file>
+	<exclude-pattern>/vendor/</exclude-pattern>
+	<exclude-pattern>bin/*</exclude-pattern>
+	<exclude-pattern>/tests/</exclude-pattern>
 </ruleset>

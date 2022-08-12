@@ -23,7 +23,7 @@ class PayPalOrder_Type {
 	public static function register_fields() {
 		register_graphql_fields(
 			'PayPalOrder',
-			array()
+			[]
 		);
 	}
 }

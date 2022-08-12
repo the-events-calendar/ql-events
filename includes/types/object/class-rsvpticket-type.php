@@ -25,7 +25,7 @@ class RSVPTicket_Type {
 		$rsvp = tribe( 'tickets.rsvp' );
 		register_graphql_fields(
 			'RSVPTicket',
-			array()
+			[]
 		);
 	}
 }
