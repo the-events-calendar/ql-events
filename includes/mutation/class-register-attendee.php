@@ -44,52 +44,52 @@ class Register_Attendee {
 	 * @return array
 	 */
 	public static function get_input_fields() {
-		$input_fields = array(
-			'eventId'         => array(
-				'type'        => array( 'non_null' => 'ID' ),
+		$input_fields = [
+			'eventId'          => [
+				'type'        => [ 'non_null' => 'ID' ],
 				'description' => __( 'Event ID', 'ql-events' ),
-			),
-			'ticketId'         => array(
-				'type'        => array( 'non_null' => 'ID' ),
+			],
+			'ticketId'         => [
+				'type'        => [ 'non_null' => 'ID' ],
 				'description' => __( 'Ticket ID', 'ql-events' ),
-			),
-			'name'             => array(
-				'type'        => array( 'non_null' => 'String' ),
+			],
+			'name'             => [
+				'type'        => [ 'non_null' => 'String' ],
 				'description' => __( 'Attendee Full Name', 'ql-events' ),
-			),
-			'email'            => array(
-				'type'        => array( 'non_null' => 'String' ),
+			],
+			'email'            => [
+				'type'        => [ 'non_null' => 'String' ],
 				'description' => __( 'Attendee Email', 'ql-events' ),
-			),
-			'orderId'          => array(
+			],
+			'orderId'          => [
 				'type'        => 'ID',
 				'description' => __( 'Order ID', 'ql-events' ),
-			),
-			'orderAttendeeId'  => array(
+			],
+			'orderAttendeeId'  => [
 				'type'        => 'String',
 				'description' => __( 'Order Attendee ID', 'ql-events' ),
-			),
-			'userId'           => array(
+			],
+			'userId'           => [
 				'type'        => 'ID',
 				'description' => __( 'Attendee\'s User ID', 'ql-events' ),
-			),
-			'optout'           => array(
+			],
+			'optout'           => [
 				'type'        => 'Boolean',
 				'description' => __( 'Optout', 'ql-events' ),
-			),
-			'attendeeStatus'   => array(
+			],
+			'attendeeStatus'   => [
 				'type'        => 'String',
 				'description' => __( 'Order status', 'ql-events' ),
-			),
-			'pricePaid'        => array(
+			],
+			'pricePaid'        => [
 				'type'        => 'Float',
 				'description' => __( 'Price paid to attendee', 'ql-events' ),
-			),
-			'additionalFields' => array(
-				'type'        => array( 'list_of' => 'MetaDataInput' ),
+			],
+			'additionalFields' => [
+				'type'        => [ 'list_of' => 'MetaDataInput' ],
 				'description' => __( 'Ticket additional fields input', 'ql-events' ),
-			),
-		);
+			],
+		];
 
 		return $input_fields;
 	}
@@ -111,7 +111,7 @@ class Register_Attendee {
 
 					return get_post( $payload['id'] );
 				},
-			]
+			],
 		];
 	}
 
@@ -129,7 +129,7 @@ class Register_Attendee {
 			$email             = $input['email'];
 			$order_id          = ! empty( $input['orderId'] )
 				? Utils::get_database_id_from_id( $input['orderId'] )
-				: md5( time() . rand() );
+				: md5( time() . wp_rand() );
 			$order_attendee_id = ! empty( $input['orderAttendeeId'] )
 				? $input['orderAttendeeId']
 				: null;
@@ -142,11 +142,11 @@ class Register_Attendee {
 
 			$additional_fields = ! empty( $input['additionalFields'] )
 				? self::map_additional_fields( $input['additionalFields'] )
-				: array();
+				: [];
 
 			// Prep attendee data.
 			$attendee_data = array_merge(
-				array(
+				[
 					'ticket_id'         => $ticket_id,
 					'post_id'           => $post_id,
 					'full_name'         => $full_name,
@@ -157,7 +157,7 @@ class Register_Attendee {
 					'optout'            => $optout,
 					'attendee_status'   => $attendee_status,
 					'price_paid'        => $price_paid,
-				),
+				],
 				$additional_fields,
 			);
 
@@ -171,19 +171,25 @@ class Register_Attendee {
 			$ticket = $provider->get_ticket( $post_id, $ticket_id );
 
 			// Create attendee.
-			/** @var Tribe__Tickets__Attendees $attendees */
 			$attendees = tribe( 'tickets.attendees' );
-			$attendee = $attendees->create_attendee( $ticket, $attendee_data );;
+			$attendee  = $attendees->create_attendee( $ticket, $attendee_data );
 
 			// Throw error if attendee not returned.
 			if ( ! $attendee ) {
 				throw new UserError( __( 'Failed to create attendee, check input and try again.', 'ql-events' ) );
 			}
 			// Return Attendee ID.
-			return array( 'id' => $attendee->ID );
+			return [ 'id' => $attendee->ID ];
 		};
 	}
 
+	/**
+	 * Simple reducer for mapping extra fields.
+	 *
+	 * @param array $additional_fields  Extra attendee meta.
+	 *
+	 * @return array
+	 */
 	private static function map_additional_fields( array $additional_fields ) {
 		return array_reduce(
 			$additional_fields,
@@ -192,7 +198,7 @@ class Register_Attendee {
 
 				return $carry;
 			},
-			array()
+			[]
 		);
 	}
 }
