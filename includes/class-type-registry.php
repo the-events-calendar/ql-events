@@ -44,7 +44,7 @@ class Type_Registry {
 			Connection\Tickets::register_connections();
 		}
 
-		if ( \QL_Events::is_ticket_events_plus_loaded() ) {
+		if ( QL_Events::is_ticket_events_plus_loaded() ) {
 			Type\WPObject\WooAttendee_Type::register_fields();
 			Type\WPObject\Ticket_Linked_Data_Type::register();
 

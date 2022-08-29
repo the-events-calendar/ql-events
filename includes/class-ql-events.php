@@ -163,10 +163,20 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		 */
 		private function includes() {
 			$include_directory_path = get_includes_directory();
+			require $include_directory_path . 'types/interface/class-ticket-field.php';
 			require $include_directory_path . 'types/interface/class-ticket-interface.php';
 			require $include_directory_path . 'types/object/common/trait-attendee.php';
 			require $include_directory_path . 'types/object/common/trait-order.php';
 			require $include_directory_path . 'types/object/common/trait-ticket.php';
+			require $include_directory_path . 'types/object/ticket-field/class-birthdate.php';
+			require $include_directory_path . 'types/object/ticket-field/class-checkbox.php';
+			require $include_directory_path . 'types/object/ticket-field/class-date.php';
+			require $include_directory_path . 'types/object/ticket-field/class-dropdown.php';
+			require $include_directory_path . 'types/object/ticket-field/class-email.php';
+			require $include_directory_path . 'types/object/ticket-field/class-phone.php';
+			require $include_directory_path . 'types/object/ticket-field/class-radio.php';
+			require $include_directory_path . 'types/object/ticket-field/class-text.php';
+			require $include_directory_path . 'types/object/ticket-field/class-url.php';
 			require $include_directory_path . 'types/object/class-event-linked-data-type.php';
 			require $include_directory_path . 'types/object/class-event-type.php';
 			require $include_directory_path . 'types/object/class-organizer-linked-data-type.php';
