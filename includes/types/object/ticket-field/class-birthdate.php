@@ -20,12 +20,11 @@ class Birthdate {
 	public static function register() {
 		register_graphql_object_type(
 			'TicketFieldBirthdate',
-			array(
-				'interfaces'  => array( 'TicketField' ),
+			[
+				'interfaces'  => [ 'TicketField' ],
 				'description' => __( 'Birthdate ticket field', 'ql-events' ),
-				'fields'      => array(
-				)
-			)
+				'fields'      => [],
+			]
 		);
 	}
 }

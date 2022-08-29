@@ -20,19 +20,19 @@ class URL {
 	public static function register() {
 		register_graphql_object_type(
 			'TicketFieldURL',
-			array(
-				'interfaces'  => array( 'TicketField' ),
+			[
+				'interfaces'  => [ 'TicketField' ],
 				'description' => __( 'URL ticket field', 'ql-events' ),
-				'fields'      => array(
-					'placeholder'      => array(
+				'fields'      => [
+					'placeholder' => [
 						'type'        => 'String',
-						'description' => __( 'Field input placeholder', 'wp-graphql' ),
+						'description' => __( 'Field input placeholder', 'ql-events' ),
 						'resolve'     => function( $field ) {
 							return 'on' === $field->placeholder;
 						},
-					),
-				)
-			)
+					],
+				],
+			]
 		);
 	}
 }

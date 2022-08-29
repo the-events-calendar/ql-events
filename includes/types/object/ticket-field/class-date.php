@@ -20,13 +20,11 @@ class Date {
 	public static function register() {
 		register_graphql_object_type(
 			'TicketFieldDate',
-			array(
-				'interfaces'  => array( 'TicketField' ),
+			[
+				'interfaces'  => [ 'TicketField' ],
 				'description' => __( 'Date ticket field', 'ql-events' ),
-				'fields'      => array(
-
-				)
-			)
+				'fields'      => [],
+			]
 		);
 	}
 }

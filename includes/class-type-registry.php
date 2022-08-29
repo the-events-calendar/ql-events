@@ -48,7 +48,7 @@ class Type_Registry {
 			Type\WPObject\WooAttendee_Type::register_fields();
 			Type\WPObject\Ticket_Linked_Data_Type::register();
 
-			// Custom ticket meta
+			// Custom ticket meta.
 			Type\WPInterface\Ticket_Field::register_type();
 			Type\WPObject\Ticket_Field\Birthdate::register();
 			Type\WPObject\Ticket_Field\Checkbox::register();

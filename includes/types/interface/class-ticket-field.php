@@ -1,6 +1,15 @@
 <?php
+/**
+ * Ticket Field interface type.
+ *
+ * @package WPGraphQL\QL_Events\Type\WPInterface
+ */
+
 namespace WPGraphQL\QL_Events\Type\WPInterface;
 
+/**
+ * Class Ticket_Field
+ */
 class Ticket_Field {
 
 	/**
@@ -11,40 +20,40 @@ class Ticket_Field {
 	public static function register_type() {
 		register_graphql_interface_type(
 			'TicketField',
-			array(
-				'description' => __( 'A ticket custom field', 'wp-graphql' ),
-				'fields'      => array(
-					'type'      => array(
+			[
+				'description' => __( 'A ticket custom field', 'ql-events' ),
+				'fields'      => [
+					'type'        => [
 						'type'        => 'String',
-						'description' => __( 'Field type', 'wp-graphql' ),
+						'description' => __( 'Field type', 'ql-events' ),
 						'resolve'     => function( $field ) {
 							return $field->type;
 						},
-					),
-					'label'      => array(
+					],
+					'label'       => [
 						'type'        => 'String',
-						'description' => __( 'Field Label', 'wp-graphql' ),
+						'description' => __( 'Field Label', 'ql-events' ),
 						'resolve'     => function( $field ) {
 							return $field->label;
 						},
-					),
-					'description'      => array(
+					],
+					'description' => [
 						'type'        => 'String',
-						'description' => __( 'Field Description', 'wp-graphql' ),
+						'description' => __( 'Field Description', 'ql-events' ),
 						'resolve'     => function( $field ) {
 							return $field->description;
 						},
-					),
-					'required'      => array(
+					],
+					'required'    => [
 						'type'        => 'Boolean',
-						'description' => __( 'Is this field required?', 'wp-graphql' ),
+						'description' => __( 'Is this field required?', 'ql-events' ),
 						'resolve'     => function( $field ) {
 							return 'on' === $field->required;
 						},
-					),
-				),
+					],
+				],
 				'resolveType' => function ( $field ) {
-					switch( $field->type ) {
+					switch ( $field->type ) {
 						case 'birth':
 							return 'TicketFieldBirthdate';
 						case 'checkbox':
@@ -66,14 +75,14 @@ class Ticket_Field {
 					}
 					return null;
 				},
-			)
+			]
 		);
 
 		register_graphql_field(
 			'Product',
 			'ticketFields',
-			array(
-				'type'        => array( 'list_of' => 'TicketField' ),
+			[
+				'type'        => [ 'list_of' => 'TicketField' ],
 				'description' => __( 'Custom ticket fields on this ticket', 'ql-events' ),
 				'resolve'     => function( $source ) {
 					$ticket_id = $source->ID;
@@ -83,23 +92,23 @@ class Ticket_Field {
 						return $meta->get_meta_fields_by_ticket( $ticket_id );
 					}
 
-					return array();
-				}
-			)
+					return [];
+				},
+			]
 		);
 
 		register_graphql_field(
 			'Event',
 			'ticketFields',
-			array(
-				'type'        => array( 'list_of' => 'TicketField' ),
+			[
+				'type'        => [ 'list_of' => 'TicketField' ],
 				'description' => __( 'All custom ticket fields on the tickets for this event', 'ql-events' ),
 				'resolve'     => function( $source ) {
 					$event_id = $source->ID;
 
 					return tribe( 'tickets-plus.meta' )->get_meta_fields_by_event( $event_id );
-				}
-			)
+				},
+			]
 		);
 	}
 }

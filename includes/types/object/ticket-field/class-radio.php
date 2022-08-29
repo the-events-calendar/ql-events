@@ -20,19 +20,19 @@ class Radio {
 	public static function register() {
 		register_graphql_object_type(
 			'TicketFieldRadio',
-			array(
-				'interfaces'  => array( 'TicketField' ),
+			[
+				'interfaces'  => [ 'TicketField' ],
 				'description' => __( 'Radio button ticket field', 'ql-events' ),
-				'fields'      => array(
-					'options'      => array(
-						'type'        => array( 'list_of' => 'String' ),
-						'description' => __( 'Is this field required?', 'wp-graphql' ),
+				'fields'      => [
+					'options' => [
+						'type'        => [ 'list_of' => 'String' ],
+						'description' => __( 'Is this field required?', 'ql-events' ),
 						'resolve'     => function( $field ) {
 							return $field->options;
 						},
-					),
-				)
-			)
+					],
+				],
+			]
 		);
 	}
 }
