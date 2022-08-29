@@ -16,6 +16,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use GraphQLRelay\Relay;
 use WPGraphQL\AppContext;
 use WPGraphQL\Data\DataSource;
+use WPGraphQL\QL_Events\QL_Events;
 
 /**
  * Class Register_WooAttendee
@@ -57,7 +58,7 @@ class Register_WooAttendee {
 			],
 		];
 
-		if ( \QL_Events::is_ticket_events_plus_loaded() ) {
+		if ( QL_Events::is_ticket_events_plus_loaded() ) {
 			$input_fields['customFields'] = [
 				'type'        => [ 'list_of' => 'MetaDataInput' ],
 				'description' => __( 'Ticket custom fields input', 'ql-events' ),

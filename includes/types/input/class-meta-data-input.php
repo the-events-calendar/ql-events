@@ -18,7 +18,7 @@ class Meta_Data_Input {
 	 */
 	public static function register() {
 		// Bail early if WooGraphQL installed and active.
-		if ( class_exists( 'WP_GraphQL_WooCommerce' ) ) {
+		if ( class_exists( 'WPGraphQL\WooCommerce\WP_GraphQL_WooCommerce' ) ) {
 			return;
 		}
 
