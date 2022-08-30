@@ -83,6 +83,15 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		}
 
 		/**
+		 * Returns if WooGraphQL is installed and activate
+		 *
+		 * @return bool
+		 */
+		public static function is_woographql_loaded() {
+			return class_exists( 'WPGraphQL\WooCommerce\WP_GraphQL_WooCommerce' );
+		}
+
+		/**
 		 * Returns if Ticket Events Plus is installed and activate
 		 *
 		 * @return bool
@@ -194,6 +203,7 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 			require $include_directory_path . 'types/object/class-venue-type.php';
 			require $include_directory_path . 'types/object/class-wooattendee-type.php';
 			require $include_directory_path . 'types/object/class-wooorder-type.php';
+			require $include_directory_path . 'types/object/class-meta-data-type.php';
 
 			require $include_directory_path . 'data/connection/class-attendee-connection-resolver.php';
 			require $include_directory_path . 'data/connection/class-event-connection-resolver.php';
@@ -202,7 +212,7 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 			require $include_directory_path . 'data/class-factory.php';
 
 			require $include_directory_path . 'mutation/class-register-attendee.php';
-			require $include_directory_path . 'mutation/class-register-wooattendee.php';
+			require $include_directory_path . 'mutation/class-update-attendee.php';
 
 			require $include_directory_path . 'connection/class-attendees.php';
 			require $include_directory_path . 'connection/class-events.php';

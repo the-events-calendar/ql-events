@@ -3,7 +3,7 @@
  * Mutation - registerAttendee
  *
  * Registers mutation for registering an attendee
- * purchasing a ticket.
+ * that has purchased a ticket.
  *
  * @package WPGraphQL\QL_Events\Mutation
  * @since 0.0.1
@@ -109,7 +109,7 @@ class Register_Attendee {
 						return null;
 					}
 
-					return get_post( $payload['id'] );
+					return new Post( get_post( $payload['id'] ) );
 				},
 			],
 		];
@@ -190,7 +190,7 @@ class Register_Attendee {
 	 *
 	 * @return array
 	 */
-	private static function map_additional_fields( array $additional_fields ) {
+	protected static function map_additional_fields( array $additional_fields ) {
 		return array_reduce(
 			$additional_fields,
 			function( array $carry, array $item ) {

@@ -13,6 +13,7 @@ use GraphQL\Error\UserError;
 use GraphQLRelay\Relay;
 use WPGraphQL\AppContext;
 use WPGraphQL\Data\DataSource;
+use WPGraphQL\QL_Events\QL_Events;
 use WPGraphQL\WooCommerce\Data\Factory;
 use TEC\Tickets\Commerce\Attendee;
 
@@ -32,12 +33,14 @@ class Attendee_Interface {
 				'description' => __( 'Attendee object', 'ql-events' ),
 				'fields'      => self::get_fields(),
 				'resolveType' => function ( $value ) use ( &$type_registry ) {
+					$post_type = get_post_type( $value->ID );
+					\codecept_debug( $value );
 					switch ( true ) {
-						case tribe( 'tickets.rsvp' )->attendee_object === $value->post_type:
+						case tribe( 'tickets.rsvp' )->attendee_object === $post_type:
 							return $type_registry->get_type( 'RSVPAttendee' );
-						case tribe( 'tickets.commerce.paypal' )->attendee_object === $value->post_type:
+						case tribe( 'tickets.commerce.paypal' )->attendee_object === $post_type:
 							return $type_registry->get_type( 'PayPalAttendee' );
-						case \QL_Events::is_ticket_events_plus_loaded() && tribe( 'tickets-plus.commerce.woo' )->attendee_object === $value->post_type:
+						case QL_Events::is_ticket_events_plus_loaded() && tribe( 'tickets-plus.commerce.woo' )->attendee_object === $post_type:
 							return $type_registry->get_type( 'WooAttendee' );
 						default:
 							throw new UserError(
@@ -153,7 +156,7 @@ class Attendee_Interface {
 	 * @return array
 	 */
 	public static function get_fields() {
-		return [
+		$fields = [
 			'id'                  => [
 				'type'        => [ 'non_null' => 'ID' ],
 				'description' => __( 'Attendee Unique ID.', 'ql-events' ),
@@ -231,7 +234,10 @@ class Attendee_Interface {
 					return null;
 				},
 			],
-			'data'                => [
+		];
+
+		if ( QL_Events::is_ticket_events_plus_loaded() ) {
+			$fields['data'] = [
 				'type'        => [ 'list_of' => 'MetaData' ],
 				'description' => __( 'Attendee\'s Data', 'ql-events' ),
 				'args'        => [
@@ -258,6 +264,10 @@ class Attendee_Interface {
 						unset( $attendee_meta_data[0] );
 					}
 
+					if ( ! is_array( $attendee_meta_data ) ) {
+						return [];
+					}
+
 					return array_map(
 						function( $key, $value ) {
 							return (object) compact( 'value', 'key' );
@@ -266,7 +276,9 @@ class Attendee_Interface {
 						array_values( $attendee_meta_data )
 					);
 				},
-			],
-		];
+			];
+		}
+
+		return $fields;
 	}
 }

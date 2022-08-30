@@ -16,13 +16,13 @@
         "wp-graphql/wp-graphql-testcase": "^2.3",
         "squizlabs/php_codesniffer": "^3.5",
         "wp-coding-standards/wpcs": "^2.3",
-        "fzaninotto/faker": "^1.9"
+        "fzaninotto/faker": "*"
     },
     "config": {
         "optimize-autoloader": true
     },
     "scripts": {
-        "install-wp-tests": "bash bin/install-wp-tests.sh",
+        "install-test-env": "bash bin/install-wp-tests.sh",
         "test": "vendor/bin/codecept run",
         "functional-test": "vendor/bin/codecept run functional",
         "acceptance-test": "vendor/bin/codecept run acceptance",

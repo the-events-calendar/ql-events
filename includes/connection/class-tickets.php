@@ -128,7 +128,7 @@ class Tickets extends PostObjects {
 				]
 			);
 
-			if ( QL_Events::is_ticket_events_plus_loaded() ) {
+			if ( QL_Events::is_ticket_events_plus_loaded() && QL_Events::is_woographql_loaded() ) {
 				// From Event to WooTicket.
 				register_graphql_connection(
 					[

@@ -24,7 +24,7 @@ class Type_Registry {
 		Type\WPInterface\Order_Interface::register_interface( $type_registry );
 
 		// TEC Input types.
-		\WPGraphQL\QL_Events\Type\WPInputObject\Meta_Data_Input::register();
+		Type\WPInputObject\Meta_Data_Input::register();
 
 		// TEC Object fields.
 		Type\WPObject\Event_Type::register_fields();
@@ -33,6 +33,7 @@ class Type_Registry {
 		Type\WPObject\Organizer_Linked_Data_Type::register();
 		Type\WPObject\Venue_Type::register_fields();
 		Type\WPObject\Venue_Linked_Data_Type::register();
+		Type\WPObject\Meta_Data_Type::register();
 
 		// TEC Connections.
 		Connection\Organizers::register_connections();
@@ -51,9 +52,10 @@ class Type_Registry {
 
 			// ET Mutations.
 			Mutation\Register_Attendee::register_mutation();
+			Mutation\Update_Attendee::register_mutation();
 		}
 
-		if ( QL_Events::is_ticket_events_plus_loaded() ) {
+		if ( QL_Events::is_ticket_events_plus_loaded() && QL_Events::is_woographql_loaded() ) {
 			Type\WPObject\WooOrder_Type::register_fields();
 			Type\WPObject\WooAttendee_Type::register_fields();
 			Type\WPObject\Ticket_Linked_Data_Type::register();

@@ -24,7 +24,7 @@ class EventQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 
 		foreach ( $event->venues as $venue ) {
 			$expected[] = $this->expectedField(
-				'event.venues',
+				'event.venue',
 				array(
 					'id'         => $this->toRelayId( 'post', $venue->ID ),
 					'databaseId' => $venue->ID
