@@ -12,6 +12,7 @@ namespace WPGraphQL\QL_Events\Type\WPObject;
 
 use WPGraphQL\AppContext;
 use WPGraphQL\Data\DataSource;
+use WPGraphQL\Model\Post;
 
 /**
  * Class - WooOrder_Type
@@ -32,6 +33,26 @@ class WooOrder_Type {
 						return $source->ID;
 					},
 				],
+				'attendees' => [
+					'type'        => [ 'list_of' => 'Attendee' ],
+					'description' => __( 'Attendees connected to order', 'ql-events' ),
+					'resolve'     => function( $source ) {
+						$woo_provider = tribe( 'tickets-plus.commerce.woo' );
+						$has_tickets  = $source->get_meta( $woo_provider->order_has_tickets );
+
+						if ( ! $has_tickets ) {
+							return [];
+						}
+
+						$attendee_list = $woo_provider->get_attendees_by_id( $source->get_id() );
+						$attendees     = [];
+						foreach ( $attendee_list as $attendee ) {
+							$attendees[] = new Post( get_post( $attendee['attendee_id'] ) );
+						}
+
+						return $attendees;
+					}
+				]
 			]
 		);
 	}

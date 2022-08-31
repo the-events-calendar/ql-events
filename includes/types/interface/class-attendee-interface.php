@@ -34,7 +34,7 @@ class Attendee_Interface {
 				'fields'      => self::get_fields(),
 				'resolveType' => function ( $value ) use ( &$type_registry ) {
 					$post_type = get_post_type( $value->ID );
-					\codecept_debug( $value );
+
 					switch ( true ) {
 						case tribe( 'tickets.rsvp' )->attendee_object === $post_type:
 							return $type_registry->get_type( 'RSVPAttendee' );
