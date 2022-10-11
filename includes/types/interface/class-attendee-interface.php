@@ -13,6 +13,7 @@ use GraphQL\Error\UserError;
 use GraphQLRelay\Relay;
 use WPGraphQL\AppContext;
 use WPGraphQL\Data\DataSource;
+use WPGraphQL\Model\Post;
 use WPGraphQL\QL_Events\QL_Events;
 use WPGraphQL\WooCommerce\Data\Factory;
 use TEC\Tickets\Commerce\Attendee;
@@ -69,10 +70,6 @@ class Attendee_Interface {
 						'type'        => 'RSVPAttendeeIdType',
 						'description' => __( 'Type of unique identifier to fetch by. Default is Global ID', 'ql-events' ),
 					],
-					'asPreview' => [
-						'type'        => 'Boolean',
-						'description' => __( 'Whether to return the node as a preview instance', 'ql-events' ),
-					],
 				],
 				'description' => __( 'Query attendee', 'ql-events' ),
 				'resolve'     => function( $source, array $args, AppContext $context ) {
@@ -117,34 +114,19 @@ class Attendee_Interface {
 							break;
 					}
 
-					if ( isset( $args['asPreview'] ) && true === $args['asPreview'] ) {
-						$revisions = wp_get_post_revisions(
-							$post_id,
-							[
-								'posts_per_page' => 1,
-								'fields'         => 'ids',
-								'check_enabled'  => false,
-							]
-						);
-						$post_id   = ! empty( $revisions ) ? array_values( $revisions )[0] : $post_id;
-					}
+					return absint( $post_id )
+						? $context->get_loader( 'post' )->load_deferred( $post_id )->then(
+							function ( $post ) use ( $post_type_object ) {
 
-					return absint( $post_id ) ? $context->get_loader( 'post' )->load_deferred( $post_id )->then(
-						function ( $post ) use ( $post_type_object ) {
-							if ( ! isset( $post->post_type ) || ! in_array(
-								$post->post_type,
-								[
-									'revision',
-									$post_type_object->name,
-								],
-								true
-							) ) {
-								return null;
+								// if the post isn't an instance of a Post model, return
+								if ( ! $post instanceof Post ) {
+									return null;
+								}
+
+								return $post;
 							}
-
-							return $post;
-						}
-					) : null;
+						)
+						: null;
 				},
 			]
 		);
