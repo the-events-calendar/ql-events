@@ -47,6 +47,18 @@ class Type_Registry {
 		if ( QL_Events::is_ticket_events_plus_loaded() ) {
 			Type\WPObject\WooAttendee_Type::register_fields();
 			Type\WPObject\Ticket_Linked_Data_Type::register();
+
+			// Custom ticket meta.
+			Type\WPInterface\Ticket_Field::register_type();
+			Type\WPObject\Ticket_Field\Birthdate::register();
+			Type\WPObject\Ticket_Field\Checkbox::register();
+			Type\WPObject\Ticket_Field\Date::register();
+			Type\WPObject\Ticket_Field\Dropdown::register();
+			Type\WPObject\Ticket_Field\Email::register();
+			Type\WPObject\Ticket_Field\Phone::register();
+			Type\WPObject\Ticket_Field\Radio::register();
+			Type\WPObject\Ticket_Field\Text::register();
+			Type\WPObject\Ticket_Field\URL::register();
 		}
 	}
 }
