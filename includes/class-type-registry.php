@@ -71,9 +71,6 @@ class Type_Registry {
 			Type\WPObject\Ticket_Field\Radio::register();
 			Type\WPObject\Ticket_Field\Text::register();
 			Type\WPObject\Ticket_Field\URL::register();
-
-			// ET Plus Mutations.
-			Mutation\Register_WooAttendee::register_mutation();
 		}
 	}
 }
