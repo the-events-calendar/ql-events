@@ -65,6 +65,8 @@ class Core_Schema_Filters {
 			5
 		);
 
+		add_filter( 'graphql_data_is_private', [ __CLASS__, 'is_cpt_private' ], 10, 6 );
+
 		if ( QL_Events::is_ticket_events_loaded() ) {
 			add_filter(
 				'graphql_wp_object_type_config',
@@ -201,7 +203,7 @@ class Core_Schema_Filters {
 	 *
 	 * @return array
 	 */
-	public static function events_where_args( $fields = [], $type_name ) {
+	public static function events_where_args( $fields, $type_name ) {
 		if ( self::ends_with( $type_name, 'ToEventConnectionWhereArgs' ) ) {
 			$fields = array_merge(
 				$fields,
@@ -225,8 +227,41 @@ class Core_Schema_Filters {
 			case 'SimpleProduct':
 				$config['interfaces'][] = 'Ticket';
 				break;
+
+			case 'PayPalOrder':
+			case 'Order':
+				$config['interfaces'][] = 'TECOrder';
+				break;
+
+			case 'RSVPAttendee':
+			case 'PayPalAttendee':
+			case 'WooAttendee':
+				$config['interfaces'][] = 'Attendee';
 		}
 
 		return $config;
+	}
+
+	/**
+	 * Filter to determine if the data should be considered private or not
+	 *
+	 * @param boolean     $is_private   Whether the model is private.
+	 * @param string      $model_name   Name of the model the filter is currently being executed in.
+	 * @param mixed       $data         The un-modeled incoming data.
+	 * @param string|null $visibility   The visibility that has currently been set for the data at this point.
+	 * @param null|int    $owner        The user ID for the owner of this piece of data.
+	 * @param WP_User     $current_user The current user for the session.
+	 *
+	 * @return bool
+	 */
+	public static function is_cpt_private( $is_private, $model_name, $data, $visibility, $owner, $current_user ) {
+		$post_type      = get_post_type( $data->ID );
+		$tec_post_types = [ Main::POSTTYPE, Main::ORGANIZER_POST_TYPE, Main::VENUE_POST_TYPE ];
+
+		if ( in_array( $post_type, $tec_post_types, true ) ) {
+			return false;
+		}
+
+		return $is_private;
 	}
 }

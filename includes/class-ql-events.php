@@ -83,6 +83,15 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		}
 
 		/**
+		 * Returns if WooGraphQL is installed and activate
+		 *
+		 * @return bool
+		 */
+		public static function is_woographql_loaded() {
+			return class_exists( 'WPGraphQL\WooCommerce\WP_GraphQL_WooCommerce' );
+		}
+
+		/**
 		 * Returns if Ticket Events Plus is installed and activate
 		 *
 		 * @return bool
@@ -164,7 +173,10 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		private function includes() {
 			$include_directory_path = get_includes_directory();
 			require $include_directory_path . 'types/interface/class-ticket-field.php';
+			require $include_directory_path . 'types/interface/class-attendee-interface.php';
+			require $include_directory_path . 'types/interface/class-order-interface.php';
 			require $include_directory_path . 'types/interface/class-ticket-interface.php';
+			require $include_directory_path . 'types/input/class-meta-data-input.php';
 			require $include_directory_path . 'types/object/common/trait-attendee.php';
 			require $include_directory_path . 'types/object/common/trait-order.php';
 			require $include_directory_path . 'types/object/common/trait-ticket.php';
@@ -190,12 +202,17 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 			require $include_directory_path . 'types/object/class-venue-linked-data-type.php';
 			require $include_directory_path . 'types/object/class-venue-type.php';
 			require $include_directory_path . 'types/object/class-wooattendee-type.php';
+			require $include_directory_path . 'types/object/class-wooorder-type.php';
+			require $include_directory_path . 'types/object/class-meta-data-type.php';
 
 			require $include_directory_path . 'data/connection/class-attendee-connection-resolver.php';
 			require $include_directory_path . 'data/connection/class-event-connection-resolver.php';
 			require $include_directory_path . 'data/connection/class-organizer-connection-resolver.php';
 			require $include_directory_path . 'data/connection/class-ticket-connection-resolver.php';
 			require $include_directory_path . 'data/class-factory.php';
+
+			require $include_directory_path . 'mutation/class-register-attendee.php';
+			require $include_directory_path . 'mutation/class-update-attendee.php';
 
 			require $include_directory_path . 'connection/class-attendees.php';
 			require $include_directory_path . 'connection/class-events.php';
