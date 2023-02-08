@@ -31,6 +31,7 @@ class Attendee_Interface {
 		register_graphql_interface_type(
 			'Attendee',
 			[
+				'interfaces'   => [ 'Node' ],
 				'description' => __( 'Attendee object', 'ql-events' ),
 				'fields'      => self::get_fields(),
 				'resolveType' => function ( $value ) use ( &$type_registry ) {

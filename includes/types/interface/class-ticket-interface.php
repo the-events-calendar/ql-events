@@ -29,6 +29,7 @@ class Ticket_Interface {
 		register_graphql_interface_type(
 			'Ticket',
 			[
+				'interfaces'  => [ 'Node' ],
 				'description' => __( 'Ticket object', 'ql-events' ),
 				'fields'      => self::get_fields(),
 				'resolveType' => function ( $value ) use ( &$type_registry ) {

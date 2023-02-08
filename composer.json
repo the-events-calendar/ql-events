@@ -1,7 +1,6 @@
 {
     "name": "the-events-calendar/ql-events",
     "description": "The Events Calendar bindings for WPGraphQL",
-    "version": "0.0.1",
     "type": "wordpress-plugin",
     "authors": [
         {
@@ -42,7 +41,7 @@
             "/codeception.yml",
             "/composer.json",
             "/composer.lock",
-            "/docker-composer.yml",
+            "/docker-compose.yml",
             "/Dockerfile",
             "/README.md"
         ]
