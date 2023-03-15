@@ -58,6 +58,7 @@ jobs:
           USING_XDEBUG: ${{ matrix.xdebug }}
           WP_VERSION: ${{ matrix.wordpress }}
           PHP_VERSION: ${{ matrix.php }}
+
         run: composer run-codeception -- ${{ matrix.coverage }} ${{ matrix.debug }}
 
       - name: Push Codecoverage to Coveralls.io
