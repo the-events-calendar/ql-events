@@ -23,4 +23,4 @@ MUPLUGINS_DIR=${MUPLUGINS_DIR:-"$WP_CORE_DIR/wp-content/mu-plugins"}
 THEMES_DIR=${THEMES_DIR:-"$WP_CORE_DIR/wp-content/themes"}
 SKIP_DB_CREATE=${SKIP_DB_CREATE-false}
 COMPOSER_TOKEN=${COMPOSER_TOKEN}
-COMPOSER_AUTH="{\"github-oauth\": {\"github.com\": \"$COMPOSER_TOKEN\"} }"
+COMPOSER_AUTH=${COMPOSER_AUTH:-"{\"github-oauth\": {\"github.com\": \"$COMPOSER_TOKEN\"} }"}
