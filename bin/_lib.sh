@@ -115,6 +115,11 @@ install_tec_extensions() {
 }
 
 generate_tec_extension_loader_files() {
+	if [ ${SKIP_WP_SETUP} = "true" ]; then
+		echo "Skipping TEC extension PSR file generation..."
+		return 0
+	fi
+
 	echo "Generating TEC extension PSR file..."
 	declare -a extensions=("event-tickets-plus" "events-virtual" "events-filterbar" "events-pro");
 	for plugin in "${extensions[@]}"
