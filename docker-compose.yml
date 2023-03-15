@@ -26,7 +26,6 @@ services:
       - ./codeception.dist.yml:/var/www/html/wp-content/plugins/ql-events/codeception.yml
       - ./local/.htaccess:/var/www/html/.htaccess
     environment:
-      WP_ROOT_FOLDER: /var/www/html
       COMPOSER_HOME: /tmp/.composer
       APACHE_RUN_USER: "#1000" # Ensure Apache can write to the filesystem.
 

@@ -115,11 +115,6 @@ install_tec_extensions() {
 }
 
 generate_tec_extension_loader_files() {
-	if [ ${SKIP_WP_SETUP} = "true" ]; then
-		echo "Skipping TEC extension PSR file generation..."
-		return 0
-	fi
-
 	echo "Generating TEC extension PSR file..."
 	declare -a extensions=("event-tickets-plus" "events-virtual" "events-filterbar" "events-pro");
 	for plugin in "${extensions[@]}"
@@ -211,11 +206,6 @@ configure_wordpress() {
 }
 
 setup_plugin() {
-	if [ ${SKIP_WP_SETUP} = "true" ]; then
-		echo "Skipping QL Events installation..."
-		return 0
-	fi
-
 	# Move to project root directory
 	cd $PROJECT_ROOT_DIR
 
@@ -227,6 +217,11 @@ setup_plugin() {
 
 	# Move to WordPress directory
 	cd $WP_CORE_DIR
+
+	if [ ${SKIP_WP_SETUP} = "true" ]; then
+		echo "Skipping QL Events installation..."
+		return 0
+	fi
 
 	# Activate the plugin, it's dependencies should be activated already.
 	wp plugin activate ql-events
