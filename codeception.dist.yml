@@ -6,7 +6,7 @@ paths:
   envs: '%TESTS_ENVS%'
 params:
   - env
-  - .env.dist
+  - .env.testing
 actor_suffix: Tester
 settings:
   colors: true
