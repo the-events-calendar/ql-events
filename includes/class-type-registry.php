@@ -39,6 +39,12 @@ class Type_Registry {
 		Connection\Organizers::register_connections();
 		Connection\Attendees::register_connections();
 
+		// Register these enums if Events Pro is installed and loaded.
+		if ( QL_Events::is_events_pro_loaded() ) {
+			Type\WPEnum\Events_Virtual_Show_Embed_At_Enum::register();
+			Type\WPEnum\Events_Virtual_Show_Embed_To_Enum::register();
+		}
+
 		// Register type fields if Event Tickets in installed and loaded.
 		if ( QL_Events::is_ticket_events_loaded() ) {
 			Type\WPObject\PayPalAttendee_Type::register_fields();

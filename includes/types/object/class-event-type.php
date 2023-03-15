@@ -365,7 +365,7 @@ class Event_Type {
 						},
 					],
 					'virtualShowEmbedAt'      => [
-						'type'        => 'String',
+						'type'        => 'EventsVirtualShowEmbedAtEnum',
 						'description' => __( 'The time to start displaying the video embed', 'ql-events' ),
 						'resolve'     => function( $source ) {
 							$event = tribe_get_event( $source->ID );
@@ -379,7 +379,7 @@ class Event_Type {
 					],
 					'virtualShowEmbedTo'      => [
 						'type'        => [
-							'list_of' => 'String',
+							'list_of' => 'EventsVirtualShowEmbedToEnum',
 						],
 						'description' => __( 'The user type (logged in or all) to display the video embed to.', 'ql-events' ),
 						'resolve'     => function( $source ) {
