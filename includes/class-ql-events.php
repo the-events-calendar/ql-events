@@ -132,6 +132,15 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		 *
 		 * @return bool
 		 */
+		public static function is_events_pro_loaded() {
+			return class_exists( 'Tribe__Events__Pro__Main' );
+		}
+
+		/**
+		 * Returns if Virtual Events is installed and activated.
+		 *
+		 * @return bool
+		 */
 		public static function is_virtual_events_loaded() {
 			return class_exists( 'Tribe\Events\Virtual\Plugin' );
 		}

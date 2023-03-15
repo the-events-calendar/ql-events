@@ -31,7 +31,7 @@ class Attendee_Interface {
 		register_graphql_interface_type(
 			'Attendee',
 			[
-				'interfaces'   => [ 'Node' ],
+				'interfaces'  => [ 'Node' ],
 				'description' => __( 'Attendee object', 'ql-events' ),
 				'fields'      => self::get_fields(),
 				'resolveType' => function ( $value ) use ( &$type_registry ) {
@@ -63,11 +63,11 @@ class Attendee_Interface {
 			[
 				'type'        => 'Attendee',
 				'args'        => [
-					'id'        => [
+					'id'     => [
 						'type'        => [ 'non_null' => 'ID' ],
 						'description' => __( 'The globally unique identifier of the object.', 'ql-events' ),
 					],
-					'idType'    => [
+					'idType' => [
 						'type'        => 'RSVPAttendeeIdType',
 						'description' => __( 'Type of unique identifier to fetch by. Default is Global ID', 'ql-events' ),
 					],
@@ -119,7 +119,7 @@ class Attendee_Interface {
 						? $context->get_loader( 'post' )->load_deferred( $post_id )->then(
 							function ( $post ) use ( $post_type_object ) {
 
-								// if the post isn't an instance of a Post model, return
+								// if the post isn't an instance of a Post model, return null.
 								if ( ! $post instanceof Post ) {
 									return null;
 								}
