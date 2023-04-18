@@ -29,7 +29,7 @@ class Order_Interface {
 		register_graphql_interface_type(
 			'TECOrder',
 			[
-				'interfaces'   => [ 'Node' ],
+				'interfaces'  => [ 'Node' ],
 				'description' => __( 'Order object', 'ql-events' ),
 				'fields'      => self::get_fields(),
 				'resolveType' => function ( $value ) use ( &$type_registry ) {

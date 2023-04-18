@@ -6,6 +6,7 @@ paths:
   envs: '%TESTS_ENVS%'
 params:
   - env
+  - .env.testing
 actor_suffix: Tester
 settings:
   colors: true
@@ -43,11 +44,19 @@ modules:
       plugins:
         - the-events-calendar/the-events-calendar.php
         - event-tickets/event-tickets.php
+        - event-tickets-plus/event-tickets-plus.php
+        - events-filterbar/the-events-calendar-filter-view.php
+        - events-pro/events-calendar-pro.php
+        - events-virtual/events-virtual.php
         - wp-graphql/wp-graphql.php
         - ql-events/ql-events.php
       activatePlugins:
         - the-events-calendar/the-events-calendar.php
         - event-tickets/event-tickets.php
+        - event-tickets-plus/event-tickets-plus.php
+        - events-filterbar/the-events-calendar-filter-view.php
+        - events-pro/events-calendar-pro.php
+        - events-virtual/events-virtual.php
         - wp-graphql/wp-graphql.php
         - ql-events/ql-events.php
       configFile: 'tests/_data/config.php'

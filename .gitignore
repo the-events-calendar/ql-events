@@ -9,7 +9,7 @@ node_modules/
 *.zip
 .env
 .env.*
-!.env.dist
+!.env.testing
 .idea
 .vscode
 .github_changelog_generator

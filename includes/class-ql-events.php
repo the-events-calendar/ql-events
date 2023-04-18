@@ -128,6 +128,24 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		}
 
 		/**
+		 * Returns if Virtual Events is installed and activated.
+		 *
+		 * @return bool
+		 */
+		public static function is_events_pro_loaded() {
+			return class_exists( 'Tribe__Events__Pro__Main' );
+		}
+
+		/**
+		 * Returns if Virtual Events is installed and activated.
+		 *
+		 * @return bool
+		 */
+		public static function is_virtual_events_loaded() {
+			return class_exists( 'Tribe\Events\Virtual\Plugin' );
+		}
+
+		/**
 		 * Throw error on object clone.
 		 * The whole idea of the singleton design pattern is that there is a single object
 		 * therefore, we don't want the object to be cloned.
@@ -176,6 +194,8 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 			require $include_directory_path . 'types/interface/class-attendee-interface.php';
 			require $include_directory_path . 'types/interface/class-order-interface.php';
 			require $include_directory_path . 'types/interface/class-ticket-interface.php';
+			require $include_directory_path . 'types/enum/class-events-virtual-show-embed-at-enum.php';
+			require $include_directory_path . 'types/enum/class-events-virtual-show-embed-to-enum.php';
 			require $include_directory_path . 'types/input/class-meta-data-input.php';
 			require $include_directory_path . 'types/object/common/trait-attendee.php';
 			require $include_directory_path . 'types/object/common/trait-order.php';

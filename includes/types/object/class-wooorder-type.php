@@ -33,7 +33,7 @@ class WooOrder_Type {
 						return $source->ID;
 					},
 				],
-				'attendees' => [
+				'attendees'  => [
 					'type'        => [ 'list_of' => 'Attendee' ],
 					'description' => __( 'Attendees connected to order', 'ql-events' ),
 					'resolve'     => function( $source ) {
@@ -51,8 +51,8 @@ class WooOrder_Type {
 						}
 
 						return $attendees;
-					}
-				]
+					},
+				],
 			]
 		);
 	}
