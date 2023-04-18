@@ -80,6 +80,7 @@ class Type_Registry {
 		Type\WPObject\Venue_Type::register_fields();
 
 		// connections.
+		Connection\Events::register_connections();
 		Connection\Organizers::register_connections();
 
 		// Register Events Pro fields, types, queries, and mutations.

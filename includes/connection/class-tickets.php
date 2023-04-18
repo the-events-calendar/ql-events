@@ -12,6 +12,8 @@ namespace WPGraphQL\QL_Events\Connection;
 
 use Tribe__Tickets__RSVP as RSVP;
 use WPGraphQL\Type\Connection\PostObjects;
+use WPGraphQL\WooCommerce\Connection\Products;
+use WPGraphQL\WooCommerce\Data\Factory;
 use WPGraphQL\Data\Connection\PostObjectConnectionResolver;
 use WPGraphQL\QL_Events\QL_Events as QL_Events;
 

@@ -364,6 +364,8 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 			require $include_directory_path . 'admin/class-section.php';
 			require $include_directory_path . 'admin/class-general.php';
 
+			require $include_directory_path . 'utils/class-events-query.php';
+
 			require $include_directory_path . 'types/interface/class-ticket-field.php';
 			require $include_directory_path . 'types/interface/class-attendee-interface.php';
 			require $include_directory_path . 'types/interface/class-order-interface.php';
