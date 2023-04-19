@@ -60,9 +60,9 @@ class Core_Schema_Filters {
 	 */
 	public static function register_post_types( $args, $post_type ) {
 		if ( Main::POSTTYPE === $post_type ) {
-			$args['show_in_graphql']     = true;
-			$args['graphql_single_name'] = 'Event';
-			$args['graphql_plural_name'] = 'Events';
+			$args['show_in_graphql']                  = true;
+			$args['graphql_single_name']              = 'Event';
+			$args['graphql_plural_name']              = 'Events';
 			$args['graphql_register_root_connection'] = false;
 		}
 

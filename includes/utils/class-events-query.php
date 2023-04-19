@@ -4,12 +4,13 @@
  *
  * @package WPGraphQL\QL_Events\Utils
  */
+
 namespace WPGraphQL\QL_Events\Utils;
 
 use Tribe__Events__Query as Query;
 
 /**
- * class Events_Query
+ * Class Events_Query
  */
 class Events_Query {
 	/**
@@ -21,6 +22,8 @@ class Events_Query {
 
 	/**
 	 * Events_Query constructor.
+	 *
+	 * @param array $args  Query Arguments.
 	 */
 	public function __construct( $args = [] ) {
 		$this->query = Query::getEvents( $args, true );
@@ -29,7 +32,8 @@ class Events_Query {
 	/**
 	 * Pass thru for query instance.
 	 *
-	 * @param string $name
+	 * @param string $name  WP_Query member name.
+	 *
 	 * @return mixed
 	 */
 	public function __get( $name ) {

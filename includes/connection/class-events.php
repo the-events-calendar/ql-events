@@ -85,7 +85,6 @@ class Events extends PostObjects {
 						$resolver->set_query_arg( 'end_date', $time );
 					}
 
-
 					return $resolver->get_connection();
 				},
 			]
@@ -98,9 +97,12 @@ class Events extends PostObjects {
 	 *
 	 * @since 0.0.1
 	 *
+	 * @param array  $_  Unused.
+	 * @param string $_2 Unused.
+	 *
 	 * @return array
 	 */
-	public static function get_connection_args( $args = [], $post_type = Main::POSTTYPE ) {
+	public static function get_connection_args( $_ = [], $_2 = Main::POSTTYPE ) {
 		$connection_args = parent::get_connection_args(
 			[
 				'venuesIn'       => [
