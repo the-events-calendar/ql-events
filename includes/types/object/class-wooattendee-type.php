@@ -42,6 +42,27 @@ class WooAttendee_Type {
 	}
 
 	/**
+	 * Resolves the GraphQL type for "WooAttendee".
+	 *
+	 * @return void
+	 */
+	public static function register_to_attendee_interface() {
+		add_filter(
+			'ql_events_resolve_attendee_type',
+			function ( $type, $value ) {
+				$type_registry = \WPGraphQL::get_type_registry();
+				if ( $post_type === tribe( 'tickets-plus.commerce.woo' )->attendee_object ) {
+					$type = $type_registry->get_type( 'WooAttendee' );
+				}
+
+				return $type;
+			},
+			10,
+			2
+		);
+	}
+
+	/**
 	 * Registers "Attendee" type fields.
 	 */
 	public static function register_fields() {
@@ -110,6 +131,46 @@ class WooAttendee_Type {
 						return ! empty( $email ) ? $email : null;
 					},
 				],
+				'data'      => [
+					'type'        => [ 'list_of' => 'MetaData' ],
+					'description' => __( 'Attendee\'s Data', 'ql-events' ),
+					'args'        => [
+						'key'      => [
+							'type'        => 'String',
+							'description' => __( 'Retrieve meta by key', 'ql-events' ),
+						],
+						'keysIn'   => [
+							'type'        => [ 'list_of' => 'String' ],
+							'description' => __( 'Retrieve multiple metas by key', 'ql-events' ),
+						],
+						'multiple' => [
+							'type'        => 'Boolean',
+							'description' => __( 'Retrieve meta with matching keys', 'ql-events' ),
+						],
+					],
+					'resolve'     => function( $source ) {
+						$decorator          = tribe( Attendee::class );
+						$decorated_attendee = $decorator->get_attendee( get_post( $source->ID ) );
+
+						$meta               = tribe( 'tickets-plus.meta' );
+						$attendee_meta_data = $meta->get_attendee_meta_fields( $decorated_attendee->ticket_id, $decorated_attendee->ID );
+						if ( isset( $attendee_meta_data[0] ) ) {
+							unset( $attendee_meta_data[0] );
+						}
+
+						if ( ! is_array( $attendee_meta_data ) ) {
+							return [];
+						}
+
+						return array_map(
+							function( $key, $value ) {
+								return (object) compact( 'value', 'key' );
+							},
+							array_keys( $attendee_meta_data ),
+							array_values( $attendee_meta_data )
+						);
+					},
+				]
 			]
 		);
 	}

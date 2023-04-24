@@ -26,6 +26,40 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		private static $instance;
 
 		/**
+		 * QL_Events constructor
+		 */
+		private function __construct() {
+			add_action( 'graphql_init', [ $this, 'init' ] );
+			add_action( 'plugins_loaded', [ $this, 'render_admin_notices' ] );
+		}
+
+		/**
+		 * Throw error on object clone.
+		 * The whole idea of the singleton design pattern is that there is a single object
+		 * therefore, we don't want the object to be cloned.
+		 *
+		 * @since  0.0.1
+		 * @access public
+		 * @return void
+		 */
+		public function __clone() {
+			// Cloning instances of the class is forbidden.
+			_doing_it_wrong( __FUNCTION__, esc_html__( 'QL_Events class should not be cloned.', 'ql-events' ), QL_EVENTS_VERSION );
+		}
+
+		/**
+		 * Disable unserializing of the class.
+		 *
+		 * @since  0.0.1
+		 * @access protected
+		 * @return void
+		 */
+		public function __wakeup() {
+			// De-serializing instances of the class is forbidden.
+			_doing_it_wrong( __FUNCTION__, esc_html__( 'De-serializing instances of the QL_Events class is not allowed', 'ql-events' ), QL_EVENTS_VERSION );
+		}
+
+		/**
 		 * QL_Events Constructor
 		 */
 		public static function instance() {
@@ -34,22 +68,214 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 					require_once ABSPATH . 'wp-admin/includes/plugin.php';
 				}
 				self::$instance = new self();
-				self::$instance->constants();
-				self::$instance->includes();
-				self::$instance->setup();
 			}
-
-			/**
-			 * Fire off init action
-			 *
-			 * @param QL_Events $instance The instance of the QL_Events class
-			 */
-			do_action( 'ql_events_init', self::$instance );
 
 			/**
 			 * Return the QL_Events Instance
 			 */
 			return self::$instance;
+		}
+
+		/**
+		 * Checks if QL Events required plugins are installed and activated
+		 *
+		 * @return array
+		 */
+		public function dependencies_not_ready() {
+			if ( ! class_exists( 'WPGraphQL' ) ) {
+				$deps[] = [ 'https://wpgraphql.com', 'WPGraphQL' ];
+			}
+			if ( ! class_exists( 'Tribe__Events__Main' ) ) {
+				$deps[] = [ 'https://theeventscalendar.com', 'The Events Calendar'];
+			}
+			$deps = [];
+
+
+			// Don't check WPGraphQL settings if WPGraphQL is not installed.
+			if ( ! class_exists( '\WPGraphQL' ) ) {
+				return $deps;
+			}
+
+			if ( self::is_events_pro_support_enabled() && ! self::is_events_pro_active() ) {
+				$deps[] = [
+					'https://woocommerce.com/products/composite-products',
+					'The Events Calendar Pro',
+				];
+			}
+
+			if ( self::is_event_tickets_support_enabled() && ! self::is_event_tickets_active() ) {
+				$deps[] = [
+					'https://woocommerce.com/products/product-add-ons',
+					'Event Tickets',
+				];
+			}
+
+			if ( self::is_event_tickets_plus_support_enabled() && ! self::is_event_tickets_plus_active() ) {
+				$deps[] = [
+					'https://woocommerce.com/products/product-bundles',
+					'Event Tickets Plus',
+				];
+			}
+
+			if ( ! defined( 'QL_EVENTS_TEST_MODE' ) && self::is_event_tickets_plus_support_enabled() && ! self::is_woographql_active() ) {
+				$deps[] = [
+					'https://woographql.com',
+					'WooGraphQL',
+				];
+			}
+
+			if ( self::is_events_virtual_support_enabled() && ! self::is_events_virtual_support_enabled() ) {
+				$deps[] = [
+					'https://woocommerce.com/products/woocommerce-subscriptions',
+					'Events Virtual',
+				];
+			}
+
+			return $deps;
+		}
+
+		/**
+		 * Returns true if the "enable_events_pro_support" is "on"
+		 *
+		 * @return boolean
+		 */
+		public static function is_events_pro_support_enabled() {
+			return 'on' === ql_events_setting( 'enable_events_pro_support', 'off' )
+				|| defined( 'QL_EVENTS_TEST_MODE' ) && QL_EVENTS_TEST_MODE;
+		}
+
+		/**
+		 * Returns if Virtual Events is installed and activated.
+		 *
+		 * @return bool
+		 */
+		public static function is_events_pro_active() {
+			return class_exists( 'Tribe__Events__Pro__Main' );
+		}
+
+		/**
+		 * Returns true if the "enable_event_tickets_support" is "on"
+		 *
+		 * @return boolean
+		 */
+		public static function is_event_tickets_support_enabled() {
+			return 'on' === ql_events_setting( 'enable_event_tickets_support', 'off' )
+				|| defined( 'QL_EVENTS_TEST_MODE' ) && QL_EVENTS_TEST_MODE;
+		}
+
+		/**
+		 * Returns if Event Tickets is installed and activated
+		 *
+		 * @return bool
+		 */
+		public static function is_event_tickets_active() {
+			if ( ! class_exists( '\Tribe__Tickets__Main' ) ) {
+				return false;
+			}
+			if ( ! tribe_isset_var( 'tickets.rsvp' ) ) {
+				return false;
+			}
+			if ( ! tribe_isset_var( 'tickets.commerce.paypal' ) ) {
+				return false;
+			}
+			return true;
+		}
+
+		/**
+		 * Returns true if the "enable_event_tickets_plus_support" is "on"
+		 *
+		 * @return boolean
+		 */
+		public static function is_event_tickets_plus_support_enabled() {
+			return 'on' === ql_events_setting( 'enable_event_tickets_plus_support', 'off' )
+				|| defined( 'QL_EVENTS_TEST_MODE' ) && QL_EVENTS_TEST_MODE;
+		}
+
+		/**
+		 * Returns if Ticket Events Plus is installed and activated
+		 *
+		 * @return bool
+		 */
+		public static function is_event_tickets_plus_active() {
+			$activated = function_exists( 'tribe_check_plugin' );
+			if ( $activated ) {
+				$tickets_plus_can_run = self::is_event_tickets_active()
+					&& class_exists( 'Tribe__Tickets_Plus__Main' )
+					&& tribe_check_plugin( 'Tribe__Tickets_Plus__Main' );
+
+				return apply_filters( 'tribe_event_tickets_plus_can_run', $tickets_plus_can_run ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+			}
+
+			return false;
+		}
+
+		/**
+		 * Returns if WooGraphQL is installed and activate
+		 *
+		 * @return bool
+		 */
+		public static function is_woographql_active() {
+			return defined( 'WPGRAPHQL_WOOCOMMERCE_VERSION' );
+		}
+
+		/**
+		 * Returns true if the "enable_events_virtual_support" is "on"
+		 *
+		 * @return boolean
+		 */
+		public static function is_events_virtual_support_enabled() {
+			return 'on' === ql_events_setting( 'enable_events_virtual_support', 'off' )
+				|| defined( 'QL_EVENTS_TEST_MODE' ) && QL_EVENTS_TEST_MODE;
+		}
+
+		/**
+		 * Returns if Virtual Events is installed and activated.
+		 *
+		 * @return bool
+		 */
+		public static function is_events_virtual_active() {
+			return class_exists( 'Tribe\Events\Virtual\Plugin' );
+		}
+
+		/**
+		 * Render admin notices for all missing dependencies.
+		 *
+		 * @return void
+		 */
+		public function render_admin_notices() {
+			$not_ready = $this->dependencies_not_ready();
+
+			foreach ( $not_ready as $dep ) {
+				add_missing_dependencies_notice( $dep );
+			}
+		}
+
+		/**
+		 * Initializes QL Events.
+		 *
+		 * @return void
+		 */
+		public function init() {
+			// Load include files.
+			$this->includes();
+
+			// Initialize QL Events.
+			new Admin();
+
+			// Bail early, if some dependencies still needed.
+			if ( ! empty( $this->dependencies_not_ready() ) ) {
+				return;
+			}
+
+			// Setup schema.
+			$this->setup();
+
+			/**
+			 * Fire off init action
+			 *
+			 * @param QL_Events $this The instance of the QL_Events class
+			 */
+			do_action( 'ql_events_init', $this );
 		}
 
 		/**
@@ -83,105 +309,6 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		}
 
 		/**
-		 * Returns if WooGraphQL is installed and activate
-		 *
-		 * @return bool
-		 */
-		public static function is_woographql_loaded() {
-			return class_exists( 'WPGraphQL\WooCommerce\WP_GraphQL_WooCommerce' );
-		}
-
-		/**
-		 * Returns if Ticket Events Plus is installed and activate
-		 *
-		 * @return bool
-		 */
-		public static function is_ticket_events_loaded() {
-			if ( ! class_exists( '\Tribe__Tickets__Main' ) ) {
-				return false;
-			}
-			if ( ! tribe_isset_var( 'tickets.rsvp' ) ) {
-				return false;
-			}
-			if ( ! tribe_isset_var( 'tickets.commerce.paypal' ) ) {
-				return false;
-			}
-			return true;
-		}
-
-		/**
-		 * Returns if Ticket Events Plus is installed and activate
-		 *
-		 * @return bool
-		 */
-		public static function is_ticket_events_plus_loaded() {
-			$activated = function_exists( 'tribe_check_plugin' );
-			if ( $activated ) {
-				$tickets_plus_can_run = self::is_ticket_events_loaded()
-					&& class_exists( 'Tribe__Tickets_Plus__Main' )
-					&& tribe_check_plugin( 'Tribe__Tickets_Plus__Main' );
-
-				return apply_filters( 'tribe_event_tickets_plus_can_run', $tickets_plus_can_run ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
-			}
-
-			return false;
-		}
-
-		/**
-		 * Returns if Virtual Events is installed and activated.
-		 *
-		 * @return bool
-		 */
-		public static function is_events_pro_loaded() {
-			return class_exists( 'Tribe__Events__Pro__Main' );
-		}
-
-		/**
-		 * Returns if Virtual Events is installed and activated.
-		 *
-		 * @return bool
-		 */
-		public static function is_virtual_events_loaded() {
-			return class_exists( 'Tribe\Events\Virtual\Plugin' );
-		}
-
-		/**
-		 * Throw error on object clone.
-		 * The whole idea of the singleton design pattern is that there is a single object
-		 * therefore, we don't want the object to be cloned.
-		 *
-		 * @since  0.0.1
-		 * @access public
-		 * @return void
-		 */
-		public function __clone() {
-			// Cloning instances of the class is forbidden.
-			_doing_it_wrong( __FUNCTION__, esc_html__( 'QL_Events class should not be cloned.', 'ql-events' ), '0.0.1' );
-		}
-
-		/**
-		 * Disable unserializing of the class.
-		 *
-		 * @since  0.0.1
-		 * @access protected
-		 * @return void
-		 */
-		public function __wakeup() {
-			// De-serializing instances of the class is forbidden.
-			_doing_it_wrong( __FUNCTION__, esc_html__( 'De-serializing instances of the QL_Events class is not allowed', 'ql-events' ), '0.0.1' );
-		}
-
-		/**
-		 * Defines constants used throughout the schema.
-		 *
-		 * @access private
-		 * @since 0.0.1
-		 * @return void
-		 */
-		private function constants() {
-		}
-
-		/**
 		 * Include plugin files.
 		 *
 		 * @access private
@@ -190,6 +317,10 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		 */
 		private function includes() {
 			$include_directory_path = get_includes_directory();
+
+			require $include_directory_path . 'admin/class-section.php';
+			require $include_directory_path . 'admin/class-general.php';
+
 			require $include_directory_path . 'types/interface/class-ticket-field.php';
 			require $include_directory_path . 'types/interface/class-attendee-interface.php';
 			require $include_directory_path . 'types/interface/class-order-interface.php';
@@ -238,8 +369,12 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 			require $include_directory_path . 'connection/class-events.php';
 			require $include_directory_path . 'connection/class-organizers.php';
 			require $include_directory_path . 'connection/class-tickets.php';
+			require $include_directory_path . 'connection/class-tickets-plus.php';
 
+			require $include_directory_path . 'class-admin.php';
 			require $include_directory_path . 'class-core-schema-filters.php';
+			require $include_directory_path . 'class-tickets-filters.php';
+			require $include_directory_path . 'class-tickets-plus-filters.php';
 			require $include_directory_path . 'class-type-registry.php';
 		}
 
@@ -248,11 +383,20 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		 */
 		private function setup() {
 			// WPGraphQL core filters.
-			\WPGraphQL\QL_Events\Core_Schema_Filters::add_filters();
+			Core_Schema_Filters::add_filters();
+
+			if ( self::is_event_tickets_support_enabled() && self::is_event_tickets_active() ) {
+				Tickets_Filters::add_filters();
+			}
+
+			if ( self::is_event_tickets_plus_support_enabled() && self::is_event_tickets_plus_active()
+				&& self::is_woographql_active() ) {
+				Tickets_Plus_Filters::add_filters();
+			}
 
 			// Initialize QL Events type registry.
-			$registry = new \WPGraphQL\QL_Events\Type_Registry();
-			add_action( 'graphql_register_types', [ $registry, 'init' ], 10, 1 );
+			$registry = new Type_Registry();
+			add_action( 'graphql_register_types', [ $registry, 'init' ], 10 );
 		}
 	}
 endif;

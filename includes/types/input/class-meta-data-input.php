@@ -3,7 +3,7 @@
  * WPInputObjectType - MetaDataInput
  *
  * @package WPGraphQL\WooCommerce\Type\WPInputObject
- * @since   0.2.0
+ * @since   0.1.0
  */
 
 namespace WPGraphQL\QL_Events\Type\WPInputObject;
@@ -19,11 +19,6 @@ class Meta_Data_Input {
 	 * Registers type
 	 */
 	public static function register() {
-		// Bail early if WooGraphQL installed and active.
-		if ( QL_Events::is_woographql_loaded() ) {
-			return;
-		}
-
 		register_graphql_input_type(
 			'MetaDataInput',
 			[

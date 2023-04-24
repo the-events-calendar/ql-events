@@ -15,28 +15,11 @@ use Tribe__Events__Main as Main;
  */
 class Core_Schema_Filters {
 	/**
-	 * Simple "endsWith" function because PHP still doesn't have on built-in.
-	 *
-	 * @param string $haystack  Source string.
-	 * @param string $needle    Target substring.
-	 *
-	 * @return bool
-	 */
-	private static function ends_with( $haystack, $needle ) {
-		$length = strlen( $needle );
-		if ( 0 === $length ) {
-			return true;
-		}
-
-		return ( substr( $haystack, -$length ) === $needle );
-	}
-
-	/**
 	 * Register filters
 	 */
 	public static function add_filters() {
-		add_action( 'register_post_type_args', [ __CLASS__, 'register_post_types' ], 10, 2 );
-		add_action( 'register_taxonomy_args', [ __CLASS__, 'register_taxonomies' ], 10, 2 );
+		add_filter( 'register_post_type_args', [ __CLASS__, 'register_post_types' ], 10, 2 );
+		add_filter( 'register_taxonomy_args', [ __CLASS__, 'register_taxonomies' ], 10, 2 );
 
 		add_filter(
 			'graphql_input_fields',
@@ -66,49 +49,6 @@ class Core_Schema_Filters {
 		);
 
 		add_filter( 'graphql_data_is_private', [ __CLASS__, 'is_cpt_private' ], 10, 6 );
-
-		if ( QL_Events::is_ticket_events_loaded() ) {
-			add_filter(
-				'graphql_wp_object_type_config',
-				[
-					self::class,
-					'assign_ticket_interface',
-				],
-				10,
-				2
-			);
-			add_filter(
-				'graphql_post_object_connection_query_args',
-				[
-					'\WPGraphQL\QL_Events\Data\Connection\Ticket_Connection_Resolver',
-					'get_ticket_args',
-				],
-				10,
-				5
-			);
-		}
-
-		if ( QL_Events::is_ticket_events_plus_loaded() ) {
-			add_filter(
-				'graphql_product_connection_query_args',
-				[
-					'\WPGraphQL\QL_Events\Data\Connection\Ticket_Connection_Resolver',
-					'get_ticket_plus_args',
-				],
-				10,
-				5
-			);
-
-			add_filter(
-				'graphql_product_connection_catalog_visibility',
-				[
-					'\WPGraphQL\QL_Events\Data\Connection\Ticket_Connection_Resolver',
-					'get_ticket_plus_default_visibility',
-				],
-				10,
-				6
-			);
-		}
 	}
 
 	/**
@@ -136,42 +76,6 @@ class Core_Schema_Filters {
 			$args['show_in_graphql']     = true;
 			$args['graphql_single_name'] = 'Venue';
 			$args['graphql_plural_name'] = 'Venues';
-		}
-
-		if ( QL_Events::is_ticket_events_loaded() ) {
-			$ticket_types = [
-				'RSVP'   => tribe( 'tickets.rsvp' ),
-				'PayPal' => tribe( 'tickets.commerce.paypal' ),
-			];
-
-			foreach ( $ticket_types as $key => $instance ) {
-				if ( $instance::ATTENDEE_OBJECT === $post_type ) {
-					$args['show_in_graphql']     = true;
-					$args['graphql_single_name'] = "{$key}Attendee";
-					$args['graphql_plural_name'] = "{$key}Attendees";
-				}
-
-				if ( $instance->ticket_object === $post_type ) {
-					$args['show_in_graphql']     = true;
-					$args['graphql_single_name'] = "{$key}Ticket";
-					$args['graphql_plural_name'] = "{$key}Tickets";
-				}
-
-				if ( $instance::ORDER_OBJECT === $post_type
-					&& $instance::ORDER_OBJECT !== $instance::ATTENDEE_OBJECT ) {
-					$args['show_in_graphql']     = true;
-					$args['graphql_single_name'] = "{$key}Order";
-					$args['graphql_plural_name'] = "{$key}Orders";
-				}
-			}
-		}
-
-		if ( QL_Events::is_ticket_events_plus_loaded() ) {
-			if ( 'tribe_wooticket' === $post_type ) {
-				$args['show_in_graphql']     = true;
-				$args['graphql_single_name'] = 'WooAttendee';
-				$args['graphql_plural_name'] = 'WooAttendees';
-			}
 		}
 
 		return $args;
@@ -204,42 +108,13 @@ class Core_Schema_Filters {
 	 * @return array
 	 */
 	public static function events_where_args( $fields, $type_name ) {
-		if ( self::ends_with( $type_name, 'ToEventConnectionWhereArgs' ) ) {
+		if ( ql_events_ends_with( $type_name, 'ToEventConnectionWhereArgs' ) ) {
 			$fields = array_merge(
 				$fields,
 				Connection\Events::where_args()
 			);
 		}
 		return $fields;
-	}
-
-	/**
-	 * Filter callback for inject WPObject types with the "Ticket" interface.
-	 *
-	 * @param array $config  WPObject type config.
-	 *
-	 * @return array
-	 */
-	public static function assign_ticket_interface( $config ) {
-		switch ( $config['name'] ) {
-			case 'RSVPTicket':
-			case 'PayPalTicket':
-			case 'SimpleProduct':
-				$config['interfaces'][] = 'Ticket';
-				break;
-
-			case 'PayPalOrder':
-			case 'Order':
-				$config['interfaces'][] = 'TECOrder';
-				break;
-
-			case 'RSVPAttendee':
-			case 'PayPalAttendee':
-			case 'WooAttendee':
-				$config['interfaces'][] = 'Attendee';
-		}
-
-		return $config;
 	}
 
 	/**

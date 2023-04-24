@@ -20,22 +20,11 @@ use WPGraphQL\QL_Events\QL_Events;
  */
 class Event_Type {
 	/**
-	 * Registers "Event" type fields.
-	 */
-	public static function register_fields() {
-		self::register_core_fields();
-
-		// TODO: Add TEC pro installation/activation check here.
-		self::register_pro_fields();
-		self::register_virtual_fields();
-	}
-
-	/**
 	 * Registers TEC core "Event" type fields.
 	 *
 	 * @return void
 	 */
-	public static function register_core_fields() {
+	public static function register_fields() {
 		register_graphql_fields(
 			'Event',
 			[
@@ -210,83 +199,81 @@ class Event_Type {
 	 * @return void
 	 */
 	public static function register_pro_fields() {
-		if ( QL_Events::is_events_pro_loaded() ) {
-			register_graphql_fields(
-				'Event',
-				[
-					'recurring'      => [
-						'type'        => 'Boolean',
-						'description' => __( 'Is this a recurring event?', 'ql-events' ),
-						'resolve'     => function( $source ) {
-							if ( ! is_callable( '\tribe_is_recurring_event' ) ) {
-								return null;
-							}
+		register_graphql_fields(
+			'Event',
+			[
+				'recurring'      => [
+					'type'        => 'Boolean',
+					'description' => __( 'Is this a recurring event?', 'ql-events' ),
+					'resolve'     => function( $source ) {
+						if ( ! is_callable( '\tribe_is_recurring_event' ) ) {
+							return null;
+						}
 
-							return tribe_is_recurring_event( $source->ID );
-						},
+						return tribe_is_recurring_event( $source->ID );
+					},
+				],
+				'startDates'     => [
+					'type'        => [ 'list_of' => 'String' ],
+					'args'        => [
+						'filter' => [ 'type' => 'DateQueryInput' ],
 					],
-					'startDates'     => [
-						'type'        => [ 'list_of' => 'String' ],
-						'args'        => [
-							'filter' => [ 'type' => 'DateQueryInput' ],
-						],
-						'description' => __( 'Recurrence events start dates', 'ql-events' ),
-						'resolve'     => function( $source, array $args ) {
-							if ( ! is_callable( '\tribe_get_recurrence_start_dates' ) ) {
-								return null;
-							}
+					'description' => __( 'Recurrence events start dates', 'ql-events' ),
+					'resolve'     => function( $source, array $args ) {
+						if ( ! is_callable( '\tribe_get_recurrence_start_dates' ) ) {
+							return null;
+						}
 
-							$dates = tribe_get_recurrence_start_dates( $source->ID );
+						$dates = tribe_get_recurrence_start_dates( $source->ID );
 
-							if ( ! empty( $args['filter'] ) ) {
-								$query = \WPGraphQL\QL_Events\Data\Connection\Event_Connection_Resolver::date_query_input_to_meta_query(
-									$args['filter'],
-									''
-								);
-								$dates = array_filter(
-									$dates,
-									function( $date ) use ( $query ) {
-										$left_date  = strtotime( $date );
-										$right_date = strtotime( $query['value'] );
+						if ( ! empty( $args['filter'] ) ) {
+							$query = \WPGraphQL\QL_Events\Data\Connection\Event_Connection_Resolver::date_query_input_to_meta_query(
+								$args['filter'],
+								''
+							);
+							$dates = array_filter(
+								$dates,
+								function( $date ) use ( $query ) {
+									$left_date  = strtotime( $date );
+									$right_date = strtotime( $query['value'] );
 
-										$compare = $query['compare'];
-										switch ( $compare ) {
-											case '=':
-												return $left_date === $right_date;
-											case '>':
-												return $left_date > $right_date;
-											case '<':
-												return $left_date < $right_date;
-										}
+									$compare = $query['compare'];
+									switch ( $compare ) {
+										case '=':
+											return $left_date === $right_date;
+										case '>':
+											return $left_date > $right_date;
+										case '<':
+											return $left_date < $right_date;
 									}
-								);
-							}
+								}
+							);
+						}
 
-							return $dates;
-						},
+						return $dates;
+					},
+				],
+				'recurrenceText' => [
+					'type'        => 'String',
+					'args'        => [
+						'format' => [ 'type' => 'PostObjectFieldFormatEnum' ],
 					],
-					'recurrenceText' => [
-						'type'        => 'String',
-						'args'        => [
-							'format' => [ 'type' => 'PostObjectFieldFormatEnum' ],
-						],
-						'description' => __( 'Recurrence text', 'ql-events' ),
-						'resolve'     => function( $source, array $args ) {
-							if ( ! is_callable( '\tribe_get_recurrence_text' ) ) {
-								return null;
-							}
+					'description' => __( 'Recurrence text', 'ql-events' ),
+					'resolve'     => function( $source, array $args ) {
+						if ( ! is_callable( '\tribe_get_recurrence_text' ) ) {
+							return null;
+						}
 
-							$text = tribe_get_recurrence_text( $source->ID );
-							if ( ! empty( $args['format'] ) && 'raw' === $args['format'] ) {
-								$text = wp_strip_all_tags( html_entity_decode( $text ) );
-							}
+						$text = tribe_get_recurrence_text( $source->ID );
+						if ( ! empty( $args['format'] ) && 'raw' === $args['format'] ) {
+							$text = wp_strip_all_tags( html_entity_decode( $text ) );
+						}
 
-							return $text;
-						},
-					],
-				]
-			);
-		}
+						return $text;
+					},
+				],
+			]
+		);
 	}
 
 	/**
@@ -295,170 +282,168 @@ class Event_Type {
 	 * @return void
 	 */
 	public static function register_virtual_fields() {
-		if ( QL_Events::is_virtual_events_loaded() ) {
-			register_graphql_fields(
-				'Event',
-				[
-					'isVirtual'               => [
-						'type'        => 'Boolean',
-						'description' => __( 'Is this a virtual event?', 'ql-events' ),
-						'resolve'     => function( $source ) {
-							$event = tribe_get_event( $source->ID );
-							if ( ! $event ) {
-								return null;
-							}
+		register_graphql_fields(
+			'Event',
+			[
+				'isVirtual'               => [
+					'type'        => 'Boolean',
+					'description' => __( 'Is this a virtual event?', 'ql-events' ),
+					'resolve'     => function( $source ) {
+						$event = tribe_get_event( $source->ID );
+						if ( ! $event ) {
+							return null;
+						}
 
-							$value = $event->virtual;
-							return ! is_null( $value ) ? $value : false;
-						},
-					],
-					'virtualUrl'              => [
-						'type'        => 'String',
-						'description' => __( "The event's virtual URL.", 'ql-events' ),
-						'resolve'     => function( $source ) {
-							$event = tribe_get_event( $source->ID );
-							if ( ! $event ) {
-								return null;
-							}
+						$value = $event->virtual;
+						return ! is_null( $value ) ? $value : false;
+					},
+				],
+				'virtualUrl'              => [
+					'type'        => 'String',
+					'description' => __( "The event's virtual URL.", 'ql-events' ),
+					'resolve'     => function( $source ) {
+						$event = tribe_get_event( $source->ID );
+						if ( ! $event ) {
+							return null;
+						}
 
-							$value = $event->virtual_url;
-							return ! is_null( $value ) ? $value : null;
-						},
-					],
-					'virtualEmbedVideo'       => [
-						'type'        => 'Boolean',
-						'description' => __( "Whether to show an event's video embed.", 'ql-events' ),
-						'resolve'     => function( $source ) {
-							$event = tribe_get_event( $source->ID );
-							if ( ! $event ) {
-								return null;
-							}
+						$value = $event->virtual_url;
+						return ! is_null( $value ) ? $value : null;
+					},
+				],
+				'virtualEmbedVideo'       => [
+					'type'        => 'Boolean',
+					'description' => __( "Whether to show an event's video embed.", 'ql-events' ),
+					'resolve'     => function( $source ) {
+						$event = tribe_get_event( $source->ID );
+						if ( ! $event ) {
+							return null;
+						}
 
-							$value = $event->virtual_embed_video;
-							return ! is_null( $value ) ? $value : null;
-						},
-					],
-					'virtualLinkedButton'     => [
-						'type'        => 'Boolean',
-						'description' => __( "Whether to show an event's linked button", 'ql-events' ),
-						'resolve'     => function( $source ) {
-							$event = tribe_get_event( $source->ID );
-							if ( ! $event ) {
-								return null;
-							}
+						$value = $event->virtual_embed_video;
+						return ! is_null( $value ) ? $value : null;
+					},
+				],
+				'virtualLinkedButton'     => [
+					'type'        => 'Boolean',
+					'description' => __( "Whether to show an event's linked button", 'ql-events' ),
+					'resolve'     => function( $source ) {
+						$event = tribe_get_event( $source->ID );
+						if ( ! $event ) {
+							return null;
+						}
 
-							$value = $event->virtual_linked_button;
-							return ! is_null( $value ) ? $value : null;
-						},
-					],
-					'virtualLinkedButtonText' => [
-						'type'        => 'String',
-						'description' => __( "The virtual linked button text. Defaults to 'Watch'. ", 'ql-events' ),
-						'resolve'     => function( $source ) {
-							$event = tribe_get_event( $source->ID );
-							if ( ! $event ) {
-								return null;
-							}
+						$value = $event->virtual_linked_button;
+						return ! is_null( $value ) ? $value : null;
+					},
+				],
+				'virtualLinkedButtonText' => [
+					'type'        => 'String',
+					'description' => __( "The virtual linked button text. Defaults to 'Watch'. ", 'ql-events' ),
+					'resolve'     => function( $source ) {
+						$event = tribe_get_event( $source->ID );
+						if ( ! $event ) {
+							return null;
+						}
 
-							$value = $event->virtual_linked_button_text;
-							return ! is_null( $value ) ? $value : null;
-						},
-					],
-					'virtualShowEmbedAt'      => [
-						'type'        => 'EventsVirtualShowEmbedAtEnum',
-						'description' => __( 'The time to start displaying the video embed', 'ql-events' ),
-						'resolve'     => function( $source ) {
-							$event = tribe_get_event( $source->ID );
-							if ( ! $event ) {
-								return null;
-							}
+						$value = $event->virtual_linked_button_text;
+						return ! is_null( $value ) ? $value : null;
+					},
+				],
+				'virtualShowEmbedAt'      => [
+					'type'        => 'EventsVirtualShowEmbedAtEnum',
+					'description' => __( 'The time to start displaying the video embed', 'ql-events' ),
+					'resolve'     => function( $source ) {
+						$event = tribe_get_event( $source->ID );
+						if ( ! $event ) {
+							return null;
+						}
 
-							$value = $event->virtual_show_embed_at;
-							return ! is_null( $value ) ? $value : null;
-						},
+						$value = $event->virtual_show_embed_at;
+						return ! is_null( $value ) ? $value : null;
+					},
+				],
+				'virtualShowEmbedTo'      => [
+					'type'        => [
+						'list_of' => 'EventsVirtualShowEmbedToEnum',
 					],
-					'virtualShowEmbedTo'      => [
-						'type'        => [
-							'list_of' => 'EventsVirtualShowEmbedToEnum',
-						],
-						'description' => __( 'The user type (logged in or all) to display the video embed to.', 'ql-events' ),
-						'resolve'     => function( $source ) {
-							$event = tribe_get_event( $source->ID );
-							if ( ! $event ) {
-								return null;
-							}
+					'description' => __( 'The user type (logged in or all) to display the video embed to.', 'ql-events' ),
+					'resolve'     => function( $source ) {
+						$event = tribe_get_event( $source->ID );
+						if ( ! $event ) {
+							return null;
+						}
 
-							$value = $event->virtual_show_embed_to;
-							return ! is_null( $value ) ? $value : null;
-						},
-					],
-					'virtualShowLeadUp'       => [
-						'type'        => 'Number',
-						'description' => __( 'The lead-up for the event embed/link button in minutes.', 'ql-events' ),
-						'resolve'     => function( $source ) {
-							$event = tribe_get_event( $source->ID );
-							if ( ! $event ) {
-								return null;
-							}
+						$value = $event->virtual_show_embed_to;
+						return ! is_null( $value ) ? $value : null;
+					},
+				],
+				'virtualShowLeadUp'       => [
+					'type'        => 'Number',
+					'description' => __( 'The lead-up for the event embed/link button in minutes.', 'ql-events' ),
+					'resolve'     => function( $source ) {
+						$event = tribe_get_event( $source->ID );
+						if ( ! $event ) {
+							return null;
+						}
 
-							$value = $event->virtual_show_lead_up;
-							return ! is_null( $value ) ? $value : null;
-						},
-					],
-					'virtualIsLinkable'       => [
-						'type'        => 'Boolean',
-						'description' => __( 'Whether the event has a URL to show (link/embed).', 'ql-events' ),
-						'resolve'     => function( $source ) {
-							$event = tribe_get_event( $source->ID );
-							if ( ! $event ) {
-								return null;
-							}
+						$value = $event->virtual_show_lead_up;
+						return ! is_null( $value ) ? $value : null;
+					},
+				],
+				'virtualIsLinkable'       => [
+					'type'        => 'Boolean',
+					'description' => __( 'Whether the event has a URL to show (link/embed).', 'ql-events' ),
+					'resolve'     => function( $source ) {
+						$event = tribe_get_event( $source->ID );
+						if ( ! $event ) {
+							return null;
+						}
 
-							$value = $event->virtual_is_linkable;
-							return ! is_null( $value ) ? $value : null;
-						},
-					],
-					'virtualIsImmediate'      => [
-						'type'        => 'Boolean',
-						'description' => __( 'Is the event set to show the embed immediately?', 'ql-events' ),
-						'resolve'     => function( $source ) {
-							$event = tribe_get_event( $source->ID );
-							if ( ! $event ) {
-								return null;
-							}
+						$value = $event->virtual_is_linkable;
+						return ! is_null( $value ) ? $value : null;
+					},
+				],
+				'virtualIsImmediate'      => [
+					'type'        => 'Boolean',
+					'description' => __( 'Is the event set to show the embed immediately?', 'ql-events' ),
+					'resolve'     => function( $source ) {
+						$event = tribe_get_event( $source->ID );
+						if ( ! $event ) {
+							return null;
+						}
 
-							$value = $event->virtual_is_immediate;
-							return ! is_null( $value ) ? $value : null;
-						},
-					],
-					'virtualShouldShowEmbed'  => [
-						'type'        => 'Boolean',
-						'description' => __( 'Is the event ready to show the embed now?', 'ql-events' ),
-						'resolve'     => function( $source ) {
-							$event = tribe_get_event( $source->ID );
-							if ( ! $event ) {
-								return null;
-							}
+						$value = $event->virtual_is_immediate;
+						return ! is_null( $value ) ? $value : null;
+					},
+				],
+				'virtualShouldShowEmbed'  => [
+					'type'        => 'Boolean',
+					'description' => __( 'Is the event ready to show the embed now?', 'ql-events' ),
+					'resolve'     => function( $source ) {
+						$event = tribe_get_event( $source->ID );
+						if ( ! $event ) {
+							return null;
+						}
 
-							$value = $event->virtual_should_show_embed;
-							return ! is_null( $value ) ? $value : null;
-						},
-					],
-					'virtualShouldShowLink'   => [
-						'type'        => 'Boolean',
-						'description' => __( 'Is the event ready to show the link now?', 'ql-events' ),
-						'resolve'     => function( $source ) {
-							$event = tribe_get_event( $source->ID );
-							if ( ! $event ) {
-								return null;
-							}
+						$value = $event->virtual_should_show_embed;
+						return ! is_null( $value ) ? $value : null;
+					},
+				],
+				'virtualShouldShowLink'   => [
+					'type'        => 'Boolean',
+					'description' => __( 'Is the event ready to show the link now?', 'ql-events' ),
+					'resolve'     => function( $source ) {
+						$event = tribe_get_event( $source->ID );
+						if ( ! $event ) {
+							return null;
+						}
 
-							$value = $event->virtual_should_show_link;
-							return ! is_null( $value ) ? $value : null;
-						},
-					],
-				]
-			);
-		}
+						$value = $event->virtual_should_show_link;
+						return ! is_null( $value ) ? $value : null;
+					},
+				],
+			]
+		);
 	}
 }

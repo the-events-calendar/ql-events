@@ -44,6 +44,15 @@ function constants() {
 }
 
 /**
+ * Returns path to plugin root directory.
+ *
+ * @return string
+ */
+function get_plugin_directory() {
+	return trailingslashit( QL_EVENTS_PLUGIN_DIR );
+}
+
+/**
  * Returns path to plugin "includes" directory.
  *
  * @return string
@@ -62,54 +71,53 @@ function get_vendor_directory() {
 }
 
 /**
- * Checks if QL Events required plugins are installed and activated
+ * Renders admin notice for error.
  *
- * @param array $deps  Unloaded dependencies list.
+ * @param array $msg  Error message.
  *
- * @return bool
+ * @return void
  */
-function dependencies_not_ready( &$deps = [] ) {
-	if ( ! class_exists( 'WPGraphQL' ) ) {
-		$deps[] = 'WPGraphQL';
-	}
-	if ( ! class_exists( 'Tribe__Events__Main' ) ) {
-		$deps[] = 'The Events Calendar';
-	}
-
-	return empty( $deps );
+function add_admin_notice( $msg ) {
+	add_action(
+		'admin_notices',
+		function() use ( $msg ) {
+			?>
+			<div class="notice notice-error">
+				<p>
+					<?php echo esc_html( $msg ); ?>
+				</p>
+			</div>
+			<?php
+		}
+	);
 }
 
 /**
- * Initializes QL Events
+ * Renders admin notice for missing dependencies.
+ *
+ * @param array $dep  Missing Dependencies.
+ *
+ * @return void
  */
-function init() {
-	constants();
-	if ( dependencies_not_ready( $not_ready ) ) {
-		require get_includes_directory() . 'class-ql-events.php';
-		return QL_Events::instance();
-	}
-
-	foreach ( $not_ready as $dep ) {
-		add_action(
-			'admin_notices',
-			function() use ( $dep ) {
-				?>
-				<div class="error notice">
-					<p>
-						<?php
-							printf(
-								/* translators: dependency not ready error message */
-								esc_html__( '%1$s must be active for QL Events to work', 'ql-events' ),
-								esc_html( $dep )
-							);
-						?>
-					</p>
-				</div>
-				<?php
-			}
-		);
-	}
-
-	return false;
+function add_missing_dependencies_notice( $dep ) {
+	add_admin_notice(
+		printf(
+			/* translators: dependency not ready error message */
+			'<a href="%1$s" target="_blank">%2$s</a> must be active for "QL Events" to work',
+			esc_attr( $dep[0] ),
+			esc_html( $dep[1] )
+		)
+	);
 }
-add_action( 'graphql_init', 'WPGraphQL\QL_Events\init' );
+
+// Load constants.
+constants();
+
+/**
+ * Initializes WooGraphQL Pro
+ */
+require_once get_includes_directory() . 'class-ql-events.php';
+QL_Events::instance();
+
+// Load access functions.
+require_once get_plugin_directory() . 'access-functions.php';
