@@ -74,6 +74,8 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 				self::$instance = new self();
 			}
 
+			new \WPGraphQL\QL_Events\Data\Config();
+
 			/**
 			 * Return the QL_Events Instance
 			 */
@@ -407,6 +409,7 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 			require $include_directory_path . 'data/connection/class-organizer-connection-resolver.php';
 			require $include_directory_path . 'data/connection/class-ticket-connection-resolver.php';
 			require $include_directory_path . 'data/class-factory.php';
+			require $include_directory_path . 'data/class-config.php';
 
 			require $include_directory_path . 'mutation/class-register-attendee.php';
 			require $include_directory_path . 'mutation/class-update-attendee.php';
