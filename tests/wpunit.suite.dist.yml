@@ -12,3 +12,4 @@ modules:
     - WPBrowser
     - WPFilesystem
     - REST
+bootstrap: _bootstrap.php

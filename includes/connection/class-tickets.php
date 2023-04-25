@@ -28,10 +28,20 @@ class Tickets extends PostObjects {
 	 *
 	 * @return mixed
 	 */
-	private static function get_event_to_ticket_resolver( $ticket_classes ) {
+	protected static function get_event_to_ticket_resolver( $ticket_classes ) {
 		return function( $source, $args, $context, $info ) use ( $ticket_classes ) {
 			// Get ticket post-types.
 			$ticket_post_types = [];
+
+			/**
+			 * Filters ticket classes to add support for additional ticket types.
+			 * @param array       $ticket_classes - TEC ticket class names.
+			 * @param mixed       $source         - Connection parent resolver.
+			 * @param array       $args           - Connection arguments.
+			 * @param AppContext  $context        - AppContext object.
+			 * @param ResolveInfo $info           - ResolveInfo object.
+			 */
+			$ticket_classes = apply_filters( 'ql_events_ticket_connection_ticket_classes', $ticket_classes, $source, $args, $context, $info );
 			foreach ( $ticket_classes as $ticket_class ) {
 				$ticket_post_types[] = tribe( $ticket_class )->ticket_object;
 			}
@@ -71,8 +81,6 @@ class Tickets extends PostObjects {
 			'tickets.rsvp',
 			'tickets.commerce.paypal',
 		];
-
-		$available_ticket_types = apply_filters( 'ql_events_available_ticket_types', $available_ticket_types );
 
 		// From RootQuery to Tickets.
 		register_graphql_connection(

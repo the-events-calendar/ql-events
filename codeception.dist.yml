@@ -48,7 +48,9 @@ modules:
         - events-filterbar/the-events-calendar-filter-view.php
         - events-pro/events-calendar-pro.php
         - events-virtual/events-virtual.php
+        - woocommerce/woocommerce.php
         - wp-graphql/wp-graphql.php
+        - wp-graphql-woocommerce/wp-graphql-woocommerce.php
         - ql-events/ql-events.php
       activatePlugins:
         - the-events-calendar/the-events-calendar.php
@@ -57,6 +59,8 @@ modules:
         - events-filterbar/the-events-calendar-filter-view.php
         - events-pro/events-calendar-pro.php
         - events-virtual/events-virtual.php
+        - woocommerce/woocommerce.php
         - wp-graphql/wp-graphql.php
+        - wp-graphql-woocommerce/wp-graphql-woocommerce.php
         - ql-events/ql-events.php
       configFile: 'tests/_data/config.php'

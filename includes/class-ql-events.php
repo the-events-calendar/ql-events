@@ -352,6 +352,7 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 			require $include_directory_path . 'types/object/class-venue-linked-data-type.php';
 			require $include_directory_path . 'types/object/class-venue-type.php';
 			require $include_directory_path . 'types/object/class-wooattendee-type.php';
+			require $include_directory_path . 'types/object/class-wooticket-type.php';
 			require $include_directory_path . 'types/object/class-wooorder-type.php';
 			require $include_directory_path . 'types/object/class-meta-data-type.php';
 

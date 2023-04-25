@@ -28,10 +28,55 @@ class Phone {
 						'type'        => 'String',
 						'description' => __( 'Field input placeholder', 'ql-events' ),
 						'resolve'     => function( $field ) {
-							return 'on' === $field->placeholder;
+							return ! empty ( $field->placeholder ) ? $field->placeholder : null;
 						},
 					],
 				],
+			]
+		);
+
+		register_graphql_field(
+			'Product',
+			'ticketFieldPhone',
+			[
+				'type'        => [ 'list_of' => 'TicketFieldPhone' ],
+				'description' => __( 'Custom ticket fields on this ticket', 'ql-events' ),
+				'resolve'     => function( $source ) {
+					$ticket_id = $source->ID;
+
+					$meta = tribe( 'tickets-plus.meta' );
+					if ( $meta->ticket_has_meta( $ticket_id ) ) {
+						$fields = $meta->get_meta_fields_by_ticket( $ticket_id );
+						return array_filter(
+							$fields,
+							function( $field ) {
+								return 'telephone' === $field->type;
+							}
+						);
+					}
+
+					return [];
+				},
+			]
+		);
+
+		register_graphql_field(
+			'Event',
+			'ticketFieldPhone',
+			[
+				'type'        => [ 'list_of' => 'TicketFieldPhone' ],
+				'description' => __( 'All custom ticket fields on the tickets for this event', 'ql-events' ),
+				'resolve'     => function( $source ) {
+					$event_id = $source->ID;
+
+					$fields = tribe( 'tickets-plus.meta' )->get_meta_fields_by_event( $event_id );
+					return array_filter(
+						$fields,
+						function( $field ) {
+							return 'telephone' === $field->type;
+						}
+					);
+				},
 			]
 		);
 	}

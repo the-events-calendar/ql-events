@@ -46,7 +46,7 @@ class Ticket_Interface {
 
 							throw new UserError(
 								sprintf(
-									/* translators: %s: Product type */
+									/* translators: %s: Ticket type */
 									__( 'The "%s" ticket type is not supported by the core QL-Events schema.', 'ql-events' ),
 									$value->post_type
 								)

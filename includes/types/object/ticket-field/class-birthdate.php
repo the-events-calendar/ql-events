@@ -26,5 +26,50 @@ class Birthdate {
 				'fields'      => [],
 			]
 		);
+
+		register_graphql_field(
+			'Product',
+			'ticketFieldBirthdate',
+			[
+				'type'        => [ 'list_of' => 'TicketFieldBirthdate' ],
+				'description' => __( 'Custom ticket fields on this ticket', 'ql-events' ),
+				'resolve'     => function( $source ) {
+					$ticket_id = $source->ID;
+
+					$meta = tribe( 'tickets-plus.meta' );
+					if ( $meta->ticket_has_meta( $ticket_id ) ) {
+						$fields = $meta->get_meta_fields_by_ticket( $ticket_id );
+						return array_filter(
+							$fields,
+							function( $field ) {
+								return 'birth' === $field->type;
+							}
+						);
+					}
+
+					return [];
+				},
+			]
+		);
+
+		register_graphql_field(
+			'Event',
+			'ticketFieldBirthdate',
+			[
+				'type'        => [ 'list_of' => 'TicketFieldBirthdate' ],
+				'description' => __( 'All custom ticket fields on the tickets for this event', 'ql-events' ),
+				'resolve'     => function( $source ) {
+					$event_id = $source->ID;
+
+					$fields = tribe( 'tickets-plus.meta' )->get_meta_fields_by_event( $event_id );
+					return array_filter(
+						$fields,
+						function( $field ) {
+							return 'birth' === $field->type;
+						}
+					);
+				},
+			]
+		);
 	}
 }

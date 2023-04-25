@@ -25,12 +25,16 @@ class Tickets_Plus extends Tickets {
 	 */
 	public static function register_available_plus_ticket_types() {
 		add_filter(
-			'ql_events_available_ticket_types',
-			function ( $available_ticket_types ) {
-				$available_ticket_types[] = 'tickets-plus.commerce.woo';
+			'ql_events_ticket_connection_ticket_classes',
+			function ( $ticket_classes, $source, $args, $context, $info ) {
+				if ( $info->fieldName === 'tickets' ) {
+					$ticket_classes[] = 'tickets-plus.commerce.woo';
+				}
 
-				return $available_ticket_types;
-			}
+				return $ticket_classes;
+			},
+			10,
+			5
 		);
 	}
 
@@ -42,7 +46,7 @@ class Tickets_Plus extends Tickets {
 		register_graphql_connection(
 			[
 				'fromType'       => 'Event',
-				'toType'         => 'Product',
+				'toType'         => 'SimpleProduct',
 				'fromFieldName'  => 'wooTickets',
 				'connectionArgs' => Products::get_connection_args(),
 				'resolve'        => self::get_event_to_ticket_resolver( [ 'tickets-plus.commerce.woo' ] ),

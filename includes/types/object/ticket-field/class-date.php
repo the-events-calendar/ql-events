@@ -26,5 +26,50 @@ class Date {
 				'fields'      => [],
 			]
 		);
+
+		register_graphql_field(
+			'Product',
+			'ticketFieldDate',
+			[
+				'type'        => [ 'list_of' => 'TicketFieldDate' ],
+				'description' => __( 'Custom ticket fields on this ticket', 'ql-events' ),
+				'resolve'     => function( $source ) {
+					$ticket_id = $source->ID;
+
+					$meta = tribe( 'tickets-plus.meta' );
+					if ( $meta->ticket_has_meta( $ticket_id ) ) {
+						$fields = $meta->get_meta_fields_by_ticket( $ticket_id );
+						return array_filter(
+							$fields,
+							function( $field ) {
+								return 'datetime' === $field->type;
+							}
+						);
+					}
+
+					return [];
+				},
+			]
+		);
+
+		register_graphql_field(
+			'Event',
+			'ticketFieldDate',
+			[
+				'type'        => [ 'list_of' => 'TicketFieldDate' ],
+				'description' => __( 'All custom ticket fields on the tickets for this event', 'ql-events' ),
+				'resolve'     => function( $source ) {
+					$event_id = $source->ID;
+
+					$fields = tribe( 'tickets-plus.meta' )->get_meta_fields_by_event( $event_id );
+					return array_filter(
+						$fields,
+						function( $field ) {
+							return 'datetime' === $field->type;
+						}
+					);
+				},
+			]
+		);
 	}
 }

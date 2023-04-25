@@ -24,11 +24,12 @@ class WooTicket_Type {
 	 * @return void
 	 */
 	public static function register_to_ticket_interface() {
+		register_graphql_interfaces_to_types( 'Ticket', 'SimpleProduct' );
 		add_filter(
 			'ql_events_resolve_ticket_type',
 			function ( $type, $value ) {
 				$type_registry = \WPGraphQL::get_type_registry();
-				if ( tribe( 'tickets-plus.commerce.woo' )->ticket_object ) {
+				if ( $value->post_type === tribe( 'tickets-plus.commerce.woo' )->ticket_object ) {
 					$type = $type_registry->get_type( 'SimpleProduct' );
 				}
 
