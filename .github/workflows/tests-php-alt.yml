@@ -51,7 +51,7 @@ jobs:
           cp .env.testing .env
           rm -rf composer.lock
           composer install
-          SKIP_DB_CREATE=true SKIP_WP_SETUP=true composer install-test-env
+          COMPOSER_TOKEN="$COMPOSER_TOKEN" SKIP_DB_CREATE=true SKIP_WP_SETUP=true composer install-test-env
 
       - name: Run Tests w/ Docker.
         env:
