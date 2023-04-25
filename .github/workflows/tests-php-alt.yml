@@ -42,11 +42,11 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: json, mbstring
           tools: composer:v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.COMPOSER_TOKEN }}
 
 
       - name: Install dependencies
+        env:
+          COMPOSER_TOKEN: ${{ secrets.GH_BOT_TOKEN }}
         run: |
           cp .env.testing .env
           rm -rf composer.lock
