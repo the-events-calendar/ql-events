@@ -12,22 +12,42 @@ namespace WPGraphQL\QL_Events;
  * Class Type_Registry
  */
 class Type_Registry {
+	/**
+	 * Returns true if the Events Pro fields, types, queries, and mutations can be loaded.
+	 *
+	 * @return bool
+	 */
 	public function load_events_pro_schema() {
 		return QL_Events::is_events_pro_support_enabled()
 			&& QL_Events::is_events_pro_active();
 	}
 
+	/**
+	 * Returns true if the Event Tickets fields, types, queries, and mutations can be loaded.
+	 *
+	 * @return bool
+	 */
 	public function load_event_tickets_schema() {
 		return QL_Events::is_event_tickets_support_enabled()
 			&& QL_Events::is_event_tickets_active();
 	}
 
+	/**
+	 * Returns true if the Event Tickets Plus fields, types, queries, and mutations can be loaded.
+	 *
+	 * @return bool
+	 */
 	public function load_event_tickets_plus_schema() {
 		return QL_Events::is_event_tickets_plus_support_enabled()
 			&& QL_Events::is_event_tickets_plus_active()
 			&& QL_Events::is_woographql_active();
 	}
 
+	/**
+	 * Returns true if the Events Virtual fields, types, queries, and mutations can be loaded.
+	 *
+	 * @return bool
+	 */
 	public function load_events_virtual_schema() {
 		return QL_Events::is_events_virtual_support_enabled()
 			&& QL_Events::is_events_virtual_active();

@@ -46,7 +46,7 @@ if ( ! function_exists( 'ql_events_setting' ) ) :
 	}
 endif;
 
-if ( ! function_exists( 'ql_events_ends_with' ) ):
+if ( ! function_exists( 'ql_events_ends_with' ) ) :
 	/**
 	 * Simple "endsWith" function because PHP still doesn't have on built-in.
 	 *

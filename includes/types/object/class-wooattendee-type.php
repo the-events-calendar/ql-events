@@ -51,7 +51,7 @@ class WooAttendee_Type {
 			'ql_events_resolve_attendee_type',
 			function ( $type, $value ) {
 				$type_registry = \WPGraphQL::get_type_registry();
-				if ( $post_type === tribe( 'tickets-plus.commerce.woo' )->attendee_object ) {
+				if ( tribe( 'tickets-plus.commerce.woo' )->attendee_object === $post_type ) {
 					$type = $type_registry->get_type( 'WooAttendee' );
 				}
 
@@ -170,7 +170,7 @@ class WooAttendee_Type {
 							array_values( $attendee_meta_data )
 						);
 					},
-				]
+				],
 			]
 		);
 	}

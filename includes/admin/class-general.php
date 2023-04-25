@@ -28,46 +28,46 @@ class General extends Section {
 
 		return [
 			[
-				'name'    => 'enable_events_pro_support',
-				'label'   => __( 'Enable The Events Calendar Pro support ', 'ql-events' ),
-				'desc'    => ! defined( 'QL_EVENTS_TEST_MODE' )
+				'name'     => 'enable_events_pro_support',
+				'label'    => __( 'Enable The Events Calendar Pro support ', 'ql-events' ),
+				'desc'     => ! defined( 'QL_EVENTS_TEST_MODE' )
 					? __( 'Include fields, types, queries, and mutations for The Events Calendar Pro (Requires The Events Calendar Pro be installed and activated.)', 'ql-events' )
 					: $settings_status,
-				'type'    => 'checkbox',
-				'default' => 'off',
+				'type'     => 'checkbox',
+				'default'  => 'off',
 				'value'    => defined( 'QL_EVENTS_TEST_MODE' ) ? 'on' : ql_events_setting( 'enable_events_pro_support', 'off' ),
 				'disabled' => defined( 'QL_EVENTS_TEST_MODE' ) ? true : false,
 			],
 			[
-				'name'    => 'enable_event_tickets_support',
-				'label'   => __( 'Enable Event Tickets support', 'ql-events' ),
-				'desc'    => ! defined( 'QL_EVENTS_TEST_MODE' )
+				'name'     => 'enable_event_tickets_support',
+				'label'    => __( 'Enable Event Tickets support', 'ql-events' ),
+				'desc'     => ! defined( 'QL_EVENTS_TEST_MODE' )
 					? __( 'Include fields, types, queries, and mutations for Event Tickets (Requires Event Tickets be installed and activated.)', 'ql-events' )
 					: $settings_status,
-				'type'    => 'checkbox',
-				'default' => 'off',
+				'type'     => 'checkbox',
+				'default'  => 'off',
 				'value'    => defined( 'QL_EVENTS_TEST_MODE' ) ? 'on' : ql_events_setting( 'enable_event_tickets_support', 'off' ),
 				'disabled' => defined( 'QL_EVENTS_TEST_MODE' ) ? true : false,
 			],
 			[
-				'name'    => 'enable_event_tickets_plus_support',
-				'label'   => __( 'Enable Event Tickets Plus support', 'ql-events' ),
-				'desc'    => ! defined( 'QL_EVENTS_TEST_MODE' )
+				'name'     => 'enable_event_tickets_plus_support',
+				'label'    => __( 'Enable Event Tickets Plus support', 'ql-events' ),
+				'desc'     => ! defined( 'QL_EVENTS_TEST_MODE' )
 					? __( 'Include fields, types, queries, and mutations for Event Tickets Plus (Requires Event Tickets Plus be installed and activated.)', 'ql-events' )
 					: $settings_status,
-				'type'    => 'checkbox',
-				'default' => 'off',
+				'type'     => 'checkbox',
+				'default'  => 'off',
 				'value'    => defined( 'QL_EVENTS_TEST_MODE' ) ? 'on' : ql_events_setting( 'enable_event_tickets_plus_support', 'off' ),
 				'disabled' => defined( 'QL_EVENTS_TEST_MODE' ) ? true : false,
 			],
 			[
-				'name'    => 'enable_events_virtual_support',
-				'label'   => __( 'Enable Event Virtual support', 'ql-events' ),
-				'desc'    => ! defined( 'QL_EVENTS_TEST_MODE' )
+				'name'     => 'enable_events_virtual_support',
+				'label'    => __( 'Enable Event Virtual support', 'ql-events' ),
+				'desc'     => ! defined( 'QL_EVENTS_TEST_MODE' )
 					? __( 'Include fields, types, queries, and mutations for Event Virtual (Requires Event Virtual be installed and activated.)', 'ql-events' )
 					: $settings_status,
-				'type'    => 'checkbox',
-				'default' => 'off',
+				'type'     => 'checkbox',
+				'default'  => 'off',
 				'value'    => defined( 'QL_EVENTS_TEST_MODE' ) ? 'on' : ql_events_setting( 'enable_events_virtual_support', 'off' ),
 				'disabled' => defined( 'QL_EVENTS_TEST_MODE' ) ? true : false,
 			],

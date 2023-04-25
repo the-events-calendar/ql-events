@@ -44,7 +44,7 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		 */
 		public function __clone() {
 			// Cloning instances of the class is forbidden.
-			_doing_it_wrong( __FUNCTION__, esc_html__( 'QL_Events class should not be cloned.', 'ql-events' ), QL_EVENTS_VERSION );
+			_doing_it_wrong( __FUNCTION__, esc_html__( 'QL_Events class should not be cloned.', 'ql-events' ), esc_html( QL_EVENTS_VERSION ) );
 		}
 
 		/**
@@ -56,7 +56,7 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		 */
 		public function __wakeup() {
 			// De-serializing instances of the class is forbidden.
-			_doing_it_wrong( __FUNCTION__, esc_html__( 'De-serializing instances of the QL_Events class is not allowed', 'ql-events' ), QL_EVENTS_VERSION );
+			_doing_it_wrong( __FUNCTION__, esc_html__( 'De-serializing instances of the QL_Events class is not allowed', 'ql-events' ), esc_html( QL_EVENTS_VERSION ) );
 		}
 
 		/**
@@ -86,10 +86,9 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 				$deps[] = [ 'https://wpgraphql.com', 'WPGraphQL' ];
 			}
 			if ( ! class_exists( 'Tribe__Events__Main' ) ) {
-				$deps[] = [ 'https://theeventscalendar.com', 'The Events Calendar'];
+				$deps[] = [ 'https://theeventscalendar.com', 'The Events Calendar' ];
 			}
 			$deps = [];
-
 
 			// Don't check WPGraphQL settings if WPGraphQL is not installed.
 			if ( ! class_exists( '\WPGraphQL' ) ) {
