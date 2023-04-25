@@ -35,6 +35,7 @@ class Tickets extends PostObjects {
 
 			/**
 			 * Filters ticket classes to add support for additional ticket types.
+			 *
 			 * @param array       $ticket_classes - TEC ticket class names.
 			 * @param mixed       $source         - Connection parent resolver.
 			 * @param array       $args           - Connection arguments.

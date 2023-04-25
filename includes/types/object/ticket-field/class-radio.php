@@ -28,8 +28,8 @@ class Radio {
 						'type'        => [ 'list_of' => 'String' ],
 						'description' => __( 'Is this field required?', 'ql-events' ),
 						'resolve'     => function( $field ) {
-							if ( ! empty ( $field->extra ) ) {
-								return ! empty ( $field->extra['options'] ) ? $field->extra['options'] : [];
+							if ( ! empty( $field->extra ) ) {
+								return ! empty( $field->extra['options'] ) ? $field->extra['options'] : [];
 							}
 
 							return null;

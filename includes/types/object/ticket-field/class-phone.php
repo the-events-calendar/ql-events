@@ -28,7 +28,7 @@ class Phone {
 						'type'        => 'String',
 						'description' => __( 'Field input placeholder', 'ql-events' ),
 						'resolve'     => function( $field ) {
-							return ! empty ( $field->placeholder ) ? $field->placeholder : null;
+							return ! empty( $field->placeholder ) ? $field->placeholder : null;
 						},
 					],
 				],
