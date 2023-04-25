@@ -105,11 +105,12 @@ class Register_Attendee {
 				'type'        => 'Attendee',
 				'description' => __( 'Newly registered attendee', 'ql-events' ),
 				'resolve'     => function( $payload, array $args, AppContext $context ) {
-					if ( empty( $payload['id'] ) || ! absint( $payload['id'] ) ) {
-						return null;
+					if ( ! empty( $payload['id'] ) ) {
+						$id = absint( $payload['id'] );
+						return ! empty( $id ) ? $context->get_loader( 'post' )->load( $id ) : null;
 					}
 
-					return new Post( get_post( $payload['id'] ) );
+					return null;
 				},
 			],
 		];
