@@ -46,7 +46,7 @@ jobs:
 
       - name: Install dependencies
         env:
-          COMPOSER_TOKEN: ${{ secrets.GH_BOT_TOKEN }}
+          COMPOSER_TOKEN: ${{ secrets.COMPOSER_TOKEN }}
         run: |
           cp .env.testing .env
           rm -rf composer.lock
