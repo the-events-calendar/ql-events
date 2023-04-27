@@ -12,6 +12,7 @@ namespace WPGraphQL\QL_Events\Connection;
 
 use Tribe__Events__Main as Main;
 use GraphQL\Error\UserError;
+use WPGraphQL\QL_Events\Utils\Events_Query;
 use WPGraphQL\Type\Connection\PostObjects;
 use WPGraphQL\Data\Connection\PostObjectConnectionResolver;
 
@@ -56,15 +57,15 @@ class Events extends PostObjects {
 				'fromType'       => 'RootQuery',
 				'toType'         => 'Event',
 				'fromFieldName'  => 'events',
-				'queryClass'     => '\WPGraphQL\QL_Events\Utils\Events_Query',
+				'queryClass'     => Events_Query::class,
 				'connectionArgs' => self::get_connection_args(),
 				'resolve'        => function( $source, $args, $context, $info ) {
-					$resolver = new PostObjectConnectionResolver( $source, $args, $context, $info, [ Main::POSTTYPE ] );
+					$resolver = new PostObjectConnectionResolver( $source, $args, $context, $info );
 					if ( ! empty( $args['startsAfter'] ) ) {
 						$time = self::validate_time_input( 'startsAfter', $args['startsAfter'] );
 						$resolver->set_query_arg( 'starts_after', $time );
 					}
-					if ( ! empty( $args['starstBefore'] ) ) {
+					if ( ! empty( $args['startsBefore'] ) ) {
 						$time = self::validate_time_input( 'startsBefore', $args['startsBefore'] );
 						$resolver->set_query_arg( 'starts_before', $time );
 					}
