@@ -58,8 +58,8 @@ class WooAttendee_Type {
 	/**
 	 * Callback for resolver
 	 *
-	 * @param mixed  $type   GraphQL Type.
-	 * @param mixed  $value  Attendee data object.
+	 * @param mixed $type   GraphQL Type.
+	 * @param mixed $value  Attendee data object.
 	 *
 	 * @return mixed
 	 */
