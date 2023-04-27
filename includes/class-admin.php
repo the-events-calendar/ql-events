@@ -20,6 +20,13 @@ class Admin {
 	 * Admin constructor
 	 */
 	public function __construct() {
+		$this->add_filters();
+	}
+
+	/**
+	 * Registers filters.
+	 */
+	public function add_filters() {
 		add_action( 'graphql_register_settings', [ $this, 'register_settings' ] );
 	}
 

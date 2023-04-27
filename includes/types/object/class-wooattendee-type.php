@@ -49,17 +49,27 @@ class WooAttendee_Type {
 	public static function register_to_attendee_interface() {
 		add_filter(
 			'ql_events_resolve_attendee_type',
-			function ( $type, $value ) {
-				$type_registry = \WPGraphQL::get_type_registry();
-				if ( tribe( 'tickets-plus.commerce.woo' )->attendee_object === $post_type ) {
-					$type = $type_registry->get_type( 'WooAttendee' );
-				}
-
-				return $type;
-			},
+			[ __CLASS__, 'resolve_woo_attendee' ],
 			10,
 			2
 		);
+	}
+
+	/**
+	 * Callback for resolver
+	 *
+	 * @param mixed  $type   GraphQL Type.
+	 * @param mixed  $value  Attendee data object.
+	 *
+	 * @return mixed
+	 */
+	public static function resolve_woo_attendee( $type, $value ) {
+		$type_registry = \WPGraphQL::get_type_registry();
+		if ( tribe( 'tickets-plus.commerce.woo' )->attendee_object === $post_type ) {
+			$type = $type_registry->get_type( 'WooAttendee' );
+		}
+
+		return $type;
 	}
 
 	/**

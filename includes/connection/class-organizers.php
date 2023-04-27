@@ -11,7 +11,7 @@
 namespace WPGraphQL\QL_Events\Connection;
 
 use Tribe__Events__Main as Main;
-use WPGraphQL\Connection\PostObjects;
+use WPGraphQL\Type\Connection\PostObjects;
 
 /**
  * Class - Organizers

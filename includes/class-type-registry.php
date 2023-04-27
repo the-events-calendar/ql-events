@@ -60,16 +60,15 @@ class Type_Registry {
 		// TEC core fields, types, queries, and mutations.
 
 		// objects/fields.
-		Type\WPObject\Event_Type::register_fields();
-		Type\WPObject\Event_Linked_Data_Type::register();
-		Type\WPObject\Organizer_Type::register_fields();
 		Type\WPObject\Organizer_Linked_Data_Type::register();
-		Type\WPObject\Venue_Type::register_fields();
 		Type\WPObject\Venue_Linked_Data_Type::register();
+		Type\WPObject\Event_Linked_Data_Type::register();
+		Type\WPObject\Event_Type::register_fields();
+		Type\WPObject\Organizer_Type::register_fields();
+		Type\WPObject\Venue_Type::register_fields();
 
 		// connections.
 		Connection\Organizers::register_connections();
-		Connection\Attendees::register_connections();
 
 		// Register Events Pro fields, types, queries, and mutations.
 		if ( $this->load_events_pro_schema() ) {
@@ -101,6 +100,7 @@ class Type_Registry {
 
 			// connections.
 			Connection\Tickets::register_connections();
+			Connection\Attendees::register_connections();
 
 			// mutations.
 			Mutation\Register_Attendee::register_mutation();

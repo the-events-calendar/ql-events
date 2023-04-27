@@ -26,17 +26,27 @@ class WooOrder_Type {
 	public static function register_to_order_interface() {
 		add_filter(
 			'ql_events_resolve_tec_order_type',
-			function ( $type, $value ) {
-				$type_registry = \WPGraphQL::get_type_registry();
-				if ( 'shop_order' === $value->post_type ) {
-					$type = $type_registry->get_type( 'Order' );
-				}
-
-				return $type;
-			},
+			[ __CLASS__, 'resolve_woo_order' ],
 			10,
 			2
 		);
+	}
+
+	/**
+	 * Callback for resolver
+	 *
+	 * @param mixed  $type   GraphQL Type.
+	 * @param mixed  $value  Order data object.
+	 *
+	 * @return mixed
+	 */
+	public static function resolve_woo_order( $type, $value ) {
+		$type_registry = \WPGraphQL::get_type_registry();
+		if ( 'shop_order' === $value->post_type ) {
+			$type = $type_registry->get_type( 'Order' );
+		}
+
+		return $type;
 	}
 
 	/**

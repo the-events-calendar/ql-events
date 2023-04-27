@@ -12,7 +12,7 @@ namespace WPGraphQL\QL_Events\Connection;
 
 use Tribe__Tickets__RSVP as RSVP;
 use Tribe__Tickets__Attendee_Repository as Attendee_Repository;
-use WPGraphQL\Connection\PostObjects;
+use WPGraphQL\Type\Connection\PostObjects;
 use WPGraphQL\Data\Connection\PostObjectConnectionResolver;
 
 /**
