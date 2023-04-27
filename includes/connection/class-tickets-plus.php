@@ -27,7 +27,7 @@ class Tickets_Plus extends Tickets {
 		add_filter(
 			'ql_events_ticket_connection_ticket_classes',
 			function ( $ticket_classes, $source, $args, $context, $info ) {
-				if ( $info->fieldName === 'tickets' ) {
+				if ( 'tickets' === $info->fieldName ) { // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 					$ticket_classes[] = 'tickets-plus.commerce.woo';
 				}
 
