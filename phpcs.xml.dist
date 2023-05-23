@@ -48,10 +48,35 @@
 	</rule>
 	<rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
 
+	<!-- Rules to exclude for test files -->
+	<rule ref="WordPress.NamingConventions">
+		<exclude-pattern>/tests/</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.Commenting">
+		<exclude-pattern>/tests/</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.PHP.CommentedOutCode.Found">
+		<exclude-pattern>/tests/</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.Files.FileName">
+		<exclude-pattern>/tests/</exclude-pattern>
+	</rule>
+	<rule ref="PSR2.Methods.MethodDeclaration.Underscore">
+		<exclude-pattern>/tests/</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.PHP.DontExtract">
+		<exclude-pattern>/tests/</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.WP.AlternativeFunctions">
+		<exclude-pattern>/tests/</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.DateTime.RestrictedFunctions.date_date">
+		<exclude-pattern>/tests/</exclude-pattern>
+	</rule>
+
 	<!-- What to scan -->
 	<file>includes/</file>
 	<exclude-pattern>/vendor/</exclude-pattern>
 	<exclude-pattern>bin/*</exclude-pattern>
-	<exclude-pattern>/tests/</exclude-pattern>
 	<exclude-pattern>local/*</exclude-pattern>
 </ruleset>

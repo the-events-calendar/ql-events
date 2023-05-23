@@ -6,10 +6,17 @@ use Tribe__Events__Main as Main;
 
 class Organizer extends \WP_UnitTest_Factory_For_Post {
 
-	function create_object( $args ) {
+	/**
+	 * Creates organizer object.
+	 *
+	 * @param array $args  Organizer arguments.
+	 *
+	 * @return \WP_Post
+	 */
+	public function create_object( $args ) {
 		$args['post_type'] = Main::ORGANIZER_POST_TYPE;
 
-		$title = 'Organizer' . uniqid();
+		$title    = 'Organizer' . uniqid();
 		$lc_title = strtolower( $title );
 
 		$defaults = [

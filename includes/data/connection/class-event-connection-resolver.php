@@ -197,7 +197,7 @@ class Event_Connection_Resolver {
 				break;
 			default:
 				$date = gmdate( 'Y-m-d' );
-		}
+		}//end switch
 
 		// Get compare value.
 		if ( isset( $date_query_input['compare'] ) ) {

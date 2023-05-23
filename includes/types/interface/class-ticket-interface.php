@@ -129,7 +129,7 @@ class Ticket_Interface {
 							}
 							$post_id = absint( $id_components['id'] );
 							break;
-					}
+					}//end switch
 
 					if ( isset( $args['asPreview'] ) && true === $args['asPreview'] ) {
 						$revisions = wp_get_post_revisions(

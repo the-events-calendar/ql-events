@@ -38,14 +38,18 @@ class RsvpAttendee {
 	 *
 	 * @todo Adding RSVP tickets should update 'total_sales' count without having to hard-code it here and in other situations
 	 *
-	 * @param int   $ticket_id
-	 * @param int   $post_id
-	 * @param array $overrides See code for overrides possibilities.
+	 * @param int   $ticket_id  Ticket ID.
+	 * @param int   $post_id    Event ID.
+	 * @param array $overrides  See code for overrides possibilities.
 	 *
-	 * @return int The generated attendee
+	 * @return int The generated attendee ID.
 	 */
-	public function create_attendee_for_ticket( int $ticket_id, int $post_id, array $overrides = array() ): int {
-		/** @var \Tribe__Tickets__Tickets $provider */
+	public function create_attendee_for_ticket( int $ticket_id, int $post_id, array $overrides = [] ): int {
+		/**
+		 * Ticket provider.
+		 *
+		 * @var \Tribe__Tickets__Tickets $provider
+		 */
 		$provider            = tribe_tickets_get_ticket_provider( $ticket_id );
 		$provider_reflection = new \ReflectionClass( $provider );
 
@@ -115,7 +119,11 @@ class RsvpAttendee {
 			$meta['_paid_price'] = (int) get_post_meta( $ticket_id, '_price', true );
 		}
 		if ( ! isset( $meta['_price_currency_symbol'] ) ) {
-			/** @var \Tribe__Tickets__Commerce__Currency $currency */
+			/**
+			 * Currency manager.
+			 *
+			 * @var \Tribe__Tickets__Commerce__Currency
+			 */
 			$currency                       = tribe( 'tickets.commerce.currency' );
 			$meta['_price_currency_symbol'] = $currency->get_currency_symbol( $ticket_id, true );
 		}
@@ -175,7 +183,7 @@ class RsvpAttendee {
 
 		$order = $provider instanceof \Tribe__Tickets__RSVP
 			? $attendee_id
-			: \Tribe__Utils__Array::get( $overrides, 'order_id', md5( uniqid()) );
+			: \Tribe__Utils__Array::get( $overrides, 'order_id', md5( uniqid() ) );
 
 		update_post_meta( $attendee_id, $order_key, $order );
 
@@ -203,8 +211,8 @@ class RsvpAttendee {
 	/**
 	 * Sets the optout option on an attendee.
 	 *
-	 * @param      int $attendee_id
-	 * @param bool     $optout
+	 * @param int  $attendee_id
+	 * @param bool $optout
 	 */
 	public function optout_attendee( int $attendee_id, $optout = true ) {
 		$attendee_post = get_post( $attendee_id );

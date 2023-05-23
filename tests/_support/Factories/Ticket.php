@@ -12,13 +12,17 @@ class Ticket extends \WP_UnitTest_Factory_For_Post {
 	 *
 	 * @param string $provider  Provider class to use.
 	 * @param int    $post_id   The ID of the post this ticket should be related to.
-	 * @param int    $price
+	 * @param int    $price     Ticket price.
 	 * @param array  $overrides An array of values to override the default and random generation arguments.
 	 *
 	 * @return int|false The new ticket ID or false if not saved.
 	 */
 	protected function create_ticket( $provider, $post_id, $price = 1, array $overrides = [] ) {
-		/** @var \Tribe__Tickets__Tickets $provider_class */
+		/**
+		 * Ticket Provider
+		 *
+		 * @var \Tribe__Tickets__Tickets
+		 */
 		$provider_class = tribe( $provider );
 
 		$post_id = absint( $post_id );
@@ -123,10 +127,14 @@ class Ticket extends \WP_UnitTest_Factory_For_Post {
 
 		unset( $overrides['meta_input'] );
 
-		/** @var \Tribe__Tickets__RSVP $rsvp */
-		$rsvp             = tribe( 'tickets.rsvp' );
-		$capacity         = Utils_Array::get( $meta_input, '_capacity', 100 );
-		$sales            = Utils_Array::get( $meta_input, 'total_sales', 0 );
+		/**
+		 * RSVP ticket manager.
+		 *
+		 * @var \Tribe__Tickets__RSVP
+		 */
+		$rsvp     = tribe( 'tickets.rsvp' );
+		$capacity = Utils_Array::get( $meta_input, '_capacity', 100 );
+		$sales    = Utils_Array::get( $meta_input, 'total_sales', 0 );
 
 		$calculated_stock = -1 === $capacity ? null : ( $capacity - $sales );
 		$manage_stock     = -1 === $capacity ? 'no' : 'yes';
@@ -140,23 +148,23 @@ class Ticket extends \WP_UnitTest_Factory_For_Post {
 
 		$merged_meta_input = array_merge(
 			[
-				'_tribe_rsvp_for_event'                          => $post_id,
-				tribe( 'tickets.handler' )->key_capacity         => $capacity,
-				'_manage_stock'                                  => 'yes',
-				'_ticket_start_date'                             => date( 'Y-m-d H:i:s', strtotime( '-1 day' ) ),
-				'_ticket_end_date'                               => date( 'Y-m-d H:i:s', strtotime( '+1 day' ) ),
+				'_tribe_rsvp_for_event'                  => $post_id,
+				tribe( 'tickets.handler' )->key_capacity => $capacity,
+				'_manage_stock'                          => 'yes',
+				'_ticket_start_date'                     => date( 'Y-m-d H:i:s', strtotime( '-1 day' ) ),
+				'_ticket_end_date'                       => date( 'Y-m-d H:i:s', strtotime( '+1 day' ) ),
 			],
 			$meta_input
 		);
 
 		// We don't set stock for unlimited rsvps
 		if ( tribe_is_truthy( $manage_stock ) ) {
-			$merged_meta_input[ '_stock' ] = $calculated_stock;
+			$merged_meta_input['_stock'] = $calculated_stock;
 		}
 
 		// if we have sales, set them
 		if ( ! empty( $sales ) ) {
-			$merged_meta_input['total_sales' ] = $sales;
+			$merged_meta_input['total_sales'] = $sales;
 		}
 
 		// if the ticket start and/or end date(s) are set to empty values they should
@@ -167,14 +175,17 @@ class Ticket extends \WP_UnitTest_Factory_For_Post {
 			}
 		}
 
-		$ticket_id = $factory->post->create( array_merge(
+		$ticket_id = $factory->post->create(
+			array_merge(
 				[
-					'post_title'   => "Test RSVP ticket for " . $post_id,
-					'post_content' => "Test RSVP ticket description for " . $post_id,
-					'post_excerpt' => "Ticket RSVP ticket excerpt for " . $post_id,
+					'post_title'   => 'Test RSVP ticket for ' . $post_id,
+					'post_content' => 'Test RSVP ticket description for ' . $post_id,
+					'post_excerpt' => 'Ticket RSVP ticket excerpt for ' . $post_id,
 					'post_type'    => $rsvp->ticket_object,
 					'meta_input'   => $merged_meta_input,
-				], $overrides )
+				],
+				$overrides
+			)
 		);
 
 		// Clear the cache.
@@ -184,9 +195,12 @@ class Ticket extends \WP_UnitTest_Factory_For_Post {
 	}
 
 	public function create_many_rsvp_tickets( int $count, int $post_id, array $overrides = [] ) {
-		return array_map( function () use ( $post_id, $overrides ) {
-			return $this->create_rsvp_ticket( $post_id, $overrides );
-		}, range( 1, $count ) );
+		return array_map(
+			function () use ( $post_id, $overrides ) {
+				return $this->create_rsvp_ticket( $post_id, $overrides );
+			},
+			range( 1, $count )
+		);
 	}
 
 	/**
@@ -259,7 +273,6 @@ class Ticket extends \WP_UnitTest_Factory_For_Post {
 	 * @param array $overrides An array of values to override the default and random generation arguments.
 	 *
 	 * @return int The generated ticket post ID.
-	 *
 	 */
 	public function create_paypal_ticket_basic( $post_id, $price = 1, array $overrides = [] ) {
 		$factory      = $this->factory ?? $this->factory();
@@ -304,9 +317,9 @@ class Ticket extends \WP_UnitTest_Factory_For_Post {
 		}
 
 		$defaults = [
-			'post_title'   => "Test PayPal ticket for " . $post_id,
-			'post_content' => "Test PayPal ticket description for " . $post_id,
-			'post_excerpt' => "Ticket PayPal ticket excerpt for " . $post_id,
+			'post_title'   => 'Test PayPal ticket for ' . $post_id,
+			'post_content' => 'Test PayPal ticket description for ' . $post_id,
+			'post_excerpt' => 'Ticket PayPal ticket excerpt for ' . $post_id,
 			'post_type'    => tribe( 'tickets.commerce.paypal' )->ticket_object,
 			'meta_input'   => array_merge( $default_meta_input, $meta_input ),
 		];
@@ -409,7 +422,11 @@ class Ticket extends \WP_UnitTest_Factory_For_Post {
 		if ( $has_global_tickets ) {
 			$global_qty = $global_qty ?? 100;
 
-			/** @var Tribe__Tickets__Tickets_Handler $tickets_handler */
+			/**
+			 * Ticket handler.
+			 *
+			 * @var Tribe__Tickets__Tickets_Handler
+			 */
 			$tickets_handler = tribe( 'tickets.handler' );
 			update_post_meta( $post_id, $global_stock::TICKET_STOCK_CAP, $global_qty );
 			update_post_meta( $post_id, $global_stock::GLOBAL_STOCK_LEVEL, $global_qty - $global_sales );

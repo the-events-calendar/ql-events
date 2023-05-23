@@ -26,7 +26,7 @@ class Tickets extends PostObjects {
 	 * Returns a connection resolver wrapped around the ticket repositories
 	 * passed by classname.
 	 *
-	 * @since 0.0.1
+	 * @since TBD
 	 *
 	 * @param array $ticket_classes  Classnames of Ticket repository to be used.
 	 *
