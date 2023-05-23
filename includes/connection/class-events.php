@@ -60,7 +60,8 @@ class Events extends PostObjects {
 				'queryClass'     => Events_Query::class,
 				'connectionArgs' => self::get_connection_args(),
 				'resolve'        => function( $source, $args, $context, $info ) {
-					$resolver = new PostObjectConnectionResolver( $source, $args, $context, $info );
+					$context->queryClass = Events_Query::class;
+					$resolver = new PostObjectConnectionResolver( $source, $args, $context, $info, Main::POSTTYPE );
 					if ( ! empty( $args['startsAfter'] ) ) {
 						$time = self::validate_time_input( 'startsAfter', $args['startsAfter'] );
 						$resolver->set_query_arg( 'starts_after', $time );

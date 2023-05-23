@@ -18,7 +18,7 @@ class Events_Query {
 	 *
 	 * @var \WP_Query
 	 */
-	private $query;
+	protected $query;
 
 	/**
 	 * Events_Query constructor.
@@ -26,7 +26,22 @@ class Events_Query {
 	 * @param array $args  Query Arguments.
 	 */
 	public function __construct( $args = [] ) {
+		add_action( 'tec_events_custom_tables_v1_custom_tables_query_pre_get_posts', [ $this, 'remove_redirect_posts_orderby' ] );
 		$this->query = Query::getEvents( $args, true );
+
+		\codecept_debug( $this->query->posts );
+	}
+
+	/**
+	 * Magic method to re-map the isset check on the child class looking for properties when
+	 * resolving the fields
+	 *
+	 * @param string $key The name of the field you are trying to retrieve
+	 *
+	 * @return bool
+	 */
+	public function __isset( $key ) {
+		return isset( $this->query->$key );
 	}
 
 	/**
@@ -38,5 +53,34 @@ class Events_Query {
 	 */
 	public function __get( $name ) {
 		return $this->query->$name;
+	}
+
+	/**
+	 * Forwards function calls to WP_Query instance.
+	 *
+	 * @param string $method - function name.
+	 * @param array  $args  - function call arguments.
+	 *
+	 * @return mixed
+	 *
+	 * @throws BadMethodCallException Method not found on WP_Query object.
+	 */
+	public function __call( $method, $args ) {
+		if ( \is_callable( [ $this->query, $method ] ) ) {
+			return $this->query->$method( ...$args );
+		}
+
+		$class = __CLASS__;
+		throw new BadMethodCallException( "Call to undefined method {$method} on the {$class}" );
+	}
+
+	/**
+	 * Removes 'posts_orderby' filter for GraphQL requests.
+	 *
+	 * @param \Custom_Table_Query $query  Query instance.
+	 * @return void
+	 */
+	public function remove_redirect_posts_orderby( $query ) {
+		remove_filter( 'posts_orderby', [ $query, 'redirect_posts_orderby' ], 200 );
 	}
 }

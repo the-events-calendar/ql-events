@@ -137,7 +137,7 @@ class EventQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 		$query = '
 			query ($where: RootQueryToEventConnectionWhereArgs) {
 				events(first: 20 where: $where) {
-					nodes { id }
+					nodes { id startDate }
 				}
 			}
 		';

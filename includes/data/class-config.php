@@ -38,6 +38,7 @@ class Config {
 	 * @return string
 	 */
 	public function patchup_orderby( string $orderby, WP_Query $wp_query ) {
+		global $wpdb;
 		if ( true !== is_graphql_request() ) {
 			return $orderby;
 		}

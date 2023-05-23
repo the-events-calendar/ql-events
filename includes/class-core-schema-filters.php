@@ -25,15 +25,15 @@ class Core_Schema_Filters {
 		add_filter( 'register_post_type_args', [ __CLASS__, 'register_post_types' ], 10, 2 );
 		add_filter( 'register_taxonomy_args', [ __CLASS__, 'register_taxonomies' ], 10, 2 );
 
-		add_filter(
-			'graphql_post_object_connection_query_args',
-			[
-				'\WPGraphQL\QL_Events\Data\Connection\Event_Connection_Resolver',
-				'get_query_args',
-			],
-			10,
-			5
-		);
+		// add_filter(
+		// 	'graphql_post_object_connection_query_args',
+		// 	[
+		// 		'\WPGraphQL\QL_Events\Data\Connection\Event_Connection_Resolver',
+		// 		'get_query_args',
+		// 	],
+		// 	10,
+		// 	5
+		// );
 
 		add_filter(
 			'graphql_post_object_connection_query_args',
