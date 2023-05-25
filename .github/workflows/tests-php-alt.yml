@@ -43,7 +43,7 @@ jobs:
           extensions: json, mbstring
           tools: composer:v2
         env:
-          GITHUB_TOKEN: ${{ secrets.COMPOSER_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install dependencies
         run: |
