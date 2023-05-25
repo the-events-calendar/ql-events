@@ -17,6 +17,7 @@ services:
       context: .
       args:
         PHP_VERSION: ${PHP_VERSION:-8.0}
+        XDEBUG_VERSION: ${XDEBUG_VERSION:-2.9.6}
     depends_on:
       - mysql
       - mysql_phpunit
