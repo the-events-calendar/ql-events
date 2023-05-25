@@ -14,7 +14,13 @@ COPY local/php.ini /usr/local/etc/php/php.ini
 
 # Setup xdebug. The latest version supported by PHP 5.6 is 2.5.5.
 RUN	pecl install "xdebug-${XDEBUG_VERSION}"; \
-	docker-php-ext-enable xdebug
+	docker-php-ext-enable xdebug \
+	echo "xdebug.default_enable = 1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
+	echo "xdebug.remote_autostart = 0" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
+	echo "xdebug.remote_connect_back = 0" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
+	echo "xdebug.remote_enable = 1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
+	echo "xdebug.remote_port = 9000" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini; \
+	echo "xdebug.remote_log = /var/www/html/xdebug.log" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini;
 
 # Install PDO MySQL driver.
 RUN docker-php-ext-install \
