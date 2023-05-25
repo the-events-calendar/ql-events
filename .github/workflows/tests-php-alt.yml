@@ -46,18 +46,19 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.COMPOSER_TOKEN }}
 
       - name: Install dependencies
+        env:
+          WP_VERSION: ${{ matrix.wordpress }}
         run: |
           cp .env.testing .env
           rm -rf composer.lock
           composer install
-          COMPOSER_AUTH="$COMPOSER_AUTH" SKIP_DB_CREATE=true SKIP_WP_SETUP=true composer install-test-env
+          SKIP_DB_CREATE=true SKIP_WP_SETUP=true composer install-test-env
 
       - name: Run Tests w/ Docker.
         env:
           USING_XDEBUG: ${{ matrix.xdebug }}
           WP_VERSION: ${{ matrix.wordpress }}
           PHP_VERSION: ${{ matrix.php }}
-
         run: composer run-codeception -- ${{ matrix.coverage }} ${{ matrix.debug }}
 
       - name: Push Codecoverage to Coveralls.io
