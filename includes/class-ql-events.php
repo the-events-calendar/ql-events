@@ -133,6 +133,10 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 			return $deps;
 		}
 
+		public static function is_test_mode_active() {
+			return defined( 'QL_EVENTS_TEST_MODE' ) && QL_EVENTS_TEST_MODE;
+		}
+
 		/**
 		 * Returns true if the "enable_events_pro_support" is "on"
 		 *
@@ -140,7 +144,7 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		 */
 		public static function is_events_pro_support_enabled() {
 			return 'on' === ql_events_setting( 'enable_events_pro_support', 'off' )
-				|| defined( 'QL_EVENTS_TEST_MODE' ) && QL_EVENTS_TEST_MODE;
+				|| self::is_test_mode_active();
 		}
 
 		/**
@@ -159,7 +163,7 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		 */
 		public static function is_event_tickets_support_enabled() {
 			return 'on' === ql_events_setting( 'enable_event_tickets_support', 'off' )
-				|| defined( 'QL_EVENTS_TEST_MODE' ) && QL_EVENTS_TEST_MODE;
+				|| self::is_test_mode_active();
 		}
 
 		/**
@@ -187,7 +191,7 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		 */
 		public static function is_event_tickets_plus_support_enabled() {
 			return 'on' === ql_events_setting( 'enable_event_tickets_plus_support', 'off' )
-				|| defined( 'QL_EVENTS_TEST_MODE' ) && QL_EVENTS_TEST_MODE;
+				|| self::is_test_mode_active();
 		}
 
 		/**
@@ -224,7 +228,7 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		 */
 		public static function is_events_virtual_support_enabled() {
 			return 'on' === ql_events_setting( 'enable_events_virtual_support', 'off' )
-				|| defined( 'QL_EVENTS_TEST_MODE' ) && QL_EVENTS_TEST_MODE;
+				|| self::is_test_mode_active();
 		}
 
 		/**

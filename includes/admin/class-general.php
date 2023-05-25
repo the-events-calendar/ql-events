@@ -8,6 +8,8 @@
 
 namespace WPGraphQL\QL_Events\Admin;
 
+use WPGraphQL\QL_Events\QL_Events;
+
 /**
  * General class
  */
@@ -19,7 +21,7 @@ class General extends Section {
 	 * @return array
 	 */
 	public static function get_fields() {
-		$test_mode_status = (bool) defined( 'QL_EVENTS_TEST_MODE' ) && QL_EVENTS_TEST_MODE ? 'force enabled' : 'force disabled';
+		$test_mode_status = QL_Events::is_test_mode_active() ? 'force enabled' : 'force disabled';
 		$settings_status  = sprintf(
 			/* translators: Test mode status */
 			__( 'This setting is <strong>%s</strong>. The <strong>QL_EVENTS_TEST_MODE</strong> flag with code', 'ql-events' ),
