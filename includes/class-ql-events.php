@@ -133,6 +133,11 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 			return $deps;
 		}
 
+		/**
+		 * Returns true if the "QL_EVENTS_TEST_MODE" set to a "truthy" value.
+		 *
+		 * @return boolean
+		 */
 		public static function is_test_mode_active() {
 			return defined( 'QL_EVENTS_TEST_MODE' ) && QL_EVENTS_TEST_MODE;
 		}
