@@ -44,13 +44,11 @@ jobs:
           tools: composer:v2
 
       - name: Install dependencies
-        env:
-          COMPOSER_TOKEN: ${{ secrets.COMPOSER_TOKEN }}
         run: |
           cp .env.testing .env
           rm -rf composer.lock
           composer install
-          COMPOSER_AUTH='{"github-oauth": {"github.com": "${{ env.COMPOSER_TOKEN }}"}}' SKIP_DB_CREATE=true SKIP_WP_SETUP=true composer install-test-env
+          COMPOSER_AUTH='{"github-oauth": {"github.com": "${{ secrets.COMPOSER_TOKEN }}"}}' SKIP_DB_CREATE=true SKIP_WP_SETUP=true composer install-test-env
 
       - name: Run Tests w/ Docker.
         env:
