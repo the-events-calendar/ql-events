@@ -16,6 +16,10 @@ namespace WPGraphQL\QL_Events\Type\WPObject;
 class Ticket_Linked_Data_Type {
 	/**
 	 * Registers TicketLinkedData type.
+	 *
+	 * @since 0.0.1
+	 *
+	 * @return void
 	 */
 	public static function register() {
 		register_graphql_object_type(

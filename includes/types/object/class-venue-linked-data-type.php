@@ -16,6 +16,10 @@ namespace WPGraphQL\QL_Events\Type\WPObject;
 class Venue_Linked_Data_Type {
 	/**
 	 * Registers VenueLinkedData type.
+	 *
+	 * @since 0.0.1
+	 *
+	 * @return void
 	 */
 	public static function register() {
 		register_graphql_object_type(

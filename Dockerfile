@@ -1,5 +1,4 @@
-ARG PHP_VERSION=7.4
-
+ARG PHP_VERSION
 FROM wordpress:php${PHP_VERSION}-apache
 
 ARG XDEBUG_VERSION=2.9.6
@@ -15,7 +14,8 @@ COPY local/php.ini /usr/local/etc/php/php.ini
 
 # Setup xdebug. The latest version supported by PHP 5.6 is 2.5.5.
 RUN	pecl install "xdebug-${XDEBUG_VERSION}"; \
-	docker-php-ext-enable xdebug
+	docker-php-ext-enable xdebug; \
+	echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/xdebug.ini;
 
 # Install PDO MySQL driver.
 RUN docker-php-ext-install \

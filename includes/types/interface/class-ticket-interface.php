@@ -5,6 +5,7 @@
  * Registers Ticket interface.
  *
  * @package WPGraphQL\QL_Events\Type\WPInterface;
+ * @since   TBD
  */
 
 namespace WPGraphQL\QL_Events\Type\WPInterface;
@@ -23,27 +24,42 @@ class Ticket_Interface {
 	/**
 	 * Registers the "Ticket" interface.
 	 *
-	 * @param \WPGraphQL\Registry\TypeRegistry $type_registry  Instance of the WPGraphQL TypeRegistry.
+	 * @since TBD
+	 *
+	 * @return void
 	 */
-	public static function register_interface( &$type_registry ) {
+	public static function register_interface() {
 		register_graphql_interface_type(
 			'Ticket',
 			[
 				'interfaces'  => [ 'Node' ],
 				'description' => __( 'Ticket object', 'ql-events' ),
 				'fields'      => self::get_fields(),
-				'resolveType' => function ( $value ) use ( &$type_registry ) {
+				'resolveType' => function ( $value ) {
+					$type_registry = \WPGraphQL::get_type_registry();
 					switch ( $value->post_type ) {
 						case tribe( 'tickets.rsvp' )->ticket_object:
 							return $type_registry->get_type( 'RSVPTicket' );
 						case tribe( 'tickets.commerce.paypal' )->ticket_object:
 							return $type_registry->get_type( 'PayPalTicket' );
-						case tribe( 'tickets-plus.commerce.woo' )->ticket_object:
-							return $type_registry->get_type( 'SimpleProduct' );
+
 						default:
+							/**
+							 * Filter the Ticket resolve type.
+							 *
+							 * @param string|null  $type_name  Name of type to be resolved.
+							 * @param mixed        $value      Data source.
+							 *
+							 * @since TBD
+							 */
+							$type = apply_filters( 'ql_events_resolve_ticket_type', null, $value );
+							if ( ! empty( $type ) ) {
+								return $type;
+							}
+
 							throw new UserError(
 								sprintf(
-									/* translators: %s: Product type */
+									/* translators: %s: Ticket type */
 									__( 'The "%s" ticket type is not supported by the core QL-Events schema.', 'ql-events' ),
 									$value->post_type
 								)

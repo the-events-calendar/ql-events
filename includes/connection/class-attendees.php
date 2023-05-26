@@ -12,7 +12,7 @@ namespace WPGraphQL\QL_Events\Connection;
 
 use Tribe__Tickets__RSVP as RSVP;
 use Tribe__Tickets__Attendee_Repository as Attendee_Repository;
-use WPGraphQL\Connection\PostObjects;
+use WPGraphQL\Type\Connection\PostObjects;
 use WPGraphQL\Data\Connection\PostObjectConnectionResolver;
 
 /**
@@ -21,6 +21,10 @@ use WPGraphQL\Data\Connection\PostObjectConnectionResolver;
 class Attendees extends PostObjects {
 	/**
 	 * Registers the various connections from other Types to Attendees
+	 *
+	 * @since 0.0.1
+	 *
+	 * @return void
 	 */
 	public static function register_connections() {
 		// Get Attendees repository instance.
@@ -84,6 +88,8 @@ class Attendees extends PostObjects {
 
 	/**
 	 * Returns the args to be used in the connection for a given attendee post-type.
+	 *
+	 * @since 0.1.0
 	 *
 	 * @param mixed|WP_Post_Type|WP_Taxonomy $attendee_type The Attendee type.
 	 *

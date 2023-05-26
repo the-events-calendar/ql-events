@@ -19,6 +19,10 @@ use WPGraphQL\Data\DataSource;
 class RSVPTicket_Type {
 	/**
 	 * Registers "Attendee" type fields.
+	 *
+	 * @since 0.0.1
+	 *
+	 * @return void
 	 */
 	public static function register_fields() {
 		// Retrieve Ticket Events' RSVP class instance.

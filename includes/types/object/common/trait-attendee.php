@@ -18,6 +18,8 @@ trait Attendee {
 	/**
 	 * Define common Attendee fields
 	 *
+	 * @since 0.0.1
+	 *
 	 * @return array
 	 */
 	public static function fields() {

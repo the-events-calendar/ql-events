@@ -24,12 +24,16 @@ class WooAttendee_Type {
 	/**
 	 * Stores ticket manager
 	 *
+	 * @since 0.0.1
+	 *
 	 * @var Tribe__Tickets_Plus__Commerce__WooCommerce__Main
 	 */
 	private static $manager;
 
 	/**
 	 * Returns ticket manager.
+	 *
+	 * @since 0.0.1
 	 *
 	 * @return Tribe__Tickets_Plus__Commerce__WooCommerce__Main
 	 */
@@ -42,7 +46,46 @@ class WooAttendee_Type {
 	}
 
 	/**
+	 * Resolves the GraphQL type for "WooAttendee".
+	 *
+	 * @since TBD
+	 *
+	 * @return void
+	 */
+	public static function register_to_attendee_interface() {
+		add_filter(
+			'ql_events_resolve_attendee_type',
+			[ static::class, 'resolve_woo_attendee' ],
+			10,
+			2
+		);
+	}
+
+	/**
+	 * Callback for resolver
+	 *
+	 * @since TBD
+	 *
+	 * @param mixed $type   GraphQL Type.
+	 * @param mixed $value  Attendee data object.
+	 *
+	 * @return mixed
+	 */
+	public static function resolve_woo_attendee( $type, $value ) {
+		$type_registry = \WPGraphQL::get_type_registry();
+		if ( tribe( 'tickets-plus.commerce.woo' )->attendee_object === $post_type ) {
+			$type = $type_registry->get_type( 'WooAttendee' );
+		}
+
+		return $type;
+	}
+
+	/**
 	 * Registers "Attendee" type fields.
+	 *
+	 * @since 0.0.1
+	 *
+	 * @return void
 	 */
 	public static function register_fields() {
 		deregister_graphql_field( 'WooAttendee', 'ticket' );
@@ -108,6 +151,46 @@ class WooAttendee_Type {
 					'resolve'     => function( $source, array $args, AppContext $context ) {
 						$email = get_post_meta( $source->ID, self::manager()->email, true );
 						return ! empty( $email ) ? $email : null;
+					},
+				],
+				'data'      => [
+					'type'        => [ 'list_of' => 'MetaData' ],
+					'description' => __( 'Attendee\'s Data', 'ql-events' ),
+					'args'        => [
+						'key'      => [
+							'type'        => 'String',
+							'description' => __( 'Retrieve meta by key', 'ql-events' ),
+						],
+						'keysIn'   => [
+							'type'        => [ 'list_of' => 'String' ],
+							'description' => __( 'Retrieve multiple metas by key', 'ql-events' ),
+						],
+						'multiple' => [
+							'type'        => 'Boolean',
+							'description' => __( 'Retrieve meta with matching keys', 'ql-events' ),
+						],
+					],
+					'resolve'     => function( $source ) {
+						$decorator          = tribe( Attendee::class );
+						$decorated_attendee = $decorator->get_attendee( get_post( $source->ID ) );
+
+						$meta               = tribe( 'tickets-plus.meta' );
+						$attendee_meta_data = $meta->get_attendee_meta_fields( $decorated_attendee->ticket_id, $decorated_attendee->ID );
+						if ( isset( $attendee_meta_data[0] ) ) {
+							unset( $attendee_meta_data[0] );
+						}
+
+						if ( ! is_array( $attendee_meta_data ) ) {
+							return [];
+						}
+
+						return array_map(
+							function( $key, $value ) {
+								return (object) compact( 'value', 'key' );
+							},
+							array_keys( $attendee_meta_data ),
+							array_values( $attendee_meta_data )
+						);
 					},
 				],
 			]

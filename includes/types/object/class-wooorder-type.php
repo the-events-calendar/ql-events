@@ -19,7 +19,46 @@ use WPGraphQL\Model\Post;
  */
 class WooOrder_Type {
 	/**
+	 * Resolves the GraphQL type for "WooOrder".
+	 *
+	 * @since TBD
+	 *
+	 * @return void
+	 */
+	public static function register_to_order_interface() {
+		add_filter(
+			'ql_events_resolve_tec_order_type',
+			[ __CLASS__, 'resolve_woo_order' ],
+			10,
+			2
+		);
+	}
+
+	/**
+	 * Callback for resolver
+	 *
+	 * @since TBD
+	 *
+	 * @param mixed $type   GraphQL Type.
+	 * @param mixed $value  Order data object.
+	 *
+	 * @return mixed
+	 */
+	public static function resolve_woo_order( $type, $value ) {
+		$type_registry = \WPGraphQL::get_type_registry();
+		if ( 'shop_order' === $value->post_type ) {
+			$type = $type_registry->get_type( 'Order' );
+		}
+
+		return $type;
+	}
+
+	/**
 	 * Registers "Order" type fields.
+	 *
+	 * @since 0.0.1
+	 *
+	 * @return void
 	 */
 	public static function register_fields() {
 		deregister_graphql_field( 'Order', 'databaseId' );

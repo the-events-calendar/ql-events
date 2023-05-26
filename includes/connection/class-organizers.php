@@ -11,7 +11,7 @@
 namespace WPGraphQL\QL_Events\Connection;
 
 use Tribe__Events__Main as Main;
-use WPGraphQL\Connection\PostObjects;
+use WPGraphQL\Type\Connection\PostObjects;
 
 /**
  * Class - Organizers
@@ -19,6 +19,10 @@ use WPGraphQL\Connection\PostObjects;
 class Organizers extends PostObjects {
 	/**
 	 * Registers the various connections from other Types to Organizers
+	 *
+	 * @since 0.0.1
+	 *
+	 * @return void
 	 */
 	public static function register_connections() {
 		// From Event to Organizers.

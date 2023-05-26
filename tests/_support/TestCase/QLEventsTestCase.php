@@ -22,7 +22,7 @@ class QLEventsTestCase extends \Tests\WPGraphQL\TestCase\WPGraphQLTestCase {
 			'Organizer',
 			'RsvpAttendee',
 			'Venue',
-			'Ticket'
+			'Ticket',
 		);
 
 		foreach ( $factories as $factory ) {

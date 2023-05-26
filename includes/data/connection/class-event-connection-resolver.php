@@ -23,6 +23,8 @@ class Event_Connection_Resolver {
 	 * This prepares the $query_args for use in the connection query. This is where default $args are set, where dynamic
 	 * $args from the $this->source get set, and where mapping the input $args to the actual $query_args occurs.
 	 *
+	 * @since 0.0.1
+	 *
 	 * @param array       $query_args - WP_Query args.
 	 * @param mixed       $source     - Connection parent resolver.
 	 * @param array       $args       - Connection arguments.
@@ -65,8 +67,7 @@ class Event_Connection_Resolver {
 	 * this was quick. I'd be down to explore more dynamic ways to map this, but for
 	 * now this gets the job done.
 	 *
-	 * @since  0.0.5
-	 * @access private
+	 * @since  0.0.1
 	 *
 	 * @param array $args  Where argument input.
 	 *
@@ -114,6 +115,8 @@ class Event_Connection_Resolver {
 
 	/**
 	 * Takes a DateQueryInput and returns a meta query array.
+	 *
+	 * @since 0.0.1
 	 *
 	 * @param array  $date_query_input  DateQueryInput.
 	 * @param string $meta_key          Target date meta key.

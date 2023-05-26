@@ -3,6 +3,7 @@
  * Ticket Field interface type.
  *
  * @package WPGraphQL\QL_Events\Type\WPInterface
+ * @since   TBD
  */
 
 namespace WPGraphQL\QL_Events\Type\WPInterface;
@@ -14,6 +15,8 @@ class Ticket_Field {
 
 	/**
 	 * Register the Node interface
+	 *
+	 * @since TBD
 	 *
 	 * @return void
 	 */

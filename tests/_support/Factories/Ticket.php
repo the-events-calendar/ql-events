@@ -418,4 +418,136 @@ class Ticket extends \WP_UnitTest_Factory_For_Post {
 
 		return $ticket_ids;
 	}
+
+	/**
+	 * Get the ticket provider class.
+	 *
+	 * @return string Ticket provider class.
+	 */
+	protected function get_woocommerce_ticket_provider() {
+		return 'tickets-plus.commerce.woo';
+	}
+
+	/**
+	 * Generates a WooCommerce ticket for a post.
+	 *
+	 * @param int   $post_id   The ID of the post this ticket should be related to.
+	 * @param int   $price     Ticket price.
+	 * @param array $overrides An array of values to override the default and random generation arguments.
+	 *
+	 * @return int The generated ticket post ID.
+	 */
+	public function create_woocommerce_ticket( $post_id, $price, array $overrides = [] ) {
+		$post_id = absint( $post_id );
+
+		$data = [
+			'ticket_name'        => "Test WooCommerce ticket for {$post_id}",
+			'ticket_description' => "Test WooCommerce ticket description for {$post_id}",
+			'ticket_price'       => $price,
+		];
+
+		$data = array_merge( $data, $overrides );
+
+		return $this->create_ticket( $this->get_woocommerce_ticket_provider(), $post_id, $price, $data );
+	}
+
+	/**
+	 * Generates multiple identical WooCommerce tickets for a post.
+	 *
+	 * @param int   $count     The number of tickets to create
+	 * @param int   $post_id   The ID of the post this ticket should be related to.
+	 * @param array $overrides An array of values to override the default and random generation arguments.
+	 *
+	 * @return array An array of the generated ticket post IDs.
+	 */
+	public function create_many_woocommerce_tickets( $count, $post_id, array $overrides = [] ) {
+		return $this->create_many_tickets( $this->get_woocommerce_ticket_provider(), $count, $post_id, $overrides );
+	}
+
+	/**
+	 * Generates a WooCommerce ticket for a post.
+	 *
+	 * @deprecated Use create_woocommerce_ticket() going forward instead.
+	 *
+	 * @param int   $post_id   The ID of the post this ticket should be related to.
+	 * @param int   $price
+	 * @param array $overrides An array of values to override the default and random generation arguments.
+	 *
+	 * @return int The generated ticket post ID.
+	 */
+	public function create_woocommerce_ticket_basic( $post_id, $price, array $overrides = [] ) {
+		$factory = $this->factory ?? $this->factory();
+
+		$meta_input = isset( $overrides['meta_input'] ) && \is_array( $overrides['meta_input'] ) ? $overrides['meta_input'] : [];
+
+		$capacity = \Tribe__Utils__Array::get( $meta_input, '_capacity', 100 );
+		$stock    = \Tribe__Utils__Array::get( $meta_input, '_stock', $capacity );
+
+		unset( $overrides['meta_input'] );
+
+		/** @var \Tribe__Tickets_Plus__Commerce__WooCommerce__Main $main */
+		$main      = tribe( 'tickets-plus.commerce.woo' );
+		$ticket_id = $factory->post->create( array_merge( [
+			'post_title'   => "Test WooCommerce ticket for {$post_id}",
+			'post_content' => "Test WooCommerce ticket description for {$post_id}",
+			'post_excerpt' => "Ticket WooCommerce ticket excerpt for {$post_id}",
+			'post_type'    => $main->ticket_object,
+			'meta_input'   => array_merge( [
+				$main->event_key                                 => $post_id,
+				'_price'                                         => $price,
+				'_regular_price'                                 => $price,
+				'_stock'                                         => $stock,
+				tribe( 'tickets.handler' )->key_capacity         => $capacity,
+				'_manage_stock'                                  => 'yes',
+				'_ticket_start_date'                             => date( 'Y-m-d H:i:s', strtotime( '-1 day' ) ),
+				'_ticket_end_date'                               => date( 'Y-m-d H:i:s', strtotime( '+1 day' ) ),
+				\Tribe__Tickets__Global_Stock::TICKET_STOCK_MODE => 'own',
+			], $meta_input ),
+		], $overrides ) );
+
+		// Get provider key name.
+		$provider_key = tribe( 'tickets.handler' )->key_provider_field;
+
+		// Update provider key for post.
+		update_post_meta( $post_id, $provider_key, 'Tribe__Tickets_Plus__Commerce__WooCommerce__Main' );
+
+		// Clear the cache.
+		tribe( $this->get_woocommerce_ticket_provider() )->clear_ticket_cache_for_post( $post_id );
+
+		return $ticket_id;
+	}
+
+	/**
+	 * Generates multiple identical WooCommerce tickets for a post.
+	 *
+	 * @deprecated Use create_many_woocommerce_tickets() going forward instead.
+	 *
+	 * @param int   $count     The number of tickets to create
+	 * @param int   $post_id   The ID of the post this ticket should be related to.
+	 * @param array $overrides An array of values to override the default and random generation arguments.
+	 *
+	 * @return array An array of the generated ticket post IDs.
+	 */
+	public function create_many_woocommerce_tickets_basic( $count, $post_id, array $overrides = [] ) {
+		return array_map( function () use ( $post_id, $overrides ) {
+			$price = $overrides['price'] ?? random_int( 1, 5 );
+
+			return $this->create_woocommerce_ticket_basic( $post_id, $price, $overrides );
+		}, range( 1, $count ) );
+	}
+
+	/**
+	 * Add ARI fields to ticket.
+	 *
+	 * @param int     $ticket_id        Ticket ID.
+	 * @param boolean $include_required Whether to include required fields.
+	 */
+	public function add_attendee_meta_fields_to_ticket( $ticket_id, $data = [] ) {
+		/** @var \Tribe__Tickets_Plus__Meta $meta */
+		$meta = \Tribe__Tickets_Plus__Main::instance()->meta();
+
+		$ticket_object = \Tribe__Tickets__Tickets::load_ticket_object( $ticket_id );
+
+		$meta->save_meta( $ticket_object->get_event_id(), $ticket_object, $data );
+	}
 }

@@ -23,12 +23,16 @@ class PayPalAttendee_Type {
 	/**
 	 * Stores ticket manager
 	 *
+	 * @since 0.0.1
+	 *
 	 * @var Tribe__Tickets__Commerce__PayPal__Main
 	 */
 	private static $manager;
 
 	/**
 	 * Returns ticket manager.
+	 *
+	 * @since 0.0.1
 	 *
 	 * @return Tribe__Tickets__Commerce__PayPal__Main
 	 */
@@ -42,6 +46,10 @@ class PayPalAttendee_Type {
 
 	/**
 	 * Registers "Attendee" type fields.
+	 *
+	 * @since 0.0.1
+	 *
+	 * @return void
 	 */
 	public static function register_fields() {
 		deregister_graphql_field( 'PayPalAttendee', 'ticket' );

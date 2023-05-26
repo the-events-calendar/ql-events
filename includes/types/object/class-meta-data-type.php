@@ -19,12 +19,12 @@ class Meta_Data_Type {
 
 	/**
 	 * Register Order type and queries to the WPGraphQL schema
+	 *
+	 * @since 0.0.1
+	 *
+	 * @return void
 	 */
 	public static function register() {
-		if ( QL_Events::is_woographql_loaded() ) {
-			return;
-		}
-
 		register_graphql_object_type(
 			'MetaData',
 			[

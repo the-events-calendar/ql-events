@@ -4,11 +4,12 @@
 
 actor: WpunitTester
 modules:
-    enabled:
-        - WPLoader
-        - \Helper\Wpunit
-    disabled:
-        - WPDb
-        - WPBrowser
-        - WPFilesystem
-        - REST
+  enabled:
+    - WPLoader
+    - \Helper\Wpunit
+  disabled:
+    - WPDb
+    - WPBrowser
+    - WPFilesystem
+    - REST
+bootstrap: _bootstrap.php
