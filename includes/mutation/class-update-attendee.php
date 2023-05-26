@@ -6,7 +6,7 @@
  * who has purchased a ticket.
  *
  * @package WPGraphQL\QL_Events\Mutation
- * @since 0.0.1
+ * @since TBD
  */
 
 namespace WPGraphQL\QL_Events\Mutation;
@@ -26,6 +26,10 @@ class Update_Attendee extends Register_Attendee {
 
 	/**
 	 * Registers mutation
+	 *
+	 * @since TBD
+	 *
+	 * @return void
 	 */
 	public static function register_mutation() {
 		register_graphql_mutation(
@@ -40,6 +44,8 @@ class Update_Attendee extends Register_Attendee {
 
 	/**
 	 * Defines the mutation input field configuration
+	 *
+	 * @since TBD
 	 *
 	 * @return array
 	 */
@@ -81,6 +87,8 @@ class Update_Attendee extends Register_Attendee {
 	/**
 	 * Defines the mutation output field configuration
 	 *
+	 * @since TBD
+	 *
 	 * @return array
 	 */
 	public static function get_output_fields() {
@@ -105,6 +113,17 @@ class Update_Attendee extends Register_Attendee {
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
+		/**
+		 * Updates existing attendee using provided input data.
+		 *
+		 * @since TBD
+		 *
+		 * @param array       $input    Mutation input data.
+		 * @param AppContext  $context  Mutation's AppContext instance.
+		 * @param ResolveInfo $info     Mutation's ResolveInfo instance.
+		 *
+		 * @return array
+		 */
 		return function( $input, AppContext $context, ResolveInfo $info ) {
 			// Get Attendee ID.
 			$attendee_id = Utils::get_database_id_from_id( $input['attendeeId'] );

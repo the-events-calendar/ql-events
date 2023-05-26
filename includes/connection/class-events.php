@@ -17,7 +17,11 @@ use WPGraphQL\Types;
  */
 class Events {
 	/**
-	 * Filters
+	 * Returns Venue connection where arguments.
+	 *
+	 * @since 0.0.1
+	 *
+	 * @return array
 	 */
 	public static function where_args() {
 		return [

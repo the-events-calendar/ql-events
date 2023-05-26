@@ -23,12 +23,16 @@ class RSVPAttendee_Type {
 	/**
 	 * Stores ticket manager
 	 *
+	 * @since 0.0.1
+	 *
 	 * @var Tribe__Tickets__RSVP
 	 */
 	private static $manager;
 
 	/**
 	 * Returns ticket manager.
+	 *
+	 * @since 0.0.1
 	 *
 	 * @return Tribe__Tickets__RSVP
 	 */
@@ -42,6 +46,10 @@ class RSVPAttendee_Type {
 
 	/**
 	 * Registers "Attendee" type fields.
+	 *
+	 * @since 0.0.1
+	 *
+	 * @return void
 	 */
 	public static function register_fields() {
 		deregister_graphql_field( 'RSVPAttendee', 'ticket' );

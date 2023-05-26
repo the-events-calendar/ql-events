@@ -6,7 +6,7 @@
  * that has purchased a ticket.
  *
  * @package WPGraphQL\QL_Events\Mutation
- * @since 0.0.1
+ * @since TBD
  */
 
 namespace WPGraphQL\QL_Events\Mutation;
@@ -26,6 +26,10 @@ class Register_Attendee {
 
 	/**
 	 * Registers mutation
+	 *
+	 * @since TBD
+	 *
+	 * @return void
 	 */
 	public static function register_mutation() {
 		register_graphql_mutation(
@@ -40,6 +44,8 @@ class Register_Attendee {
 
 	/**
 	 * Defines the mutation input field configuration
+	 *
+	 * @since TBD
 	 *
 	 * @return array
 	 */
@@ -97,6 +103,8 @@ class Register_Attendee {
 	/**
 	 * Defines the mutation output field configuration
 	 *
+	 * @since TBD
+	 *
 	 * @return array
 	 */
 	public static function get_output_fields() {
@@ -119,9 +127,20 @@ class Register_Attendee {
 	/**
 	 * Defines the mutation data modification closure.
 	 *
+	 * @since TBD
+	 *
 	 * @return callable
 	 */
 	public static function mutate_and_get_payload() {
+		/**
+		 * Registers attendee using provided input data.
+		 *
+		 * @param array       $input    Mutation input data.
+		 * @param AppContext  $context  Mutation's AppContext instance.
+		 * @param ResolveInfo $info     Mutation's ResolveInfo instance.
+		 *
+		 * @return array
+		 */
 		return function( $input, AppContext $context, ResolveInfo $info ) {
 			// Get input.
 			$ticket_id         = Utils::get_database_id_from_id( $input['ticketId'] );
@@ -186,6 +205,8 @@ class Register_Attendee {
 
 	/**
 	 * Simple reducer for mapping extra fields.
+	 *
+	 * @since TBD
 	 *
 	 * @param array $additional_fields  Extra attendee meta.
 	 *

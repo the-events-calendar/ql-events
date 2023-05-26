@@ -15,6 +15,8 @@ class Type_Registry {
 	/**
 	 * Returns true if the Events Pro fields, types, queries, and mutations can be loaded.
 	 *
+	 * @since TBD
+	 *
 	 * @return bool
 	 */
 	public function load_events_pro_schema() {
@@ -25,6 +27,8 @@ class Type_Registry {
 	/**
 	 * Returns true if the Event Tickets fields, types, queries, and mutations can be loaded.
 	 *
+	 * @since TBD
+	 *
 	 * @return bool
 	 */
 	public function load_event_tickets_schema() {
@@ -34,6 +38,8 @@ class Type_Registry {
 
 	/**
 	 * Returns true if the Event Tickets Plus fields, types, queries, and mutations can be loaded.
+	 *
+	 * @since TBD
 	 *
 	 * @return bool
 	 */
@@ -46,6 +52,8 @@ class Type_Registry {
 	/**
 	 * Returns true if the Events Virtual fields, types, queries, and mutations can be loaded.
 	 *
+	 * @since TBD
+	 *
 	 * @return bool
 	 */
 	public function load_events_virtual_schema() {
@@ -55,6 +63,10 @@ class Type_Registry {
 
 	/**
 	 * Registers QL Events types, connections, unions, and mutations to GraphQL schema
+	 *
+	 * @since 0.0.1
+	 *
+	 * @return void
 	 */
 	public function init() {
 		// TEC core fields, types, queries, and mutations.

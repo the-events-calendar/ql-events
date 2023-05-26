@@ -17,6 +17,10 @@ class Meta_Data_Input {
 
 	/**
 	 * Registers type
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return void
 	 */
 	public static function register() {
 		register_graphql_input_type(

@@ -3,7 +3,7 @@
  * Initializes a QL Events admin settings.
  *
  * @package WPGraphQL\QL_Events
- * @since 0.1.0
+ * @since TBD
  */
 
 namespace WPGraphQL\QL_Events;
@@ -25,6 +25,10 @@ class Admin {
 
 	/**
 	 * Registers filters.
+	 *
+	 * @since TBD
+	 *
+	 * @return void
 	 */
 	public function add_filters() {
 		add_action( 'graphql_register_settings', [ $this, 'register_settings' ] );
@@ -33,7 +37,10 @@ class Admin {
 	/**
 	 * Registers the WooGraphQL Settings tab.
 	 *
+	 * @since TBD
+	 *
 	 * @param Settings $manager  Settings Manager.
+	 *
 	 * @return void
 	 */
 	public function register_settings( Settings $manager ) {

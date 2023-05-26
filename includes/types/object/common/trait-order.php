@@ -18,6 +18,8 @@ trait Order {
 	/**
 	 * Define common Order fields
 	 *
+	 * @since 0.0.1
+	 *
 	 * @return array
 	 */
 	public static function fields() {

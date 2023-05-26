@@ -22,6 +22,8 @@ class Event_Type {
 	/**
 	 * Registers TEC core "Event" type fields.
 	 *
+	 * @since 0.1.0
+	 *
 	 * @return void
 	 */
 	public static function register_fields() {
@@ -196,6 +198,8 @@ class Event_Type {
 	/**
 	 * Registers TEC pro "Event" type fields.
 	 *
+	 * @since 0.1.0
+	 *
 	 * @return void
 	 */
 	public static function register_pro_fields() {
@@ -278,6 +282,8 @@ class Event_Type {
 
 	/**
 	 * Registers TEC events virtual "Event" type fields.
+	 *
+	 * @since TBD
 	 *
 	 * @return void
 	 */

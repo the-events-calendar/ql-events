@@ -21,6 +21,8 @@ class WooOrder_Type {
 	/**
 	 * Resolves the GraphQL type for "WooOrder".
 	 *
+	 * @since TBD
+	 *
 	 * @return void
 	 */
 	public static function register_to_order_interface() {
@@ -34,6 +36,8 @@ class WooOrder_Type {
 
 	/**
 	 * Callback for resolver
+	 *
+	 * @since TBD
 	 *
 	 * @param mixed $type   GraphQL Type.
 	 * @param mixed $value  Order data object.
@@ -51,6 +55,10 @@ class WooOrder_Type {
 
 	/**
 	 * Registers "Order" type fields.
+	 *
+	 * @since 0.0.1
+	 *
+	 * @return void
 	 */
 	public static function register_fields() {
 		deregister_graphql_field( 'Order', 'databaseId' );

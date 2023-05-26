@@ -5,6 +5,7 @@
  * Registers Ticket interface.
  *
  * @package WPGraphQL\QL_Events\Type\WPInterface;
+ * @since   TBD
  */
 
 namespace WPGraphQL\QL_Events\Type\WPInterface;
@@ -22,6 +23,10 @@ use WP_GraphQL_WooCommerce;
 class Ticket_Interface {
 	/**
 	 * Registers the "Ticket" interface.
+	 *
+	 * @since TBD
+	 *
+	 * @return void
 	 */
 	public static function register_interface() {
 		register_graphql_interface_type(
@@ -39,6 +44,14 @@ class Ticket_Interface {
 							return $type_registry->get_type( 'PayPalTicket' );
 
 						default:
+							/**
+							 * Filter the Ticket resolve type.
+							 *
+							 * @param string|null  $type_name  Name of type to be resolved.
+							 * @param mixed        $value      Data source.
+							 *
+							 * @since TBD
+							 */
 							$type = apply_filters( 'ql_events_resolve_ticket_type', null, $value );
 							if ( ! empty( $type ) ) {
 								return $type;

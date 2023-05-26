@@ -19,6 +19,10 @@ use WPGraphQL\Type\Connection\PostObjects;
 class Organizers extends PostObjects {
 	/**
 	 * Registers the various connections from other Types to Organizers
+	 *
+	 * @since 0.0.1
+	 *
+	 * @return void
 	 */
 	public static function register_connections() {
 		// From Event to Organizers.

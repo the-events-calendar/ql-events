@@ -21,6 +21,8 @@ class Tickets_Plus extends Tickets {
 	/**
 	 * Registers ET Plus types as available ticket type on existing ET connections.
 	 *
+	 * @since 0.1.0
+	 *
 	 * @return void
 	 */
 	public static function register_available_plus_ticket_types() {
@@ -40,6 +42,10 @@ class Tickets_Plus extends Tickets {
 
 	/**
 	 * Registers the various connections from other Types to Product
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return void
 	 */
 	public static function register_connections() {
 		// From Event to WooTicket.

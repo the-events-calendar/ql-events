@@ -5,6 +5,7 @@
  * Registers Order interface.
  *
  * @package WPGraphQL\QL_Events\Type\WPInterface;
+ * @since   TBD
  */
 
 namespace WPGraphQL\QL_Events\Type\WPInterface;
@@ -22,6 +23,10 @@ use WP_GraphQL_WooCommerce;
 class Order_Interface {
 	/**
 	 * Registers the "Order" interface.
+	 *
+	 * @since TBD
+	 *
+	 * @return void
 	 */
 	public static function register_interface() {
 		register_graphql_interface_type(
@@ -37,6 +42,13 @@ class Order_Interface {
 							return $type_registry->get_type( 'PayPalOrder' );
 
 						default:
+							/**
+							 * Filter the TECOrder resolve type.
+							 *
+							 * @param string|null  $type_name  Name of type to be resolved.
+							 * @param mixed        $value      Data source.
+							 * @since TBD
+							 */
 							$type = apply_filters( 'ql_events_resolve_tec_order_type', null, $value );
 							if ( ! empty( $type ) ) {
 								return $type;
@@ -57,6 +69,8 @@ class Order_Interface {
 
 	/**
 	 * Defines Ticket fields. All child type must have these fields as well.
+	 *
+	 * @since TBD
 	 *
 	 * @return array
 	 */

@@ -61,6 +61,10 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 
 		/**
 		 * QL_Events Constructor
+		 *
+		 * @since 0.0.1
+		 *
+		 * @return QL_Events
 		 */
 		public static function instance() {
 			if ( ! isset( self::$instance ) && ! ( is_a( self::$instance, __CLASS__ ) ) ) {
@@ -78,6 +82,8 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 
 		/**
 		 * Checks if QL Events required plugins are installed and activated
+		 *
+		 * @since TBD
 		 *
 		 * @return array
 		 */
@@ -136,6 +142,8 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		/**
 		 * Returns true if the "QL_EVENTS_TEST_MODE" set to a "truthy" value.
 		 *
+		 * @since TBD
+		 *
 		 * @return boolean
 		 */
 		public static function is_test_mode_active() {
@@ -144,6 +152,8 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 
 		/**
 		 * Returns true if the "enable_events_pro_support" is "on"
+		 *
+		 * @since TBD
 		 *
 		 * @return boolean
 		 */
@@ -155,6 +165,8 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		/**
 		 * Returns if Virtual Events is installed and activated.
 		 *
+		 * @since TBD
+		 *
 		 * @return bool
 		 */
 		public static function is_events_pro_active() {
@@ -163,6 +175,8 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 
 		/**
 		 * Returns true if the "enable_event_tickets_support" is "on"
+		 *
+		 * @since TBD
 		 *
 		 * @return boolean
 		 */
@@ -173,6 +187,8 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 
 		/**
 		 * Returns if Event Tickets is installed and activated
+		 *
+		 * @since TBD
 		 *
 		 * @return bool
 		 */
@@ -192,6 +208,8 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		/**
 		 * Returns true if the "enable_event_tickets_plus_support" is "on"
 		 *
+		 * @since TBD
+		 *
 		 * @return boolean
 		 */
 		public static function is_event_tickets_plus_support_enabled() {
@@ -201,6 +219,8 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 
 		/**
 		 * Returns if Ticket Events Plus is installed and activated
+		 *
+		 * @since TBD
 		 *
 		 * @return bool
 		 */
@@ -220,6 +240,8 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		/**
 		 * Returns if WooGraphQL is installed and activate
 		 *
+		 * @since TBD
+		 *
 		 * @return bool
 		 */
 		public static function is_woographql_active() {
@@ -228,6 +250,8 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 
 		/**
 		 * Returns true if the "enable_events_virtual_support" is "on"
+		 *
+		 * @since TBD
 		 *
 		 * @return boolean
 		 */
@@ -239,6 +263,8 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		/**
 		 * Returns if Virtual Events is installed and activated.
 		 *
+		 * @since TBD
+		 *
 		 * @return bool
 		 */
 		public static function is_events_virtual_active() {
@@ -247,6 +273,8 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 
 		/**
 		 * Render admin notices for all missing dependencies.
+		 *
+		 * @since TBD
 		 *
 		 * @return void
 		 */
@@ -260,6 +288,8 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 
 		/**
 		 * Initializes QL Events.
+		 *
+		 * @since 0.0.1
 		 *
 		 * @return void
 		 */
@@ -289,6 +319,8 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		/**
 		 * Returns The Events Calendar and core extensions post-types registered to the schema.
 		 *
+		 * @since TBD
+		 *
 		 * @return array
 		 */
 		public static function get_post_types() {
@@ -304,6 +336,8 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 
 		/**
 		 * Returns The Events Calendar and core extensions taxonomies registered to the schema.
+		 *
+		 * @since TBD
 		 *
 		 * @return array
 		 */
@@ -321,6 +355,7 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		 *
 		 * @access private
 		 * @since  0.0.1
+		 *
 		 * @return void
 		 */
 		private function includes() {
@@ -389,6 +424,11 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 
 		/**
 		 * Sets up QL Events schema.
+		 *
+		 * @since 0.0.1
+		 * @access private
+		 *
+		 * @return void
 		 */
 		private function setup() {
 			// WPGraphQL core filters.

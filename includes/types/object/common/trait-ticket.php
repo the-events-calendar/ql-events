@@ -18,6 +18,8 @@ trait Ticket {
 	/**
 	 * Define common Ticket fields
 	 *
+	 * @since 0.0.1
+	 *
 	 * @return array
 	 */
 	public static function fields() {

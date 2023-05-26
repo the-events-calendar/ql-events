@@ -19,6 +19,10 @@ use WPGraphQL\AppContext;
 class Venue_Type {
 	/**
 	 * Registers "Venue" type and queries.
+	 *
+	 * @since 0.0.1
+	 *
+	 * @return void
 	 */
 	public static function register_fields() {
 		register_graphql_fields(

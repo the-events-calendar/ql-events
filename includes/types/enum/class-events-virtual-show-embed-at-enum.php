@@ -3,7 +3,7 @@
  * Enum Type - Events_Virtual_Show_Embed_At_Enum
  *
  * @package WPGraphQL\WooCommerce\Pro\Type\WPEnum
- * @since   0.1.0
+ * @since   TBD
  */
 
 namespace WPGraphQL\QL_Events\Type\WPEnum;
@@ -14,6 +14,10 @@ namespace WPGraphQL\QL_Events\Type\WPEnum;
 class Events_Virtual_Show_Embed_At_Enum {
 	/**
 	 * Registers type
+	 *
+	 * @since TBD
+	 *
+	 * @return void
 	 */
 	public static function register() {
 		register_graphql_enum_type(

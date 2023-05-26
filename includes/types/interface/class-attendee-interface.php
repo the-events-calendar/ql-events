@@ -5,6 +5,7 @@
  * Registers Attendee interface.
  *
  * @package WPGraphQL\QL_Events\Type\WPInterface;
+ * @since   TBD
  */
 
 namespace WPGraphQL\QL_Events\Type\WPInterface;
@@ -24,6 +25,10 @@ use TEC\Tickets\Commerce\Attendee;
 class Attendee_Interface {
 	/**
 	 * Registers the "Attendee" interface and "attendee" query.
+	 *
+	 * @since TBD
+	 *
+	 * @return void
 	 */
 	public static function register_interface() {
 		register_graphql_interface_type(
@@ -43,6 +48,14 @@ class Attendee_Interface {
 							return $type_registry->get_type( 'PayPalAttendee' );
 
 						default:
+							/**
+							 * Filter the Attendee resolve type.
+							 *
+							 * @param string|null  $type_name  Name of type to be resolved.
+							 * @param mixed        $value      Data source.
+							 *
+							 * @since TBD
+							 */
 							$type = apply_filters( 'ql_events_resolve_attendee_type', null, $value );
 							if ( ! empty( $type ) ) {
 								return $type;
@@ -138,6 +151,8 @@ class Attendee_Interface {
 
 	/**
 	 * Defines Attendee fields. All child type must have these fields as well.
+	 *
+	 * @since TBD
 	 *
 	 * @return array
 	 */

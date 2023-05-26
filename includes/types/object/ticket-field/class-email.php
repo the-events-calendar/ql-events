@@ -5,7 +5,7 @@
  * Registers "TicketFieldEmail" type.
  *
  * @package \WPGraphQL\QL_Events\Type\WPObject
- * @since   0.0.1
+ * @since   0.1.0
  */
 
 namespace WPGraphQL\QL_Events\Type\WPObject\Ticket_Field;
@@ -16,6 +16,10 @@ namespace WPGraphQL\QL_Events\Type\WPObject\Ticket_Field;
 class Email {
 	/**
 	 * Registers type.
+	 *
+	 * @since 0.1.0
+	 *
+	 * @return void
 	 */
 	public static function register() {
 		register_graphql_object_type(

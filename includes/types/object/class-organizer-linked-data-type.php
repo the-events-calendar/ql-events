@@ -16,6 +16,10 @@ namespace WPGraphQL\QL_Events\Type\WPObject;
 class Organizer_Linked_Data_Type {
 	/**
 	 * Registers OrganizerLinkedData type.
+	 *
+	 * @since 0.0.1
+	 *
+	 * @return void
 	 */
 	public static function register() {
 		register_graphql_object_type(

@@ -3,7 +3,7 @@
  * The section defines the root functionality for a settings section
  *
  * @package WPGraphQL\WooCommerce\Admin
- * @since 0.1.0
+ * @since TBD
  */
 
 namespace WPGraphQL\QL_Events\Admin;
@@ -15,6 +15,8 @@ abstract class Section {
 
 	/**
 	 * Returns Section settings fields.
+	 *
+	 * @since TBD
 	 *
 	 * @return array
 	 */

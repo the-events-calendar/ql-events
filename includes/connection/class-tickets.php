@@ -24,6 +24,8 @@ class Tickets extends PostObjects {
 	 * Returns a connection resolver wrapped around the ticket repositories
 	 * passed by classname.
 	 *
+	 * @since 0.0.1
+	 *
 	 * @param array $ticket_classes  Classnames of Ticket repository to be used.
 	 *
 	 * @return mixed
@@ -41,6 +43,8 @@ class Tickets extends PostObjects {
 			 * @param array       $args           - Connection arguments.
 			 * @param AppContext  $context        - AppContext object.
 			 * @param ResolveInfo $info           - ResolveInfo object.
+			 *
+			 * @since TBD
 			 */
 			$ticket_classes = apply_filters( 'ql_events_ticket_connection_ticket_classes', $ticket_classes, $source, $args, $context, $info );
 			foreach ( $ticket_classes as $ticket_class ) {
@@ -75,6 +79,10 @@ class Tickets extends PostObjects {
 	}
 	/**
 	 * Registers the various connections from other Types to Tickets
+	 *
+	 * @since 0.0.1
+	 *
+	 * @return void
 	 */
 	public static function register_connections() {
 		$post_object_object     = get_post_type_object( tribe( 'tickets.rsvp' )->ticket_object );

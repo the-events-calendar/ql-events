@@ -15,7 +15,11 @@ use Tribe__Events__Main as Main;
  */
 class Core_Schema_Filters {
 	/**
-	 * Register filters
+	 * Registers filters related to WPGraphQL's core functionality.
+	 *
+	 * @since 0.0.1
+	 *
+	 * @return void
 	 */
 	public static function add_filters() {
 		add_filter( 'register_post_type_args', [ __CLASS__, 'register_post_types' ], 10, 2 );
@@ -52,7 +56,9 @@ class Core_Schema_Filters {
 	}
 
 	/**
-	 * Register TEC post types to GraphQL schema
+	 * Registers TEC post types to GraphQL schema
+	 *
+	 * @since 0.0.1
 	 *
 	 * @param array  $args      - post-type args.
 	 * @param string $post_type - post-type slug.
@@ -84,6 +90,8 @@ class Core_Schema_Filters {
 	/**
 	 * Register TEC taxonomies to GraphQL schema
 	 *
+	 * @since 0.0.1
+	 *
 	 * @param array  $args     - taxonomy args.
 	 * @param string $taxonomy - taxonomy slug.
 	 *
@@ -102,6 +110,8 @@ class Core_Schema_Filters {
 	/**
 	 * Adds "where" arguments to Event connections
 	 *
+	 * @since 0.1.0
+	 *
 	 * @param array  $fields     Event where args.
 	 * @param string $type_name  Connection "where" input type name.
 	 *
@@ -119,6 +129,8 @@ class Core_Schema_Filters {
 
 	/**
 	 * Filter to determine if the data should be considered private or not
+	 *
+	 * @since 0.1.0
 	 *
 	 * @param boolean     $is_private   Whether the model is private.
 	 * @param string      $model_name   Name of the model the filter is currently being executed in.

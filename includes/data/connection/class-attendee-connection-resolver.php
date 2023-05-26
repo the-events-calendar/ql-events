@@ -24,6 +24,8 @@ class Attendee_Connection_Resolver {
 	 * This prepares the $query_args for use in the connection query. This is where default $args are set, where dynamic
 	 * $args from the $this->source get set, and where mapping the input $args to the actual $query_args occurs.
 	 *
+	 * @since 0.0.1
+	 *
 	 * @param array       $query_args - WP_Query args.
 	 * @param mixed       $source     - Connection parent resolver.
 	 * @param array       $args       - Connection arguments.
