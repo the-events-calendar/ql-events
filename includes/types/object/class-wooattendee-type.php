@@ -49,7 +49,7 @@ class WooAttendee_Type {
 	public static function register_to_attendee_interface() {
 		add_filter(
 			'ql_events_resolve_attendee_type',
-			[ __CLASS__, 'resolve_woo_attendee' ],
+			[ static::class, 'resolve_woo_attendee' ],
 			10,
 			2
 		);
