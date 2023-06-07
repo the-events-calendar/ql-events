@@ -14,6 +14,7 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Tribe__Events__Main as Main;
 use WPGraphQL\AppContext;
 use WPGraphQL\Model\Post;
+use WPGraphQL\Utils\Utils;
 
 /**
  * Class Event_Connection_Resolver
@@ -34,14 +35,23 @@ class Event_Connection_Resolver {
 	 * @return mixed
 	 */
 	public static function get_query_args( $query_args, $source, $args, $context, $info ) {
-		$query_args['tribe_suppress_query_filters'] = true;
-		unset( $query_args['perm'] );
+		if ( ! in_array( Main::POSTTYPE, $query_args['post_type'], true ) ) {
+			return $query_args;
+		}
+
+		$query_args['orderby']                      = 'event_date';
+		$query_args['tribe_suppress_query_filters'] = false;
+		unset( $query_args['ignore_sticky_posts'] );
 
 		/**
 		 * Collect the input_fields and sanitize them to prepare them for sending to the WP_Query
 		 */
 		if ( ! empty( $args['where'] ) ) {
-			$query_args = array_merge(
+			$where_arg_keys = array_keys( $args['where'] );
+			foreach( $where_arg_keys as $key ) {
+				unset( $query_args[ $key ] );
+			}
+			$query_args     = array_merge(
 				$query_args,
 				self::sanitize_input_fields( $args['where'] )
 			);
@@ -62,6 +72,28 @@ class Event_Connection_Resolver {
 	}
 
 	/**
+	 * Validate time input value.
+	 *
+	 * @since TBD
+	 *
+	 * @param string $input_field_name  Name of input field being validated.
+	 * @param string $input_value       Input field value being validated.
+	 *
+	 * @throws UserError Invalid input.
+	 *
+	 * @return string
+	 */
+	private static function validate_time_input( $input_field_name, $input_value ) {
+		$time = strtotime( $input_value );
+		if ( false === $time ) {
+			/* translators: Input field name. */
+			throw new UserError( sprintf( __( 'Invalid time input provided for %s', 'ql-events' ), $input_field_name ) );
+		}
+
+		return $time;
+	}
+
+	/**
 	 * This sets up the "allowed" args, and translates the GraphQL-friendly keys to WP_Query
 	 * friendly keys. There's probably a cleaner/more dynamic way to approach this, but
 	 * this was quick. I'd be down to explore more dynamic ways to map this, but for
@@ -76,16 +108,67 @@ class Event_Connection_Resolver {
 	private static function sanitize_input_fields( $args ) {
 		$query_args = [];
 
-		if ( ! empty( $args['startDateQuery'] ) ) {
-			$query_args['meta_query']   = []; // phpcs:ignore slow query ok.
-			$query_args['meta_query'][] = self::date_query_input_to_meta_query( $args['startDateQuery'], '_EventStartDate' );
+		// Process single date arguments.
+		$date_meta_key_mapping = [
+			'startsAfter'     => 'starts_after',
+			'startsBefore'    => 'starts_before',
+			'startsOnOrAfter' => 'starts_on_or_after',
+			'startDate'       => 'start_date',
+			'endsAfter'       => 'ends_after',
+			'endsBefore'      => 'ends_before',
+			'endsOnOrAfter'   => 'ends_on_or_after',
+			'endDate'         => 'end_date',
+			'onDate'          => 'on_date',
+		];
+		foreach ( $date_meta_key_mapping as $where_arg => $query_arg ) {
+			if ( ! empty( $args[ $where_arg ] ) ) {
+				// Validate/format time input.
+				$time = self::validate_time_input( $where_arg, $args[ $where_arg ] );
+
+				// Set query argument.
+				$query_args[ $query_arg ] = $time;
+			}
 		}
 
-		if ( ! empty( $args['endDateQuery'] ) ) {
-			if ( ! isset( $query_args['meta_query'] ) ) {
-				$query_args['meta_query'] = []; // phpcs:ignore slow query ok.
+		// Process date range arguments.
+		$date_range_meta_key_mapping = [
+			'dateOverlaps' => 'date_overlaps',
+			'runsBetween'  => 'runs_between',
+		];
+		foreach ( $date_range_meta_key_mapping as $where_arg => $query_arg ) {
+			if ( ! empty( $args[ $where_arg ] ) ) {
+				// Validate/format time inputs.
+				$value = [
+					self::validate_time_input( "{$where_arg}.start", $args[ $where_arg ]['start'] ),
+					self::validate_time_input( "{$where_arg}.end", $args[ $where_arg ]['end'] ),
+				];
+
+				// Set query argument.
+				$query_args[ $query_arg ] = $value;
 			}
-			$query_args['meta_query'][] = self::date_query_input_to_meta_query( $args['endDateQuery'], '_EventEndDate' );
+		}
+
+		$bool_meta_key_mapping = [
+			'allDay'             => 'all_day',
+			'multiday'           => 'multiday',
+			'onCalendarGrid'     => 'on_calendar_grid',
+			'hiddenFromUpcoming' => 'hidden_from_upcoming',
+			'sticky'             => 'sticky',
+			'featured'           => 'featured',
+			'hidden'             => 'hidden',
+		];
+		foreach ( $bool_meta_key_mapping as $where_arg => $query_arg ) {
+			if ( ! is_null( $args[ $where_arg ] ) ) {
+				// Set query argument.
+				$query_args[ $query_arg ] = $args[ $where_arg ];
+			}
+		}
+
+		// Process organizer.
+		if ( ! is_null( $args['organizer'] ) ) {
+			// Set query argument.
+			$organizer_id            = Utils::get_database_id_from_id( $args['organizer'] );
+			$query_args['organizer'] = $organizer_id;
 		}
 
 		if ( ! empty( $args['venuesIn'] ) ) {
@@ -110,6 +193,22 @@ class Event_Connection_Resolver {
 			];
 		}
 
+		/**
+		 * Here for backwards compatibility.
+		 */
+		if ( ! empty( $args['startDateQuery'] ) ) {
+			$query_args['meta_query']   = []; // phpcs:ignore slow query ok.
+			$query_args['meta_query'][] = self::date_query_input_to_meta_query( $args['startDateQuery'], '_EventStartDate' );
+		}
+
+		if ( ! empty( $args['endDateQuery'] ) ) {
+			if ( ! isset( $query_args['meta_query'] ) ) {
+				$query_args['meta_query'] = []; // phpcs:ignore slow query ok.
+			}
+			$query_args['meta_query'][] = self::date_query_input_to_meta_query( $args['endDateQuery'], '_EventEndDate' );
+		}
+
+		// Return query arguments.
 		return $query_args;
 	}
 

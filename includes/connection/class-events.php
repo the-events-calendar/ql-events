@@ -22,28 +22,6 @@ use WPGraphQL\Data\Connection\PostObjectConnectionResolver;
 class Events extends PostObjects {
 
 	/**
-	 * Validate time input value.
-	 *
-	 * @since TBD
-	 *
-	 * @param string $input_field_name  Name of input field being validated.
-	 * @param string $input_value       Input field value being validated.
-	 *
-	 * @throws UserError Invalid input.
-	 *
-	 * @return string
-	 */
-	private static function validate_time_input( $input_field_name, $input_value ) {
-		$time = strtotime( $input_value );
-		if ( false === $time ) {
-			/* translators: Input field name. */
-			throw new UserError( sprintf( __( 'Invalid time input provided for %s', 'ql-events' ), $input_field_name ) );
-		}
-
-		return $time;
-	}
-
-	/**
 	 * Register event connections.
 	 *
 	 * @since TBD
@@ -57,35 +35,10 @@ class Events extends PostObjects {
 				'fromType'       => 'RootQuery',
 				'toType'         => 'Event',
 				'fromFieldName'  => 'events',
-				'queryClass'     => Events_Query::class,
 				'connectionArgs' => self::get_connection_args(),
 				'resolve'        => function( $source, $args, $context, $info ) {
 					$context->queryClass = Events_Query::class;
 					$resolver = new PostObjectConnectionResolver( $source, $args, $context, $info, Main::POSTTYPE );
-					if ( ! empty( $args['startsAfter'] ) ) {
-						$time = self::validate_time_input( 'startsAfter', $args['startsAfter'] );
-						$resolver->set_query_arg( 'starts_after', $time );
-					}
-					if ( ! empty( $args['startsBefore'] ) ) {
-						$time = self::validate_time_input( 'startsBefore', $args['startsBefore'] );
-						$resolver->set_query_arg( 'starts_before', $time );
-					}
-					if ( ! empty( $args['startDate'] ) ) {
-						$time = self::validate_time_input( 'startDate', $args['startDate'] );
-						$resolver->set_query_arg( 'start_date', $time );
-					}
-					if ( ! empty( $args['endsAfter'] ) ) {
-						$time = self::validate_time_input( 'endsAfter', $args['endsAfter'] );
-						$resolver->set_query_arg( 'ends_after', $time );
-					}
-					if ( ! empty( $args['endsBefore'] ) ) {
-						$time = self::validate_time_input( 'endsBefore', $args['endsBefore'] );
-						$resolver->set_query_arg( 'ends_before', $time );
-					}
-					if ( ! empty( $args['endDate'] ) ) {
-						$time = self::validate_time_input( 'endDate', $args['endDate'] );
-						$resolver->set_query_arg( 'end_date', $time );
-					}
 
 					return $resolver->get_connection();
 				},
@@ -107,45 +60,104 @@ class Events extends PostObjects {
 	public static function get_connection_args( $_ = [], $_2 = Main::POSTTYPE ) {
 		$connection_args = parent::get_connection_args(
 			[
-				'venuesIn'       => [
-					'type'        => [ 'list_of' => 'Int' ],
-					'description' => __( 'Filter the connection based on event venue ID', 'ql-events' ),
-				],
-				'venuesNotIn'    => [
-					'type'        => [ 'list_of' => 'Int' ],
-					'description' => __( 'Filter the connection based on event venue ID', 'ql-events' ),
-				],
-				'startDateQuery' => [
-					'type'        => 'DateQueryInput',
-					'description' => __( 'Filter the connection based on event start dates', 'ql-events' ),
-				],
-				'endDateQuery'   => [
-					'type'        => 'DateQueryInput',
-					'description' => __( 'Filter the connection based on event end dates', 'ql-events' ),
-				],
-				'startsAfter'    => [
+				'startsAfter'          => [
 					'type'        => 'String',
 					'description' => __( 'Include events that start after.', 'ql-events' ),
 				],
-				'startsBefore'   => [
+				'startsBefore'         => [
 					'type'        => 'String',
 					'description' => __( 'Include events that start before.', 'ql-events' ),
 				],
-				'startDate'      => [
+				'startsOnOrAfter'      => [
+					'type'        => 'String',
+					'description' => __( 'Include events that start on or after.', 'ql-events' ),
+				],
+				'startDate'            => [
 					'type'        => 'String',
 					'description' => __( 'Include events that start at.', 'ql-events' ),
 				],
-				'endsAfter'      => [
+				'endsAfter'            => [
 					'type'        => 'String',
 					'description' => __( 'Include events that end after.', 'ql-events' ),
 				],
-				'endsBefore'     => [
+				'endsBefore'           => [
 					'type'        => 'String',
 					'description' => __( 'Include events that end before.', 'ql-events' ),
 				],
-				'endDate'        => [
+				'endsOnOrAfter'        => [
+					'type'        => 'String',
+					'description' => __( 'Include events that end on or after.', 'ql-events' ),
+				],
+				'endDate'              => [
 					'type'        => 'String',
 					'description' => __( 'Include events that end at.', 'ql-events' ),
+				],
+				'dateOverlaps'         => [
+					'type'        => 'TECDateRangeInput',
+					'description' => __( 'Include events that overlap with.', 'ql-events' ),
+				],
+				'runsBetween'          => [
+					'type'        => 'TECDateRangeInput',
+					'description' => __( 'Include events that run between.', 'ql-events' ),
+				],
+				'onDate'               => [
+					'type'        => 'String',
+					'description' => __( 'Include events that end at.', 'ql-events' ),
+				],
+
+				'allDay'               => [
+					'type'        => 'Boolean',
+					'description' => __( 'Include all-day events.', 'ql-events' ),
+				],
+				'multiday'             => [
+					'type'        => 'Boolean',
+					'description' => __( 'Include events spanning multiple days.', 'ql-events' ),
+				],
+				'onCalendarGrid'       => [
+					'type'        => 'Boolean',
+					'description' => __( 'Include events that are shown on the calendar grid.', 'ql-events' ),
+				],
+				'timezone'       => [
+					'type'        => 'String',
+					'description' => __( 'Filter events by timezone.', 'ql-events' ),
+				],
+				'hiddenFromUpcoming'       => [
+					'type'        => 'Boolean',
+					'description' => __( 'Include events hidden from the upcoming list', 'ql-events' ),
+				],
+				'sticky'       => [
+					'type'        => 'Boolean',
+					'description' => __( 'Include sticky events', 'ql-events' ),
+				],
+				'featured'       => [
+					'type'        => 'Boolean',
+					'description' => __( 'Include featured events', 'ql-events' ),
+				],
+				'hidden'       => [
+					'type'        => 'Boolean',
+					'description' => __( 'Include hidden events', 'ql-events' ),
+				],
+				'organizer'    => [
+					'type'        => 'ID',
+					'description' => __( 'Filter events by organizer.', 'ql-events' ),
+				],
+				'venuesIn'             => [
+					'type'        => [ 'list_of' => 'Int' ],
+					'description' => __( 'Filter the connection based on event venue ID', 'ql-events' ),
+				],
+				'venuesNotIn'          => [
+					'type'        => [ 'list_of' => 'Int' ],
+					'description' => __( 'Filter the connection based on event venue ID', 'ql-events' ),
+				],
+				'startDateQuery'       => [
+					'type'              => 'DateQueryInput',
+					'description'       => __( 'Filter the connection based on event start dates', 'ql-events' ),
+					'deprecationReason' => __( 'Deprecated in favor of using the "startDate"', 'ql-events' ),
+				],
+				'endDateQuery'         => [
+					'type'              => 'DateQueryInput',
+					'description'       => __( 'Filter the connection based on event end dates', 'ql-events' ),
+					'deprecationReason' => __( 'Deprecated in favor of using the "endDate"', 'ql-events' ),
 				],
 			],
 			Main::POSTTYPE

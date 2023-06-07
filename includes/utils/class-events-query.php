@@ -3,6 +3,7 @@
  * WP_Query clone for wrapping the Tribe__Events__Query::getEvents() function
  *
  * @package WPGraphQL\QL_Events\Utils
+ * @since   TBD
  */
 
 namespace WPGraphQL\QL_Events\Utils;
@@ -16,6 +17,8 @@ class Events_Query {
 	/**
 	 * Stores query results.
 	 *
+	 * @since TBD
+	 *
 	 * @var \WP_Query
 	 */
 	protected $query;
@@ -26,15 +29,16 @@ class Events_Query {
 	 * @param array $args  Query Arguments.
 	 */
 	public function __construct( $args = [] ) {
-		add_action( 'tec_events_custom_tables_v1_custom_tables_query_pre_get_posts', [ $this, 'remove_redirect_posts_orderby' ] );
+		//add_action( 'tec_events_custom_tables_v1_custom_tables_query_pre_get_posts', [ $this, 'remove_redirect_posts_orderby' ] );
+		//wp_send_json( $args );
 		$this->query = Query::getEvents( $args, true );
-
-		\codecept_debug( $this->query->posts );
 	}
 
 	/**
 	 * Magic method to re-map the isset check on the child class looking for properties when
 	 * resolving the fields
+	 *
+	 * @since TBD
 	 *
 	 * @param string $key The name of the field you are trying to retrieve
 	 *
@@ -47,6 +51,8 @@ class Events_Query {
 	/**
 	 * Pass thru for query instance.
 	 *
+	 * @since TBD
+	 *
 	 * @param string $name  WP_Query member name.
 	 *
 	 * @return mixed
@@ -57,6 +63,8 @@ class Events_Query {
 
 	/**
 	 * Forwards function calls to WP_Query instance.
+	 *
+	 * @since TBD
 	 *
 	 * @param string $method - function name.
 	 * @param array  $args  - function call arguments.
@@ -70,14 +78,17 @@ class Events_Query {
 			return $this->query->$method( ...$args );
 		}
 
-		$class = __CLASS__;
+		$class = static::class;
 		throw new BadMethodCallException( "Call to undefined method {$method} on the {$class}" );
 	}
 
 	/**
 	 * Removes 'posts_orderby' filter for GraphQL requests.
 	 *
+	 * @since TBD
+	 *
 	 * @param \Custom_Table_Query $query  Query instance.
+	 *
 	 * @return void
 	 */
 	public function remove_redirect_posts_orderby( $query ) {

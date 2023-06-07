@@ -74,8 +74,6 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 				self::$instance = new self();
 			}
 
-			new \WPGraphQL\QL_Events\Data\Config();
-
 			/**
 			 * Return the QL_Events Instance
 			 */
@@ -301,6 +299,7 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 
 			// Initialize QL Events.
 			new Admin();
+			new Data\Config();
 
 			// Bail early, if some dependencies still needed.
 			if ( ! empty( $this->dependencies_not_ready() ) ) {
@@ -375,6 +374,7 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 			require $include_directory_path . 'types/enum/class-events-virtual-show-embed-at-enum.php';
 			require $include_directory_path . 'types/enum/class-events-virtual-show-embed-to-enum.php';
 			require $include_directory_path . 'types/input/class-meta-data-input.php';
+			require $include_directory_path . 'types/input/class-tec-date-range.php';
 			require $include_directory_path . 'types/object/common/trait-attendee.php';
 			require $include_directory_path . 'types/object/common/trait-order.php';
 			require $include_directory_path . 'types/object/common/trait-ticket.php';

@@ -71,6 +71,9 @@ class Type_Registry {
 	public function init() {
 		// TEC core fields, types, queries, and mutations.
 
+		// inputs.
+		Type\WPInputObject\TEC_Date_Range_Input::register();
+
 		// objects/fields.
 		Type\WPObject\Organizer_Linked_Data_Type::register();
 		Type\WPObject\Venue_Linked_Data_Type::register();

@@ -12,6 +12,7 @@
 namespace WPGraphQL\QL_Events\Data;
 
 use WP_Query;
+use Tribe__Events__Main as Main;
 
 /**
  * Class Config
@@ -43,9 +44,18 @@ class Config {
 			return $orderby;
 		}
 
+		if ( ! isset( $wp_query->query['post_type'] ) ) {
+			return $orderby;
+		}
+		$post_types = $wp_query->query['post_type'];
+		$post_types = is_string( $post_types ) ? [ $post_types ] : $post_types;
+		if ( ! in_array( Main::POSTTYPE, $post_types, true ) ) {
+			return $orderby;
+		}
+
 		$orderby_fields = preg_split( '/(,|\s)/', $orderby );
 
-		\codecept_debug( $orderby_fields );
+		//wp_send_json( $wp_query->query );
 
 		return $orderby;
 	}
