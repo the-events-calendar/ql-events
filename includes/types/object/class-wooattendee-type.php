@@ -48,7 +48,7 @@ class WooAttendee_Type {
 	/**
 	 * Resolves the GraphQL type for "WooAttendee".
 	 *
-	 * @since TBD
+	 * @since 0.3.0
 	 *
 	 * @return void
 	 */
@@ -64,7 +64,7 @@ class WooAttendee_Type {
 	/**
 	 * Callback for resolver
 	 *
-	 * @since TBD
+	 * @since 0.3.0
 	 *
 	 * @param mixed $type   GraphQL Type.
 	 * @param mixed $value  Attendee data object.

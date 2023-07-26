@@ -83,7 +83,7 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		/**
 		 * Checks if QL Events required plugins are installed and activated
 		 *
-		 * @since TBD
+		 * @since 0.3.0
 		 *
 		 * @return array
 		 */
@@ -142,7 +142,7 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		/**
 		 * Returns true if the "QL_EVENTS_TEST_MODE" set to a "truthy" value.
 		 *
-		 * @since TBD
+		 * @since 0.3.0
 		 *
 		 * @return boolean
 		 */
@@ -153,7 +153,7 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		/**
 		 * Returns true if the "enable_events_pro_support" is "on"
 		 *
-		 * @since TBD
+		 * @since 0.3.0
 		 *
 		 * @return boolean
 		 */
@@ -165,7 +165,7 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		/**
 		 * Returns if Virtual Events is installed and activated.
 		 *
-		 * @since TBD
+		 * @since 0.3.0
 		 *
 		 * @return bool
 		 */
@@ -176,7 +176,7 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		/**
 		 * Returns true if the "enable_event_tickets_support" is "on"
 		 *
-		 * @since TBD
+		 * @since 0.3.0
 		 *
 		 * @return boolean
 		 */
@@ -188,7 +188,7 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		/**
 		 * Returns if Event Tickets is installed and activated
 		 *
-		 * @since TBD
+		 * @since 0.3.0
 		 *
 		 * @return bool
 		 */
@@ -208,7 +208,7 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		/**
 		 * Returns true if the "enable_event_tickets_plus_support" is "on"
 		 *
-		 * @since TBD
+		 * @since 0.3.0
 		 *
 		 * @return boolean
 		 */
@@ -220,7 +220,7 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		/**
 		 * Returns if Ticket Events Plus is installed and activated
 		 *
-		 * @since TBD
+		 * @since 0.3.0
 		 *
 		 * @return bool
 		 */
@@ -240,7 +240,7 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		/**
 		 * Returns if WooGraphQL is installed and activate
 		 *
-		 * @since TBD
+		 * @since 0.3.0
 		 *
 		 * @return bool
 		 */
@@ -251,7 +251,7 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		/**
 		 * Returns true if the "enable_events_virtual_support" is "on"
 		 *
-		 * @since TBD
+		 * @since 0.3.0
 		 *
 		 * @return boolean
 		 */
@@ -263,7 +263,7 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		/**
 		 * Returns if Virtual Events is installed and activated.
 		 *
-		 * @since TBD
+		 * @since 0.3.0
 		 *
 		 * @return bool
 		 */
@@ -274,7 +274,7 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		/**
 		 * Render admin notices for all missing dependencies.
 		 *
-		 * @since TBD
+		 * @since 0.3.0
 		 *
 		 * @return void
 		 */
@@ -319,7 +319,7 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		/**
 		 * Returns The Events Calendar and core extensions post-types registered to the schema.
 		 *
-		 * @since TBD
+		 * @since 0.3.0
 		 *
 		 * @return array
 		 */
@@ -337,7 +337,7 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 		/**
 		 * Returns The Events Calendar and core extensions taxonomies registered to the schema.
 		 *
-		 * @since TBD
+		 * @since 0.3.0
 		 *
 		 * @return array
 		 */

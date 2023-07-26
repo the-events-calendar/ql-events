@@ -15,7 +15,7 @@ class Type_Registry {
 	/**
 	 * Returns true if the Events Pro fields, types, queries, and mutations can be loaded.
 	 *
-	 * @since TBD
+	 * @since 0.3.0
 	 *
 	 * @return bool
 	 */
@@ -27,7 +27,7 @@ class Type_Registry {
 	/**
 	 * Returns true if the Event Tickets fields, types, queries, and mutations can be loaded.
 	 *
-	 * @since TBD
+	 * @since 0.3.0
 	 *
 	 * @return bool
 	 */
@@ -39,7 +39,7 @@ class Type_Registry {
 	/**
 	 * Returns true if the Event Tickets Plus fields, types, queries, and mutations can be loaded.
 	 *
-	 * @since TBD
+	 * @since 0.3.0
 	 *
 	 * @return bool
 	 */
@@ -52,7 +52,7 @@ class Type_Registry {
 	/**
 	 * Returns true if the Events Virtual fields, types, queries, and mutations can be loaded.
 	 *
-	 * @since TBD
+	 * @since 0.3.0
 	 *
 	 * @return bool
 	 */

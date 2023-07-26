@@ -6,7 +6,7 @@
  * that has purchased a ticket.
  *
  * @package WPGraphQL\QL_Events\Mutation
- * @since TBD
+ * @since 0.2.0
  */
 
 namespace WPGraphQL\QL_Events\Mutation;
@@ -27,7 +27,7 @@ class Register_Attendee {
 	/**
 	 * Registers mutation
 	 *
-	 * @since TBD
+	 * @since 0.2.0
 	 *
 	 * @return void
 	 */
@@ -45,7 +45,7 @@ class Register_Attendee {
 	/**
 	 * Defines the mutation input field configuration
 	 *
-	 * @since TBD
+	 * @since 0.2.0
 	 *
 	 * @return array
 	 */
@@ -103,7 +103,7 @@ class Register_Attendee {
 	/**
 	 * Defines the mutation output field configuration
 	 *
-	 * @since TBD
+	 * @since 0.2.0
 	 *
 	 * @return array
 	 */
@@ -127,7 +127,7 @@ class Register_Attendee {
 	/**
 	 * Defines the mutation data modification closure.
 	 *
-	 * @since TBD
+	 * @since 0.2.0
 	 *
 	 * @return callable
 	 */
@@ -206,7 +206,7 @@ class Register_Attendee {
 	/**
 	 * Simple reducer for mapping extra fields.
 	 *
-	 * @since TBD
+	 * @since 0.2.0
 	 *
 	 * @param array $additional_fields  Extra attendee meta.
 	 *

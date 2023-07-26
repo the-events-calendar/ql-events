@@ -5,7 +5,7 @@
  * Registers "Product" type to "Ticket" interface
  *
  * @package \WPGraphQL\QL_Events\Type\WPObject
- * @since   TBD
+ * @since   0.3.0
  */
 
 namespace WPGraphQL\QL_Events\Type\WPObject;
@@ -21,7 +21,7 @@ class WooTicket_Type {
 	/**
 	 * Resolves the GraphQL type for "WooOrder".
 	 *
-	 * @since TBD
+	 * @since 0.3.0
 	 *
 	 * @return void
 	 */

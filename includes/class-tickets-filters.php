@@ -3,7 +3,7 @@
  * Adds filters that modify core schema.
  *
  * @package \WPGraphQL\QL_Events
- * @since   TBD
+ * @since   0.3.0
  */
 
 namespace WPGraphQL\QL_Events;
@@ -18,7 +18,7 @@ class Tickets_Filters {
 	/**
 	 * Register filters
 	 *
-	 * @since TBD
+	 * @since 0.3.0
 	 *
 	 * @return void
 	 */
@@ -48,7 +48,7 @@ class Tickets_Filters {
 	/**
 	 * Register ET post types to GraphQL schema
 	 *
-	 * @since TBD
+	 * @since 0.3.0
 	 *
 	 * @param array  $args      - post-type args.
 	 * @param string $post_type - post-type slug.
@@ -88,7 +88,7 @@ class Tickets_Filters {
 	/**
 	 * Filter callback for inject WPObject types with the "Ticket" interface.
 	 *
-	 * @since TBD
+	 * @since 0.1.0
 	 *
 	 * @param array $config  WPObject type config.
 	 *

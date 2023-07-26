@@ -283,7 +283,7 @@ class Event_Type {
 	/**
 	 * Registers TEC events virtual "Event" type fields.
 	 *
-	 * @since TBD
+	 * @since 0.3.0
 	 *
 	 * @return void
 	 */

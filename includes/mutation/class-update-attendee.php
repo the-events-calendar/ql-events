@@ -6,7 +6,7 @@
  * who has purchased a ticket.
  *
  * @package WPGraphQL\QL_Events\Mutation
- * @since TBD
+ * @since 0.2.0
  */
 
 namespace WPGraphQL\QL_Events\Mutation;
@@ -27,7 +27,7 @@ class Update_Attendee extends Register_Attendee {
 	/**
 	 * Registers mutation
 	 *
-	 * @since TBD
+	 * @since 0.2.0
 	 *
 	 * @return void
 	 */
@@ -45,7 +45,7 @@ class Update_Attendee extends Register_Attendee {
 	/**
 	 * Defines the mutation input field configuration
 	 *
-	 * @since TBD
+	 * @since 0.2.0
 	 *
 	 * @return array
 	 */
@@ -87,7 +87,7 @@ class Update_Attendee extends Register_Attendee {
 	/**
 	 * Defines the mutation output field configuration
 	 *
-	 * @since TBD
+	 * @since 0.2.0
 	 *
 	 * @return array
 	 */
@@ -116,7 +116,7 @@ class Update_Attendee extends Register_Attendee {
 		/**
 		 * Updates existing attendee using provided input data.
 		 *
-		 * @since TBD
+		 * @since 0.2.0
 		 *
 		 * @param array       $input    Mutation input data.
 		 * @param AppContext  $context  Mutation's AppContext instance.
