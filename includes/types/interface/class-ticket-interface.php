@@ -5,7 +5,7 @@
  * Registers Ticket interface.
  *
  * @package WPGraphQL\QL_Events\Type\WPInterface;
- * @since   TBD
+ * @since   0.2.0
  */
 
 namespace WPGraphQL\QL_Events\Type\WPInterface;
@@ -24,7 +24,7 @@ class Ticket_Interface {
 	/**
 	 * Registers the "Ticket" interface.
 	 *
-	 * @since TBD
+	 * @since 0.2.0
 	 *
 	 * @return void
 	 */
@@ -50,7 +50,7 @@ class Ticket_Interface {
 							 * @param string|null  $type_name  Name of type to be resolved.
 							 * @param mixed        $value      Data source.
 							 *
-							 * @since TBD
+							 * @since 0.3.0
 							 */
 							$type = apply_filters( 'ql_events_resolve_ticket_type', null, $value );
 							if ( ! empty( $type ) ) {

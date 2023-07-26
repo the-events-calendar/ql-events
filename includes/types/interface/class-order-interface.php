@@ -5,7 +5,7 @@
  * Registers Order interface.
  *
  * @package WPGraphQL\QL_Events\Type\WPInterface;
- * @since   TBD
+ * @since   0.2.0
  */
 
 namespace WPGraphQL\QL_Events\Type\WPInterface;
@@ -24,7 +24,7 @@ class Order_Interface {
 	/**
 	 * Registers the "Order" interface.
 	 *
-	 * @since TBD
+	 * @since 0.2.0
 	 *
 	 * @return void
 	 */
@@ -47,7 +47,7 @@ class Order_Interface {
 							 *
 							 * @param string|null  $type_name  Name of type to be resolved.
 							 * @param mixed        $value      Data source.
-							 * @since TBD
+							 * @since 0.3.0
 							 */
 							$type = apply_filters( 'ql_events_resolve_tec_order_type', null, $value );
 							if ( ! empty( $type ) ) {
@@ -70,7 +70,7 @@ class Order_Interface {
 	/**
 	 * Defines Ticket fields. All child type must have these fields as well.
 	 *
-	 * @since TBD
+	 * @since 0.2.0
 	 *
 	 * @return array
 	 */

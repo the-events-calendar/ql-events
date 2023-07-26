@@ -44,7 +44,7 @@ class Tickets extends PostObjects {
 			 * @param AppContext  $context        - AppContext object.
 			 * @param ResolveInfo $info           - ResolveInfo object.
 			 *
-			 * @since TBD
+			 * @since 0.3.0
 			 */
 			$ticket_classes = apply_filters( 'ql_events_ticket_connection_ticket_classes', $ticket_classes, $source, $args, $context, $info );
 			foreach ( $ticket_classes as $ticket_class ) {

@@ -5,7 +5,7 @@
  * Registers Attendee interface.
  *
  * @package WPGraphQL\QL_Events\Type\WPInterface;
- * @since   TBD
+ * @since   0.2.0
  */
 
 namespace WPGraphQL\QL_Events\Type\WPInterface;
@@ -26,7 +26,7 @@ class Attendee_Interface {
 	/**
 	 * Registers the "Attendee" interface and "attendee" query.
 	 *
-	 * @since TBD
+	 * @since 0.2.0
 	 *
 	 * @return void
 	 */
@@ -54,7 +54,7 @@ class Attendee_Interface {
 							 * @param string|null  $type_name  Name of type to be resolved.
 							 * @param mixed        $value      Data source.
 							 *
-							 * @since TBD
+							 * @since 0.3.0
 							 */
 							$type = apply_filters( 'ql_events_resolve_attendee_type', null, $value );
 							if ( ! empty( $type ) ) {
@@ -152,7 +152,7 @@ class Attendee_Interface {
 	/**
 	 * Defines Attendee fields. All child type must have these fields as well.
 	 *
-	 * @since TBD
+	 * @since 0.2.0
 	 *
 	 * @return array
 	 */

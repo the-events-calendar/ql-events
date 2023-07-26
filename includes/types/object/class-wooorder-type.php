@@ -21,7 +21,7 @@ class WooOrder_Type {
 	/**
 	 * Resolves the GraphQL type for "WooOrder".
 	 *
-	 * @since TBD
+	 * @since 0.3.0
 	 *
 	 * @return void
 	 */
@@ -37,7 +37,7 @@ class WooOrder_Type {
 	/**
 	 * Callback for resolver
 	 *
-	 * @since TBD
+	 * @since 0.3.0
 	 *
 	 * @param mixed $type   GraphQL Type.
 	 * @param mixed $value  Order data object.

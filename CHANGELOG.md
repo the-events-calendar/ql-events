@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.3.0](https://github.com/the-events-calendar/ql-events/tree/0.3.0) (2023-07-26)
+
+[Full Changelog](https://github.com/the-events-calendar/ql-events/compare/0.1.0...0.3.0)
+
+**New Features:**
+
+- feat: QL Events settings tab added and schema organized [\#55](https://github.com/the-events-calendar/ql-events/pull/55) ([kidunot89](https://github.com/kidunot89))
+- feat: Events Virtual Support. [\#53](https://github.com/the-events-calendar/ql-events/pull/53) ([kidunot89](https://github.com/kidunot89))
+- Attendee interface/connections/mutations added. Order interface added. [\#46](https://github.com/the-events-calendar/ql-events/pull/46) ([kidunot89](https://github.com/kidunot89))
+- feat: Custom ticket field types and queries implemented. [\#40](https://github.com/the-events-calendar/ql-events/pull/40) ([kidunot89](https://github.com/kidunot89))
+
 ## [0.1.0](https://github.com/the-events-calendar/ql-events/tree/0.1.0) (2022-08-12)
 
 [Full Changelog](https://github.com/the-events-calendar/ql-events/compare/0.0.1...0.1.0)
@@ -11,9 +22,6 @@
 **Fixed:**
 
 - fix: Support for WPGraphQL v1.8+ has been added. [\#45](https://github.com/the-events-calendar/ql-events/pull/45) ([kidunot89](https://github.com/kidunot89))
-
-**Other Changes:**
-
 - Removes extraneous comma to prevent a silent PHP error. [\#31](https://github.com/the-events-calendar/ql-events/pull/31) ([geoffgraham](https://github.com/geoffgraham))
 
 

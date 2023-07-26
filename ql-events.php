@@ -2,7 +2,7 @@
 /**
  * Plugin Name: QL Events
  * Description: Adds The Events Calendar Functionality to WPGraphQL schema.
- * Version: 0.1.0
+ * Version: 0.3.0
  * Author: kidunot89
  * Author URI: https://axistaylor.com
  * Text Domain: ql-events
@@ -23,7 +23,7 @@ defined( 'ABSPATH' ) || exit;
 function constants() {
 	// Plugin version.
 	if ( ! defined( 'QL_EVENTS_VERSION' ) ) {
-		define( 'QL_EVENTS_VERSION', '0.0.1' );
+		define( 'QL_EVENTS_VERSION', '0.3.0' );
 	}
 	// Plugin Folder Path.
 	if ( ! defined( 'QL_EVENTS_PLUGIN_DIR' ) ) {
