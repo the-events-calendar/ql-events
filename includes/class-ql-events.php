@@ -299,7 +299,6 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 
 			// Initialize QL Events.
 			new Admin();
-			new Data\Config();
 
 			// Bail early, if some dependencies still needed.
 			if ( ! empty( $this->dependencies_not_ready() ) ) {
@@ -409,7 +408,6 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 			require $include_directory_path . 'data/connection/class-organizer-connection-resolver.php';
 			require $include_directory_path . 'data/connection/class-ticket-connection-resolver.php';
 			require $include_directory_path . 'data/class-factory.php';
-			require $include_directory_path . 'data/class-config.php';
 
 			require $include_directory_path . 'mutation/class-register-attendee.php';
 			require $include_directory_path . 'mutation/class-update-attendee.php';

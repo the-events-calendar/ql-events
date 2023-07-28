@@ -40,6 +40,8 @@ class Events extends PostObjects {
 					$context->queryClass = Events_Query::class;
 					$resolver = new PostObjectConnectionResolver( $source, $args, $context, $info, Main::POSTTYPE );
 
+					$resolver->set_query_arg( 'order', 'ASC' );
+					$resolver->set_query_arg( 'orderby', 'event_date' );
 					return $resolver->get_connection();
 				},
 			]
