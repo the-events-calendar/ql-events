@@ -2,13 +2,11 @@
 /**
  * WPInputObjectType - TECDateRangeInput
  *
- * @package WPGraphQL\WooCommerce\Type\WPInputObject
+ * @package WPGraphQL\QL_Events\Type\WPInputObject
  * @since   TBD
  */
 
 namespace WPGraphQL\QL_Events\Type\WPInputObject;
-
-use WPGraphQL\QL_Events\QL_Events;
 
 /**
  * Class TEC_Date_Range_Input

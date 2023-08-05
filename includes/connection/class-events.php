@@ -41,7 +41,7 @@ class Events extends PostObjects {
 					$resolver = new PostObjectConnectionResolver( $source, $args, $context, $info, Main::POSTTYPE );
 
 					$resolver->set_query_arg( 'order', 'ASC' );
-					$resolver->set_query_arg( 'orderby', 'event_date' );
+					$resolver->set_query_arg( 'orderby', 'event_start_date' );
 					return $resolver->get_connection();
 				},
 			]
@@ -160,6 +160,12 @@ class Events extends PostObjects {
 					'type'              => 'DateQueryInput',
 					'description'       => __( 'Filter the connection based on event end dates', 'ql-events' ),
 					'deprecationReason' => __( 'Deprecated in favor of using the "endDate"', 'ql-events' ),
+				],
+				'orderby' 			=> [
+					'type'        => [
+						'list_of' => 'EventsConnectionOrderbyInput',
+					],
+					'description' => __( 'Order the connection by a specific field.', 'ql-events' ),
 				],
 			],
 			Main::POSTTYPE

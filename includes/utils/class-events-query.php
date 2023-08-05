@@ -29,8 +29,9 @@ class Events_Query {
 	 * @param array $args  Query Arguments.
 	 */
 	public function __construct( $args = [] ) {
-		//add_action( 'tec_events_custom_tables_v1_custom_tables_query_pre_get_posts', [ $this, 'remove_redirect_posts_orderby' ] );
-		//wp_send_json( $args );
+		add_action( 'tec_events_custom_tables_v1_custom_tables_query_pre_get_posts', [ $this, 'remove_redirect_posts_orderby' ] );
+		add_action( 'graphql_post_object_cursor_meta_key', [ $this, 'filter_meta_keys' ], 10, 5 );
+
 		$this->query = Query::getEvents( $args, true );
 	}
 
@@ -93,5 +94,32 @@ class Events_Query {
 	 */
 	public function remove_redirect_posts_orderby( $query ) {
 		remove_filter( 'posts_orderby', [ $query, 'redirect_posts_orderby' ], 200 );
+	}
+
+
+	/**
+	 * Filters meta keys for GraphQL requests.
+	 *
+	 * @since TBD
+	 *
+	 * @param string $key       The meta key to use for cursor based pagination
+	 * @param string $meta_key  The original meta key
+	 * @param string $meta_type The meta type
+	 * @param string $order     The order direction
+	 * @param object $cursor      The PostObjectCursor instance
+	 *
+	 * @return string
+	 */
+	public function filter_meta_keys( $key, $meta_key, $meta_type, $order, $cursor ) {
+		if ( '_EventStartDate' === $meta_key ) {
+			return 'wp_tec_occurrences.start_date';
+		}
+
+		wp_send_json( $meta_key );
+		if ( '_EventEndDate' === $meta_key ) {
+			return 'wp_tec_occurrences.end_date';
+		}
+
+		return $key;
 	}
 }

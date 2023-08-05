@@ -71,7 +71,11 @@ class Type_Registry {
 	public function init() {
 		// TEC core fields, types, queries, and mutations.
 
+		// enums.
+		Type\WPEnum\Events_Connection_Orderby_Enum::register();
+
 		// inputs.
+		Type\WPInputObject\Events_Connection_Orderby_Input::register();
 		Type\WPInputObject\TEC_Date_Range_Input::register();
 
 		// objects/fields.
