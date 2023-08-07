@@ -42,7 +42,9 @@ class Events extends PostObjects {
 
 					$resolver->set_query_arg( 'order', 'ASC' );
 					$resolver->set_query_arg( 'orderby', 'event_start_date' );
-					return $resolver->get_connection();
+					$connection = $resolver->get_connection();
+					unset( $context->queryClass );
+					return $connection;
 				},
 			]
 		);

@@ -39,7 +39,6 @@ class Event_Connection_Resolver {
 			return $query_args;
 		}
 
-		$query_args['orderby']                      = 'event_date';
 		$query_args['tribe_suppress_query_filters'] = false;
 		unset( $query_args['ignore_sticky_posts'] );
 

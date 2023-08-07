@@ -71,6 +71,8 @@ class Tickets extends PostObjects {
 					'compare' => '=',
 				];
 			}
+
+			//wp_send_json( \GraphQLRelay\Relay::fromGlobalId("cG9zdDoxMDAwMDM2MQ==") );
 			$resolver->set_query_arg( 'meta_query', $meta_query );
 			$resolver->set_query_arg( 'tribe_suppress_query_filters', true );
 
