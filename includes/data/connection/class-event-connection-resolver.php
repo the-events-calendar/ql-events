@@ -39,9 +39,6 @@ class Event_Connection_Resolver {
 			return $query_args;
 		}
 
-		$query_args['tribe_suppress_query_filters'] = false;
-		unset( $query_args['ignore_sticky_posts'] );
-
 		/**
 		 * Collect the input_fields and sanitize them to prepare them for sending to the WP_Query
 		 */
@@ -54,6 +51,38 @@ class Event_Connection_Resolver {
 				$query_args,
 				self::sanitize_input_fields( $args['where'] )
 			);
+		}
+
+		/**
+		 * Remove TEC filters we need to apply manually.
+		 */
+		foreach ( $query_args as $key => $value ) {
+			if ( in_array(
+				$key,
+				[
+					'cost',
+					'endsAfter',
+					'endsBefore',
+					'endsBetween',
+					'endsOnOrBefore',
+					'eventDateOverlaps',
+					'runsBetween',
+					'startsAfter',
+					'startsBefore',
+					'startsBetween',
+					'startsOnDate',
+					'startsOnOrAfter',
+					'customFieldLike',
+					'customFieldBetween',
+					'customFieldGreaterThan',
+					'customFieldLessThan',
+					'geolocation',
+					'near',
+				],
+				true
+			) ) {
+				unset( $query_args[ $key ] );
+			}
 		}
 
 		/**
