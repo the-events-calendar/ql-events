@@ -77,12 +77,11 @@ class Tickets extends PostObjects {
 			$repository->by( 'post_type', $ticket_post_types );
 
 			$ticket_ids = $repository->pluck( 'ID' );
-			$resolver->set_query_arg( 'post__in', $ticket_ids );
+			$resolver->set_query_arg( 'post__in', ! empty( $ticket_ids ) ? $ticket_ids : [ '0' ] );
 			$resolver->set_query_arg( 'tribe_suppress_query_filters', true );
 
 			// Resolve connection and return results.
-			$connection = $resolver->get_connection();
-			return $connection;
+			return $resolver->get_connection();
 		};
 	}
 	/**

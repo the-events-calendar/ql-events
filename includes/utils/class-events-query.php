@@ -33,6 +33,7 @@ class Events_Query {
 		add_action( 'graphql_post_object_cursor_meta_key', [ $this, 'filter_meta_keys' ], 10, 5 );
 
 		$this->query = apply_filters( 'tribe_get_events', Query::getEvents( $args, true ), $args, true );
+		//wp_send_json( tribe_events()->set_args( $args )->pluck( 'ID' ) );
 	}
 
 	/**

@@ -28,16 +28,6 @@ class Core_Schema_Filters {
 		add_filter(
 			'graphql_post_object_connection_query_args',
 			[
-				'\WPGraphQL\QL_Events\Data\Connection\Event_Connection_Resolver',
-				'get_query_args',
-			],
-			10,
-			5
-		);
-
-		add_filter(
-			'graphql_post_object_connection_query_args',
-			[
 				'\WPGraphQL\QL_Events\Data\Connection\Organizer_Connection_Resolver',
 				'get_query_args',
 			],

@@ -12,9 +12,8 @@ namespace WPGraphQL\QL_Events\Connection;
 
 use Tribe__Events__Main as Main;
 use GraphQL\Error\UserError;
-use WPGraphQL\QL_Events\Utils\Events_Query;
+use WPGraphQL\QL_Events\Data\Connection\Event_Connection_Resolver;
 use WPGraphQL\Type\Connection\PostObjects;
-use WPGraphQL\Data\Connection\PostObjectConnectionResolver;
 
 /**
  * Class - Events
@@ -37,14 +36,8 @@ class Events extends PostObjects {
 				'fromFieldName'  => 'events',
 				'connectionArgs' => self::get_connection_args(),
 				'resolve'        => function( $source, $args, $context, $info ) {
-					$context->queryClass = Events_Query::class;
-					$resolver = new PostObjectConnectionResolver( $source, $args, $context, $info, Main::POSTTYPE );
-
-					$resolver->set_query_arg( 'order', 'ASC' );
-					$resolver->set_query_arg( 'orderby', 'event_start_date' );
-					$connection = $resolver->get_connection();
-					unset( $context->queryClass );
-					return $connection;
+					$resolver = new Event_Connection_Resolver( $source, $args, $context, $info );
+					return $resolver->get_connection();
 				},
 			]
 		);
@@ -103,6 +96,14 @@ class Events extends PostObjects {
 				'runsBetween'          => [
 					'type'        => 'TECDateRangeInput',
 					'description' => __( 'Include events that run between.', 'ql-events' ),
+				],
+				'startsBetween'          => [
+					'type'        => 'TECDateRangeInput',
+					'description' => __( 'Include events that start between.', 'ql-events' ),
+				],
+				'endsBetween'          => [
+					'type'        => 'TECDateRangeInput',
+					'description' => __( 'Include events that end between.', 'ql-events' ),
 				],
 				'onDate'               => [
 					'type'        => 'String',
