@@ -46,6 +46,7 @@ class Event extends \WP_UnitTest_Factory_For_Post {
 		$args['post_status'] = Arr::get( $args, 'post_status', 'publish' );
 		// By default an event will happen tomorrow.
 		$utc_start_time = Arr::get( $args, 'when', '+24 hours' );
+
 		// By default an event will last 2hrs.
 		$duration = Arr::get( $args, 'duration', '7200' );
 		// By default an event will be on UTC time.
@@ -119,6 +120,8 @@ class Event extends \WP_UnitTest_Factory_For_Post {
 				add_post_meta( $id, '_EventOrganizerID', $organizer );
 			}
 		}
+
+		clean_post_cache( $id );
 
 		return $id;
 	}

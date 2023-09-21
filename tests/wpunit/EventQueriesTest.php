@@ -1,4 +1,5 @@
 <?php
+use Tribe__Date_Utils as Dates;
 
 class EventQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 	public function expectedEventData( $id ) {
@@ -104,33 +105,58 @@ class EventQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 		$organizer = $this->factory->organizer->create();
 		$venue_id  = $this->factory->venue->create();
 
+		// Create dates.
+		$tomorrow_date = gmdate( 'Y-m-d H:i:s', strtotime( '+24 hours' ) );
+		$yesterday_date = gmdate( 'Y-m-d H:i:s', strtotime( '-24 hours' ) );
+		$next_week_date = gmdate( 'Y-m-d H:i:s', strtotime( '+1 week' ) );
+		$last_week_date = gmdate( 'Y-m-d H:i:s', strtotime( '-1 week' ) );
+
+		// Create timezone object.
+		$utc = new DateTimeZone( 'UTC' );
+
 		// Create events.
 		$tomorrow  = $this->factory->event->create(
 			[
-				'when'       => strtotime( '+1 day' ),
+				'when'       => '+24 hours',
 				'venue'      => $venue_id,
 				'organizers' => [ $organizer ],
+				'post_date'  => $tomorrow_date,
+				'post_date_gmt' => Dates::immutable( $tomorrow_date )
+					->setTimezone( $utc )
+					->format( Dates::DBDATETIMEFORMAT ),
 			]
 		);
 		$yesterday = $this->factory->event->create(
 			[
-				'when'       => strtotime( '-1 day' ),
+				'when'       => '-24 hours',
 				'venue'      => $venue_id,
 				'organizers' => [ $organizer ],
+				'post_date'  => $yesterday_date,
+				'post_date_gmt' => Dates::immutable( $yesterday_date )
+					->setTimezone( $utc )
+					->format( Dates::DBDATETIMEFORMAT ),
 			]
 		);
 		$next_week = $this->factory->event->create(
 			[
-				'when'       => strtotime( '+1 week' ),
+				'when'       => '+1 week',
 				'venue'      => $venue_id,
 				'organizers' => [ $organizer ],
+				'post_date'  => $next_week_date,
+				'post_date_gmt' => Dates::immutable( $next_week_date )
+					->setTimezone( $utc )
+					->format( Dates::DBDATETIMEFORMAT ),
 			]
 		);
 		$last_week = $this->factory->event->create(
 			[
-				'when'       => strtotime( '-1 week' ),
+				'when'       => '-1 week',
 				'venue'      => $venue_id,
 				'organizers' => [ $organizer ],
+				'post_date'  => $last_week_date,
+				'post_date_gmt' => Dates::immutable( $last_week_date )
+					->setTimezone( $utc )
+					->format( Dates::DBDATETIMEFORMAT ),
 			]
 		);
 

@@ -58,10 +58,10 @@ remove_wordpress() {
 install_local_test_library() {
 	# Install testing library dependencies.
 	composer require --no-interaction --dev --with-all-dependencies \
-		lucatume/wp-browser \
-		codeception/module-asserts:^1.0 \
-		codeception/module-rest:^2.0 \
-		codeception/util-universalframework:^1.0  \
+		lucatume/wp-browser:^3.1 \
+		codeception/module-asserts:* \
+		codeception/module-rest:* \
+		codeception/util-universalframework:* \
 		wp-graphql/wp-graphql-testcase:^2.3 \
         fzaninotto/faker:*
 

@@ -36,7 +36,8 @@ class Event_Connection_Resolver extends PostObjectConnectionResolver {
 	 */
 	public function get_ids_from_query() {
 		$ids = $this->query->get_posts() ?: [];
-		remove_filter( 'graphql_pre_post_cursor_compare_with', [ $this, 'compare_with_ct_fields' ] );
+
+		\codecept_debug( tribe_get_events() );
 
 		// If we're going backwards, we need to reverse the array.
 		if ( ! empty( $this->args['last'] ) ) {
@@ -123,13 +124,10 @@ class Event_Connection_Resolver extends PostObjectConnectionResolver {
 				$cursor_id = \TEC\Events\Custom_Tables\V1\Models\Occurrence::normalize_id( $cursor_offset );
 			}
 
-
-
-			//wp_send_json( compact( 'cursor_id' ) );
 			$query_args['graphql_cursor_id_value'] = $cursor_id;
 
 			$cursor_node = tribe_get_event( $cursor_offset );
-			$query_args['graphql_cursor_threshold_fields'] = [
+			$query_args['graphql_cursor_compare_fields'] = [
 				[
 					'key'   => Occurrences::table_name() . '.start_date_utc',
 					'value' => $cursor_node->start_date_utc,
