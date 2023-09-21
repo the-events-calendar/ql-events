@@ -10,28 +10,28 @@ namespace QL_Events\Test\Factories;
  *
  * @return string
  */
-function slugify($text, string $divider = '-') {
-  // Replace non letter or digits by divider.
-  $text = preg_replace( '~[^\pL\d]+~u', $divider, $text );
+function slugify( $text, string $divider = '-' ) {
+	// Replace non letter or digits by divider.
+	$text = preg_replace( '~[^\pL\d]+~u', $divider, $text );
 
-  // Transliterate.
-  $text = iconv( 'utf-8', 'us-ascii//TRANSLIT', $text );
+	// Transliterate.
+	$text = iconv( 'utf-8', 'us-ascii//TRANSLIT', $text );
 
-  // Remove unwanted characters.
-  $text = preg_replace( '~[^-\w]+~', '', $text );
+	// Remove unwanted characters.
+	$text = preg_replace( '~[^-\w]+~', '', $text );
 
-  // Trim.
-  $text = trim( $text, $divider );
+	// Trim.
+	$text = trim( $text, $divider );
 
-  // Remove duplicate divider.
-  $text = preg_replace( '~-+~', $divider, $text );
+	// Remove duplicate divider.
+	$text = preg_replace( '~-+~', $divider, $text );
 
-  // Lowercase.
-  $text = strtolower( $text );
+	// Lowercase.
+	$text = strtolower( $text );
 
-  if ( empty( $text ) ) {
-    return 'n-a';
-  }
+	if ( empty( $text ) ) {
+		return 'n-a';
+	}
 
-  return $text;
+	return $text;
 }

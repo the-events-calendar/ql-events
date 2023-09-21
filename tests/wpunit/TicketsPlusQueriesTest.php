@@ -2,7 +2,7 @@
 class TicketPlusQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 	public function testEventToTicketConnectionQuery() {
 		// Generate events.
-		$event_id      = $this->factory->event->create();
+		$event_id = $this->factory->event->create();
 
 		// Generate ticket.
 		$ticket_id = $this->factory->ticket->create_woocommerce_ticket( $event_id, 20 );
@@ -32,32 +32,32 @@ class TicketPlusQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 				}
 			}
 		';
-		$variables = array( 'id' => $this->toRelayId( 'post', $event_id ) );
+		$variables = [ 'id' => $this->toRelayId( 'post', $event_id ) ];
 		$response  = $this->graphql( compact( 'query', 'variables' ) );
 
 		// Assert response is correct.
-		$expected = array(
+		$expected = [
 			$this->expectedField( 'event.id', $this->toRelayId( 'post', $event_id ) ),
 			$this->expectedField( 'event.databaseId', $event_id ),
 			$this->expectedNode(
 				'event.tickets.nodes',
-				array(
+				[
 					$this->expectedField( 'id', $this->toRelayId( 'product', $ticket_id ) ),
 					$this->expectedField( 'price', '$20.00' ),
 					$this->expectedField( '__typename', 'SimpleProduct' ),
-				),
+				],
 				0
 			),
 			$this->expectedNode(
 				'event.wooTickets.nodes',
-				array(
+				[
 					$this->expectedField( 'id', $this->toRelayId( 'product', $ticket_id ) ),
 					$this->expectedField( 'price', '$20.00' ),
 					$this->expectedField( '__typename', 'SimpleProduct' ),
-				),
+				],
 				0
 			),
-		);
+		];
 		$this->assertQuerySuccessful( $response, $expected );
 	}
 
@@ -67,10 +67,10 @@ class TicketPlusQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 		$organizer_two = $this->factory->organizer->create();
 		$venue_id      = $this->factory->venue->create();
 		$event_id      = $this->factory->event->create(
-			array(
-				'venue' => $venue_id,
-				'organizers' => array( $organizer_one, $organizer_two ),
-			)
+			[
+				'venue'      => $venue_id,
+				'organizers' => [ $organizer_one, $organizer_two ],
+			]
 		);
 
 		// Generate ticket.
@@ -118,7 +118,7 @@ class TicketPlusQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 					'label'       => 'Text field test',
 					'description' => 'test description',
 					'required'    => 'on',
-					'placeholder' => 'Enter text'
+					'placeholder' => 'Enter text',
 				],
 				[
 					'type'        => 'birth',
@@ -137,13 +137,13 @@ class TicketPlusQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 					'type'        => 'email',
 					'label'       => 'Email field test',
 					'description' => 'test description',
-					'placeholder' => 'Enter email'
+					'placeholder' => 'Enter email',
 				],
 				[
 					'type'        => 'telephone',
 					'label'       => 'Phone field test',
 					'description' => 'test description',
-					'placeholder' => 'Enter phone'
+					'placeholder' => 'Enter phone',
 				],
 				[
 					'type'        => 'datetime',
@@ -154,7 +154,7 @@ class TicketPlusQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 					'type'        => 'url',
 					'label'       => 'URL field test',
 					'description' => 'test description',
-					'placeholder' => 'Enter URL'
+					'placeholder' => 'Enter URL',
 				],
 			],
 		];
@@ -408,8 +408,7 @@ class TicketPlusQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 			$this->expectedField( 'placeholder', 'Enter URL' ),
 		];
 
-
-		$expected  = [
+		$expected = [
 			$this->expectedNode( 'event.ticketFields', $expected_checkbox, 0 ),
 			$this->expectedNode( 'event.ticketFieldCheckbox', $expected_checkbox, 0 ),
 			$this->expectedNode( 'event.wooTickets.nodes.0.ticketFields', $expected_checkbox, 0 ),

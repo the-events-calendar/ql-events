@@ -17,13 +17,13 @@ class QLEventsTestCase extends \Tests\WPGraphQL\TestCase\WPGraphQLTestCase {
 		parent::setUp();
 
 		// Load factories.
-		$factories = array(
+		$factories = [
 			'Event',
 			'Organizer',
 			'RsvpAttendee',
 			'Venue',
 			'Ticket',
-		);
+		];
 
 		foreach ( $factories as $factory ) {
 			$factory_name                   = strtolower( preg_replace( '/\B([A-Z])/', '_$1', $factory ) );
@@ -32,12 +32,6 @@ class QLEventsTestCase extends \Tests\WPGraphQL\TestCase\WPGraphQLTestCase {
 		}
 
 		$this->clearSchema();
-	}
-
-	public function tearDown(): void {
-
-		// then
-		parent::tearDown();
 	}
 
 	/**

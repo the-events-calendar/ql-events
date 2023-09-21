@@ -368,9 +368,12 @@ if ( ! class_exists( '\WPGraphQL\QL_Events\QL_Events' ) ) :
 			require $include_directory_path . 'types/interface/class-attendee-interface.php';
 			require $include_directory_path . 'types/interface/class-order-interface.php';
 			require $include_directory_path . 'types/interface/class-ticket-interface.php';
+			require $include_directory_path . 'types/enum/class-events-connection-orderby-enum.php';
 			require $include_directory_path . 'types/enum/class-events-virtual-show-embed-at-enum.php';
 			require $include_directory_path . 'types/enum/class-events-virtual-show-embed-to-enum.php';
+			require $include_directory_path . 'types/input/class-events-connection-orderby-input.php';
 			require $include_directory_path . 'types/input/class-meta-data-input.php';
+			require $include_directory_path . 'types/input/class-tec-date-range-input.php';
 			require $include_directory_path . 'types/object/common/trait-attendee.php';
 			require $include_directory_path . 'types/object/common/trait-order.php';
 			require $include_directory_path . 'types/object/common/trait-ticket.php';

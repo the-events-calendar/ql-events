@@ -68,7 +68,7 @@ class Attendee_Interface {
 									$value->post_type
 								)
 							);
-					}
+					}//end switch
 				},
 			]
 		);
@@ -129,7 +129,7 @@ class Attendee_Interface {
 							}
 							$post_id = absint( $id_components['id'] );
 							break;
-					}
+					}//end switch
 
 					return absint( $post_id )
 						? $context->get_loader( 'post' )->load_deferred( $post_id )->then(

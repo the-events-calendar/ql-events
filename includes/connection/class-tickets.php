@@ -12,6 +12,8 @@ namespace WPGraphQL\QL_Events\Connection;
 
 use Tribe__Tickets__RSVP as RSVP;
 use WPGraphQL\Type\Connection\PostObjects;
+use WPGraphQL\WooCommerce\Connection\Products;
+use WPGraphQL\WooCommerce\Data\Factory;
 use WPGraphQL\Data\Connection\PostObjectConnectionResolver;
 use WPGraphQL\QL_Events\QL_Events as QL_Events;
 
@@ -24,7 +26,7 @@ class Tickets extends PostObjects {
 	 * Returns a connection resolver wrapped around the ticket repositories
 	 * passed by classname.
 	 *
-	 * @since 0.0.1
+	 * @since TBD
 	 *
 	 * @param array $ticket_classes  Classnames of Ticket repository to be used.
 	 *
@@ -32,8 +34,14 @@ class Tickets extends PostObjects {
 	 */
 	protected static function get_event_to_ticket_resolver( $ticket_classes ) {
 		return function( $source, $args, $context, $info ) use ( $ticket_classes ) {
-			// Get ticket post-types.
-			$ticket_post_types = [];
+			// Get ticket repository.
+			$repository = tribe_tickets( 'default' );
+
+			// Normalize ID.
+			$post_id = $source->ID;
+			if ( class_exists( '\TEC\Events\Custom_Tables\V1\Models\Occurrence', false ) ) {
+				$post_id = \TEC\Events\Custom_Tables\V1\Models\Occurrence::normalize_id( $source->ID );
+			}
 
 			/**
 			 * Filters ticket classes to add support for additional ticket types.
@@ -47,8 +55,9 @@ class Tickets extends PostObjects {
 			 * @since 0.3.0
 			 */
 			$ticket_classes = apply_filters( 'ql_events_ticket_connection_ticket_classes', $ticket_classes, $source, $args, $context, $info );
+
 			foreach ( $ticket_classes as $ticket_class ) {
-				$ticket_post_types[] = tribe( $ticket_class )->ticket_object;
+				$ticket_post_types[ $ticket_class ] = tribe( $ticket_class )->ticket_object;
 			}
 
 			// Create connection resolver.
@@ -60,21 +69,18 @@ class Tickets extends PostObjects {
 				$ticket_post_types
 			);
 
-			// Set query args to connection resolver.
-			$meta_query = count( $ticket_classes ) > 1 ? [ 'relation' => 'OR' ] : [];
-			foreach ( $ticket_classes as $ticket_class ) {
-				$meta_query[] = [
-					'key'     => tribe( $ticket_class )->get_event_key(),
-					'value'   => $source->ID,
-					'compare' => '=',
-				];
-			}
-			$resolver->set_query_arg( 'meta_query', $meta_query );
+			// Set query args to ticket repository.
+			$repository->by( 'event', $post_id );
+			$repository->by( 'status', 'publish' );
+			$repository->by( 'posts_per_page', -1 );
+			$repository->by( 'post_type', $ticket_post_types );
+
+			$ticket_ids = $repository->pluck( 'ID' );
+			$resolver->set_query_arg( 'post__in', ! empty( $ticket_ids ) ? $ticket_ids : [ '0' ] );
 			$resolver->set_query_arg( 'tribe_suppress_query_filters', true );
 
 			// Resolve connection and return results.
-			$connection = $resolver->get_connection();
-			return $connection;
+			return $resolver->get_connection();
 		};
 	}
 	/**

@@ -22,7 +22,7 @@ class Event_Type {
 	/**
 	 * Registers TEC core "Event" type fields.
 	 *
-	 * @since 0.1.0
+	 * @since 0.0.1
 	 *
 	 * @return void
 	 */
@@ -198,7 +198,7 @@ class Event_Type {
 	/**
 	 * Registers TEC pro "Event" type fields.
 	 *
-	 * @since 0.1.0
+	 * @since TBD
 	 *
 	 * @return void
 	 */
@@ -252,7 +252,7 @@ class Event_Type {
 									}
 								}
 							);
-						}
+						}//end if
 
 						return $dates;
 					},

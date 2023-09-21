@@ -26,6 +26,7 @@ class Organizers extends PostObjects {
 	 */
 	public static function register_connections() {
 		// From Event to Organizers.
+		deregister_graphql_connection( 'RootQueryToEventConnection' );
 		register_graphql_connection(
 			self::get_connection_config(
 				get_post_type_object( Main::ORGANIZER_POST_TYPE ),

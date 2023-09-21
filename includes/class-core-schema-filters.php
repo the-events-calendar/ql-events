@@ -26,23 +26,6 @@ class Core_Schema_Filters {
 		add_filter( 'register_taxonomy_args', [ __CLASS__, 'register_taxonomies' ], 10, 2 );
 
 		add_filter(
-			'graphql_input_fields',
-			[ __CLASS__, 'events_where_args' ],
-			10,
-			2
-		);
-
-		add_filter(
-			'graphql_post_object_connection_query_args',
-			[
-				'\WPGraphQL\QL_Events\Data\Connection\Event_Connection_Resolver',
-				'get_query_args',
-			],
-			10,
-			5
-		);
-
-		add_filter(
 			'graphql_post_object_connection_query_args',
 			[
 				'\WPGraphQL\QL_Events\Data\Connection\Organizer_Connection_Resolver',
@@ -67,9 +50,10 @@ class Core_Schema_Filters {
 	 */
 	public static function register_post_types( $args, $post_type ) {
 		if ( Main::POSTTYPE === $post_type ) {
-			$args['show_in_graphql']     = true;
-			$args['graphql_single_name'] = 'Event';
-			$args['graphql_plural_name'] = 'Events';
+			$args['show_in_graphql']                  = true;
+			$args['graphql_single_name']              = 'Event';
+			$args['graphql_plural_name']              = 'Events';
+			$args['graphql_register_root_connection'] = false;
 		}
 
 		if ( Main::ORGANIZER_POST_TYPE === $post_type ) {

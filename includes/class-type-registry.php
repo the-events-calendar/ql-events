@@ -71,6 +71,13 @@ class Type_Registry {
 	public function init() {
 		// TEC core fields, types, queries, and mutations.
 
+		// enums.
+		Type\WPEnum\Events_Connection_Orderby_Enum::register();
+
+		// inputs.
+		Type\WPInputObject\Events_Connection_Orderby_Input::register();
+		Type\WPInputObject\Tec_Date_Range_Input::register();
+
 		// objects/fields.
 		Type\WPObject\Organizer_Linked_Data_Type::register();
 		Type\WPObject\Venue_Linked_Data_Type::register();
@@ -80,6 +87,7 @@ class Type_Registry {
 		Type\WPObject\Venue_Type::register_fields();
 
 		// connections.
+		Connection\Events::register_connections();
 		Connection\Organizers::register_connections();
 
 		// Register Events Pro fields, types, queries, and mutations.
@@ -117,7 +125,7 @@ class Type_Registry {
 			// mutations.
 			Mutation\Register_Attendee::register_mutation();
 			Mutation\Update_Attendee::register_mutation();
-		}
+		}//end if
 
 		// Register Event Tickets Plus fields, types, queries, and mutations.
 		if ( $this->load_event_tickets_plus_schema() ) {
@@ -144,7 +152,7 @@ class Type_Registry {
 			// connections.
 			Connection\Tickets_Plus::register_available_plus_ticket_types();
 			Connection\Tickets_Plus::register_connections();
-		}
+		}//end if
 
 		// Register Events Virtual types, queries, and mutations.
 		if ( $this->load_events_virtual_schema() ) {

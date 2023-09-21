@@ -3,7 +3,7 @@
  * Defines QL Events's general settings.
  *
  * @package WPGraphQL\QL_Events\Admin
- * @since 0.3.0
+ * @since TBD
  */
 
 namespace WPGraphQL\QL_Events\Admin;
@@ -18,7 +18,7 @@ class General extends Section {
 	/**
 	 * Returns General settings fields.
 	 *
-	 * @since 0.3.0
+	 * @since TBD
 	 *
 	 * @return array
 	 */

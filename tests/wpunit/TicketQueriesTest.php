@@ -1,17 +1,17 @@
 <?php
 class TicketQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 
-    // tests
+	// tests
 	public function testRSVPTicketQuery() {
 		// Generate event.
 		$organizer_one = $this->factory->organizer->create();
 		$organizer_two = $this->factory->organizer->create();
 		$venue_id      = $this->factory->venue->create();
 		$event_id      = $this->factory->event->create(
-			array(
-				'venue' => $venue_id,
-				'organizers' => array( $organizer_one, $organizer_two ),
-			)
+			[
+				'venue'      => $venue_id,
+				'organizers' => [ $organizer_one, $organizer_two ],
+			]
 		);
 
 		// Generate ticket.
@@ -30,15 +30,15 @@ class TicketQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 				}
 			}
 		';
-		$variables = array( 'id' => $ticket_id );
+		$variables = [ 'id' => $ticket_id ];
 		$response  = $this->graphql( compact( 'query', 'variables' ) );
 
 		// Assert response is correct.
-		$expected = array(
+		$expected = [
 			$this->expectedField( 'rSVPTicket.id', $this->toRelayId( 'post', $ticket_id ) ),
 			$this->expectedField( 'rSVPTicket.databaseId', $ticket_id ),
 			$this->expectedField( 'rSVPTicket.title', self::NOT_FALSY ),
-		);
+		];
 		$this->assertQuerySuccessful( $response, $expected );
 	}
 
@@ -48,10 +48,10 @@ class TicketQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 		$organizer_two = $this->factory->organizer->create();
 		$venue_id      = $this->factory->venue->create();
 		$event_id      = $this->factory->event->create(
-			array(
-				'venue' => $venue_id,
-				'organizers' => array( $organizer_one, $organizer_two ),
-			)
+			[
+				'venue'      => $venue_id,
+				'organizers' => [ $organizer_one, $organizer_two ],
+			]
 		);
 
 		// Generate ticket.
@@ -70,15 +70,15 @@ class TicketQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 				}
 			}
 		';
-		$variables = array( 'id' => $this->toRelayId( 'post', $ticket_id ) );
+		$variables = [ 'id' => $this->toRelayId( 'post', $ticket_id ) ];
 		$response  = $this->graphql( compact( 'query', 'variables' ) );
 
 		// Assert response is correct.
-		$expected = array(
+		$expected = [
 			$this->expectedField( 'payPalTicket.id', $this->toRelayId( 'post', $ticket_id ) ),
 			$this->expectedField( 'payPalTicket.databaseId', $ticket_id ),
 			$this->expectedField( 'payPalTicket.title', self::NOT_NULL ),
-		);
+		];
 		$this->assertQuerySuccessful( $response, $expected );
 	}
 
@@ -97,7 +97,7 @@ class TicketQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 		$this->loginAs( 1 );
 
 		// Query tickets.
-		$query = '
+		$query    = '
 			query {
 				tickets {
 					nodes {
@@ -116,45 +116,45 @@ class TicketQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 		$response = $this->graphql( compact( 'query' ) );
 
 		// Assert response is correct.
-		$expected = array(
+		$expected = [
 			$this->expectedNode(
 				'tickets.nodes',
-				array(
+				[
 					$this->expectedField( 'id', $this->toRelayId( 'post', $rsvp_one ) ),
 					$this->expectedField( '__typename', 'RSVPTicket' ),
-				)
+				]
 			),
 			$this->expectedNode(
 				'tickets.nodes',
-				array(
+				[
 					$this->expectedField( 'id', $this->toRelayId( 'post', $rsvp_two ) ),
 					$this->expectedField( '__typename', 'RSVPTicket' ),
-				)
+				]
 			),
 			$this->expectedNode(
 				'tickets.nodes',
-				array(
+				[
 					$this->expectedField( 'id', $this->toRelayId( 'post', $paypal_one ) ),
 					$this->expectedField( '__typename', 'PayPalTicket' ),
-				)
+				]
 			),
 			$this->expectedNode(
 				'tickets.nodes',
-				array(
+				[
 					$this->expectedField( 'id', $this->toRelayId( 'post', $paypal_two ) ),
 					$this->expectedField( '__typename', 'PayPalTicket' ),
-				)
+				]
 			),
-		);
+		];
 		$this->assertQuerySuccessful( $response, $expected );
 	}
 
 	public function testEventToTicketConnectionQuery() {
 		// Generate events.
-		$event_id      = $this->factory->event->create();
+		$event_id = $this->factory->event->create();
 
 		// Generate tickets.
-		$rsvp_id  = $this->factory->ticket->create_rsvp_ticket( $event_id );
+		$rsvp_id   = $this->factory->ticket->create_rsvp_ticket( $event_id );
 		$paypal_id = $this->factory->ticket->create_paypal_ticket( $event_id );
 
 		// Login as admin
@@ -181,28 +181,28 @@ class TicketQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 				}
 			}
 		';
-		$variables = array( 'id' => $this->toRelayId( 'post', $event_id ) );
+		$variables = [ 'id' => $this->toRelayId( 'post', $event_id ) ];
 		$response  = $this->graphql( compact( 'query', 'variables' ) );
 
 		// Assert response is correct.
-		$expected = array(
+		$expected = [
 			$this->expectedField( 'event.id', $this->toRelayId( 'post', $event_id ) ),
 			$this->expectedField( 'event.databaseId', $event_id ),
 			$this->expectedNode(
 				'event.tickets.nodes',
-				array(
+				[
 					$this->expectedField( 'id', $this->toRelayId( 'post', $rsvp_id ) ),
 					$this->expectedField( '__typename', 'RSVPTicket' ),
-				)
+				]
 			),
 			$this->expectedNode(
 				'event.tickets.nodes',
-				array(
+				[
 					$this->expectedField( 'id', $this->toRelayId( 'post', $paypal_id ) ),
 					$this->expectedField( '__typename', 'PayPalTicket' ),
-				)
+				]
 			),
-		);
+		];
 		$this->assertQuerySuccessful( $response, $expected );
 	}
 
