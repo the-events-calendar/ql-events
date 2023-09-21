@@ -65,11 +65,11 @@ class Events_Connection_Orderby_Enum {
 						'value'       => 'comment_count',
 						'description' => __( 'Order by the number of comments it has acquired', 'ql-events' ),
 					],
-					'START_DATE' => [
+					'START_DATE'    => [
 						'value'       => '_EventStartDateUTC',
 						'description' => __( 'Order by the event start date', 'ql-events' ),
 					],
-					'END_DATE'   => [
+					'END_DATE'      => [
 						'value'       => '_EventEndDateUTC',
 						'description' => __( 'Order by the event end date', 'ql-events' ),
 					],

@@ -502,25 +502,32 @@ class Ticket extends \WP_UnitTest_Factory_For_Post {
 
 		unset( $overrides['meta_input'] );
 
-		/** @var \Tribe__Tickets_Plus__Commerce__WooCommerce__Main $main */
 		$main      = tribe( 'tickets-plus.commerce.woo' );
-		$ticket_id = $factory->post->create( array_merge( [
-			'post_title'   => "Test WooCommerce ticket for {$post_id}",
-			'post_content' => "Test WooCommerce ticket description for {$post_id}",
-			'post_excerpt' => "Ticket WooCommerce ticket excerpt for {$post_id}",
-			'post_type'    => $main->ticket_object,
-			'meta_input'   => array_merge( [
-				$main->event_key                                 => $post_id,
-				'_price'                                         => $price,
-				'_regular_price'                                 => $price,
-				'_stock'                                         => $stock,
-				tribe( 'tickets.handler' )->key_capacity         => $capacity,
-				'_manage_stock'                                  => 'yes',
-				'_ticket_start_date'                             => date( 'Y-m-d H:i:s', strtotime( '-1 day' ) ),
-				'_ticket_end_date'                               => date( 'Y-m-d H:i:s', strtotime( '+1 day' ) ),
-				\Tribe__Tickets__Global_Stock::TICKET_STOCK_MODE => 'own',
-			], $meta_input ),
-		], $overrides ) );
+		$ticket_id = $factory->post->create(
+			array_merge(
+				[
+					'post_title'   => "Test WooCommerce ticket for {$post_id}",
+					'post_content' => "Test WooCommerce ticket description for {$post_id}",
+					'post_excerpt' => "Ticket WooCommerce ticket excerpt for {$post_id}",
+					'post_type'    => $main->ticket_object,
+					'meta_input'   => array_merge(
+						[
+							$main->event_key     => $post_id,
+							'_price'             => $price,
+							'_regular_price'     => $price,
+							'_stock'             => $stock,
+							tribe( 'tickets.handler' )->key_capacity => $capacity,
+							'_manage_stock'      => 'yes',
+							'_ticket_start_date' => date( 'Y-m-d H:i:s', strtotime( '-1 day' ) ),
+							'_ticket_end_date'   => date( 'Y-m-d H:i:s', strtotime( '+1 day' ) ),
+							\Tribe__Tickets__Global_Stock::TICKET_STOCK_MODE => 'own',
+						],
+						$meta_input
+					),
+				],
+				$overrides
+			)
+		);
 
 		// Get provider key name.
 		$provider_key = tribe( 'tickets.handler' )->key_provider_field;
@@ -546,11 +553,14 @@ class Ticket extends \WP_UnitTest_Factory_For_Post {
 	 * @return array An array of the generated ticket post IDs.
 	 */
 	public function create_many_woocommerce_tickets_basic( $count, $post_id, array $overrides = [] ) {
-		return array_map( function () use ( $post_id, $overrides ) {
-			$price = $overrides['price'] ?? random_int( 1, 5 );
+		return array_map(
+			function () use ( $post_id, $overrides ) {
+				$price = $overrides['price'] ?? random_int( 1, 5 );
 
-			return $this->create_woocommerce_ticket_basic( $post_id, $price, $overrides );
-		}, range( 1, $count ) );
+				return $this->create_woocommerce_ticket_basic( $post_id, $price, $overrides );
+			},
+			range( 1, $count )
+		);
 	}
 
 	/**
@@ -560,7 +570,6 @@ class Ticket extends \WP_UnitTest_Factory_For_Post {
 	 * @param boolean $include_required Whether to include required fields.
 	 */
 	public function add_attendee_meta_fields_to_ticket( $ticket_id, $data = [] ) {
-		/** @var \Tribe__Tickets_Plus__Meta $meta */
 		$meta = \Tribe__Tickets_Plus__Main::instance()->meta();
 
 		$ticket_object = \Tribe__Tickets__Tickets::load_ticket_object( $ticket_id );

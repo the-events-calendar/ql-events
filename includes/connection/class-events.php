@@ -57,114 +57,114 @@ class Events extends PostObjects {
 	public static function get_connection_args( $_ = [], $_2 = Main::POSTTYPE ) {
 		$connection_args = parent::get_connection_args(
 			[
-				'startsAfter'          => [
+				'startsAfter'        => [
 					'type'        => 'String',
 					'description' => __( 'Include events that start after.', 'ql-events' ),
 				],
-				'startsBefore'         => [
+				'startsBefore'       => [
 					'type'        => 'String',
 					'description' => __( 'Include events that start before.', 'ql-events' ),
 				],
-				'startsOnOrAfter'      => [
+				'startsOnOrAfter'    => [
 					'type'        => 'String',
 					'description' => __( 'Include events that start on or after.', 'ql-events' ),
 				],
-				'startDate'            => [
+				'startDate'          => [
 					'type'        => 'String',
 					'description' => __( 'Include events that start at.', 'ql-events' ),
 				],
-				'endsAfter'            => [
+				'endsAfter'          => [
 					'type'        => 'String',
 					'description' => __( 'Include events that end after.', 'ql-events' ),
 				],
-				'endsBefore'           => [
+				'endsBefore'         => [
 					'type'        => 'String',
 					'description' => __( 'Include events that end before.', 'ql-events' ),
 				],
-				'endsOnOrAfter'        => [
+				'endsOnOrAfter'      => [
 					'type'        => 'String',
 					'description' => __( 'Include events that end on or after.', 'ql-events' ),
 				],
-				'endDate'              => [
+				'endDate'            => [
 					'type'        => 'String',
 					'description' => __( 'Include events that end at.', 'ql-events' ),
 				],
-				'dateOverlaps'         => [
+				'dateOverlaps'       => [
 					'type'        => 'TECDateRangeInput',
 					'description' => __( 'Include events that overlap with.', 'ql-events' ),
 				],
-				'runsBetween'          => [
+				'runsBetween'        => [
 					'type'        => 'TECDateRangeInput',
 					'description' => __( 'Include events that run between.', 'ql-events' ),
 				],
-				'startsBetween'          => [
+				'startsBetween'      => [
 					'type'        => 'TECDateRangeInput',
 					'description' => __( 'Include events that start between.', 'ql-events' ),
 				],
-				'endsBetween'          => [
+				'endsBetween'        => [
 					'type'        => 'TECDateRangeInput',
 					'description' => __( 'Include events that end between.', 'ql-events' ),
 				],
-				'onDate'               => [
+				'onDate'             => [
 					'type'        => 'String',
 					'description' => __( 'Include events that end at.', 'ql-events' ),
 				],
 
-				'allDay'               => [
+				'allDay'             => [
 					'type'        => 'Boolean',
 					'description' => __( 'Include all-day events.', 'ql-events' ),
 				],
-				'multiday'             => [
+				'multiday'           => [
 					'type'        => 'Boolean',
 					'description' => __( 'Include events spanning multiple days.', 'ql-events' ),
 				],
-				'onCalendarGrid'       => [
+				'onCalendarGrid'     => [
 					'type'        => 'Boolean',
 					'description' => __( 'Include events that are shown on the calendar grid.', 'ql-events' ),
 				],
-				'timezone'       => [
+				'timezone'           => [
 					'type'        => 'String',
 					'description' => __( 'Filter events by timezone.', 'ql-events' ),
 				],
-				'hiddenFromUpcoming'       => [
+				'hiddenFromUpcoming' => [
 					'type'        => 'Boolean',
 					'description' => __( 'Include events hidden from the upcoming list', 'ql-events' ),
 				],
-				'sticky'       => [
+				'sticky'             => [
 					'type'        => 'Boolean',
 					'description' => __( 'Include sticky events', 'ql-events' ),
 				],
-				'featured'       => [
+				'featured'           => [
 					'type'        => 'Boolean',
 					'description' => __( 'Include featured events', 'ql-events' ),
 				],
-				'hidden'       => [
+				'hidden'             => [
 					'type'        => 'Boolean',
 					'description' => __( 'Include hidden events', 'ql-events' ),
 				],
-				'organizer'    => [
+				'organizer'          => [
 					'type'        => 'ID',
 					'description' => __( 'Filter events by organizer.', 'ql-events' ),
 				],
-				'venuesIn'             => [
+				'venuesIn'           => [
 					'type'        => [ 'list_of' => 'Int' ],
 					'description' => __( 'Filter the connection based on event venue ID', 'ql-events' ),
 				],
-				'venuesNotIn'          => [
+				'venuesNotIn'        => [
 					'type'        => [ 'list_of' => 'Int' ],
 					'description' => __( 'Filter the connection based on event venue ID', 'ql-events' ),
 				],
-				'startDateQuery'       => [
+				'startDateQuery'     => [
 					'type'              => 'DateQueryInput',
 					'description'       => __( 'Filter the connection based on event start dates', 'ql-events' ),
 					'deprecationReason' => __( 'Deprecated in favor of using the "startDate"', 'ql-events' ),
 				],
-				'endDateQuery'         => [
+				'endDateQuery'       => [
 					'type'              => 'DateQueryInput',
 					'description'       => __( 'Filter the connection based on event end dates', 'ql-events' ),
 					'deprecationReason' => __( 'Deprecated in favor of using the "endDate"', 'ql-events' ),
 				],
-				'orderby' 			=> [
+				'orderby'            => [
 					'type'        => [
 						'list_of' => 'EventsConnectionOrderbyInput',
 					],

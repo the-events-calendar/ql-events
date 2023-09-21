@@ -38,7 +38,7 @@ class Tickets extends PostObjects {
 			$repository = tribe_tickets( 'default' );
 
 			// Normalize ID.
-			$post_id    = $source->ID;
+			$post_id = $source->ID;
 			if ( class_exists( '\TEC\Events\Custom_Tables\V1\Models\Occurrence', false ) ) {
 				$post_id = \TEC\Events\Custom_Tables\V1\Models\Occurrence::normalize_id( $source->ID );
 			}
@@ -55,7 +55,6 @@ class Tickets extends PostObjects {
 			 * @since 0.3.0
 			 */
 			$ticket_classes = apply_filters( 'ql_events_ticket_connection_ticket_classes', $ticket_classes, $source, $args, $context, $info );
-
 
 			foreach ( $ticket_classes as $ticket_class ) {
 				$ticket_post_types[ $ticket_class ] = tribe( $ticket_class )->ticket_object;

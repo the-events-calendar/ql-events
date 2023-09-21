@@ -26,6 +26,11 @@ class Event_Connection_Resolver extends PostObjectConnectionResolver {
 
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @param mixed       $source  The source of the field.
+	 * @param array       $args    The args passed to the field.
+	 * @param AppContext  $context The AppContext passed down the Resolve Tree.
+	 * @param ResolveInfo $info    The ResolveInfo passed down the Resolve Tree.
 	 */
 	public function __construct( $source, array $args, AppContext $context, ResolveInfo $info ) {
 		parent::__construct( $source, $args, $context, $info, Main::POSTTYPE );
@@ -35,9 +40,7 @@ class Event_Connection_Resolver extends PostObjectConnectionResolver {
 	 * {@inheritDoc}
 	 */
 	public function get_ids_from_query() {
-		$ids = $this->query->get_posts() ?: [];
-
-		\codecept_debug( tribe_get_events() );
+		$ids = $this->query->get_posts();
 
 		// If we're going backwards, we need to reverse the array.
 		if ( ! empty( $this->args['last'] ) ) {
@@ -50,7 +53,7 @@ class Event_Connection_Resolver extends PostObjectConnectionResolver {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @throws InvariantViolation
+	 * @throws InvariantViolation If the WP_Query has been modified to suppress_filters.
 	 */
 	public function get_query() {
 		// Repository.
@@ -63,7 +66,7 @@ class Event_Connection_Resolver extends PostObjectConnectionResolver {
 		$order   = ! empty( $this->query_args['order'] ) ? $this->query_args['order'] : 'DESC';
 		$query->order_by( $orderby );
 
-		// WP_Query
+		// WP_Query.
 		$query = $query->build_query();
 		if ( isset( $query->query_vars['suppress_filters'] ) && true === $query->query_vars['suppress_filters'] ) {
 			throw new InvariantViolation( __( 'WP_Query has been modified by a plugin or theme to suppress_filters, which will cause issues with WPGraphQL Execution. If you need to suppress filters for a specific reason within GraphQL, consider registering a custom field to the WPGraphQL Schema with a custom resolver.', 'ql-events' ) );
@@ -85,14 +88,14 @@ class Event_Connection_Resolver extends PostObjectConnectionResolver {
 		// Set default query args.
 		$query_args = [
 			// Ignore sticky posts by default.
-			'ignore_sticky_posts'                     => true,
+			'ignore_sticky_posts' => true,
 			// Set the post_type for the query based on the type of post being queried.
-			'post_type'                               => $this->post_type,
+			'post_type'           => $this->post_type,
 			// This is all we need.
 			// Don't calculate the total rows, it's not needed and can be expensive.
-			'no_found_rows'                           => true,
+			'no_found_rows'       => true,
 			// Set the post_status to "publish" by default.
-			'post_status'                             => 'publish',
+			'post_status'         => 'publish',
 		];
 
 		/**
@@ -105,11 +108,11 @@ class Event_Connection_Resolver extends PostObjectConnectionResolver {
 		 */
 		$query_args['posts_per_page'] = $this->one_to_one ? 1 : min( max( absint( $first ), absint( $last ), 10 ), $this->query_amount ) + 1;
 
-		// set the graphql cursor args
-		$query_args['graphql_cursor_compare']          = ( ! empty( $last ) ) ? '>' : '<';
-		$query_args['graphql_after_cursor']            = $this->get_after_offset();
-		$query_args['graphql_before_cursor']           = $this->get_before_offset();
-		$query_args['graphql_cursor_id_key']           = Occurrences::table_name() . '.occurrence_id';
+		// set the graphql cursor args.
+		$query_args['graphql_cursor_compare'] = ( ! empty( $last ) ) ? '>' : '<';
+		$query_args['graphql_after_cursor']   = $this->get_after_offset();
+		$query_args['graphql_before_cursor']  = $this->get_before_offset();
+		$query_args['graphql_cursor_id_key']  = Occurrences::table_name() . '.occurrence_id';
 
 		if ( false !== $cursor_offset ) {
 			/**
@@ -126,20 +129,20 @@ class Event_Connection_Resolver extends PostObjectConnectionResolver {
 
 			$query_args['graphql_cursor_id_value'] = $cursor_id;
 
-			$cursor_node = tribe_get_event( $cursor_offset );
+			$cursor_node                                 = tribe_get_event( $cursor_offset );
 			$query_args['graphql_cursor_compare_fields'] = [
 				[
 					'key'   => Occurrences::table_name() . '.start_date_utc',
 					'value' => $cursor_node->start_date_utc,
 					'type'  => 'DATETIME',
-				]
+				],
 			];
 
 			$query_args['graphql_cursor_compare_by__EventStartDateUTC_key']   = Occurrences::table_name() . '.start_date_utc';
 			$query_args['graphql_cursor_compare_by__EventStartDateUTC_value'] = $cursor_node->start_date_utc;
 			$query_args['graphql_cursor_compare_by__EventEndDateUTC_key']     = Occurrences::table_name() . '.end_date_utc';
 			$query_args['graphql_cursor_compare_by__EventEndDateUTC_value']   = $cursor_node->end_date_utc;
-		}
+		}//end if
 
 		/**
 		 * Pass the graphql $args to the WP_Query.
@@ -206,8 +209,8 @@ class Event_Connection_Resolver extends PostObjectConnectionResolver {
 				$query_args['post__in'] = $post_in;
 				$query_args['orderby']  = 'post__in';
 				$query_args['order']    = isset( $last ) ? 'ASC' : 'DESC';
-			}
-		}
+			}//end if
+		}//end if
 
 		/**
 		 * Map the orderby inputArgs to the WP_Query
@@ -241,8 +244,8 @@ class Event_Connection_Resolver extends PostObjectConnectionResolver {
 
 					$query_args['orderby'][ esc_sql( $orderby_input['field'] ) ] = esc_sql( $order );
 				}
-			}
-		}
+			}//end foreach
+		}//end if
 
 		/**
 		 * Convert meta_value_num to seperate meta_value value field which our
@@ -250,7 +253,7 @@ class Event_Connection_Resolver extends PostObjectConnectionResolver {
 		 */
 		if ( isset( $query_args['orderby'] ) && 'meta_value_num' === $query_args['orderby'] ) {
 			$query_args['orderby'] = [
-				'meta_value' => empty( $query_args['order'] ) ? 'DESC' : $query_args['order'],
+				'meta_value' => empty( $query_args['order'] ) ? 'DESC' : $query_args['order'], // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
 			];
 			unset( $query_args['order'] );
 			$query_args['meta_type'] = 'NUMERIC';
@@ -261,7 +264,7 @@ class Event_Connection_Resolver extends PostObjectConnectionResolver {
 		 */
 		if ( empty( $query_args['orderby'] ) ) {
 			$query_args['orderby'] = 'event_date';
-			$query_args['order'] = ! empty( $last ) ? 'ASC' : 'DESC';
+			$query_args['order']   = ! empty( $last ) ? 'ASC' : 'DESC';
 		}
 
 		/**
@@ -282,7 +285,7 @@ class Event_Connection_Resolver extends PostObjectConnectionResolver {
 		 */
 
 		return apply_filters(
-			'graphql_events_connection_query_args',
+			'ql_events_connection_query_args',
 			$query_args,
 			$this->source,
 			$this->args,
@@ -389,7 +392,7 @@ class Event_Connection_Resolver extends PostObjectConnectionResolver {
 			) ) {
 				unset( $query_args[ $key ] );
 			}
-		}
+		}//end foreach
 
 		/**
 		 * Filter the input fields
@@ -407,7 +410,7 @@ class Event_Connection_Resolver extends PostObjectConnectionResolver {
 		 * @return array
 		 * @since 0.0.5
 		 */
-		$query_args = apply_filters( 'graphql_map_input_fields_to_event_query', $query_args, $where_args, $this->source, $this->args, $this->context, $this->info, $this->post_type );
+		$query_args = apply_filters( 'ql_events_map_input_fields_to_event_query', $query_args, $where_args, $this->source, $this->args, $this->context, $this->info, $this->post_type );
 
 		/**
 		 * Return the Query Args
@@ -543,7 +546,7 @@ class Event_Connection_Resolver extends PostObjectConnectionResolver {
 	 * @return mixed.
 	 */
 	public function filtered( $query, array $where_args ) {
-		$fields = [
+		$fields     = [
 			'cost'                   => 'cost',
 			'endsAfter'              => 'ends_after',
 			'endsBefore'             => 'ends_before',
@@ -635,11 +638,11 @@ class Event_Connection_Resolver extends PostObjectConnectionResolver {
 						$value['distance'] ?? 10,
 					);
 					break;
-			}
+			}//end switch
 			if ( in_array( $key, array_keys( $fields ), true ) ) {
 				unset( $this->query_args[ $key ] );
 			}
-		}
+		}//end foreach
 
 		return $query;
 	}

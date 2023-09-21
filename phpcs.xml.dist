@@ -76,6 +76,7 @@
 
 	<!-- What to scan -->
 	<file>includes/</file>
+	<exclude-pattern>_bootstrap.php</exclude-pattern>
 	<exclude-pattern>/vendor/</exclude-pattern>
 	<exclude-pattern>bin/*</exclude-pattern>
 	<exclude-pattern>local/*</exclude-pattern>

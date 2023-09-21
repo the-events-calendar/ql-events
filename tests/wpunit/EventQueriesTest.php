@@ -106,7 +106,7 @@ class EventQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 		$venue_id  = $this->factory->venue->create();
 
 		// Create dates.
-		$tomorrow_date = gmdate( 'Y-m-d H:i:s', strtotime( '+24 hours' ) );
+		$tomorrow_date  = gmdate( 'Y-m-d H:i:s', strtotime( '+24 hours' ) );
 		$yesterday_date = gmdate( 'Y-m-d H:i:s', strtotime( '-24 hours' ) );
 		$next_week_date = gmdate( 'Y-m-d H:i:s', strtotime( '+1 week' ) );
 		$last_week_date = gmdate( 'Y-m-d H:i:s', strtotime( '-1 week' ) );
@@ -117,10 +117,10 @@ class EventQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 		// Create events.
 		$tomorrow  = $this->factory->event->create(
 			[
-				'when'       => '+24 hours',
-				'venue'      => $venue_id,
-				'organizers' => [ $organizer ],
-				'post_date'  => $tomorrow_date,
+				'when'          => '+24 hours',
+				'venue'         => $venue_id,
+				'organizers'    => [ $organizer ],
+				'post_date'     => $tomorrow_date,
 				'post_date_gmt' => Dates::immutable( $tomorrow_date )
 					->setTimezone( $utc )
 					->format( Dates::DBDATETIMEFORMAT ),
@@ -128,10 +128,10 @@ class EventQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 		);
 		$yesterday = $this->factory->event->create(
 			[
-				'when'       => '-24 hours',
-				'venue'      => $venue_id,
-				'organizers' => [ $organizer ],
-				'post_date'  => $yesterday_date,
+				'when'          => '-24 hours',
+				'venue'         => $venue_id,
+				'organizers'    => [ $organizer ],
+				'post_date'     => $yesterday_date,
 				'post_date_gmt' => Dates::immutable( $yesterday_date )
 					->setTimezone( $utc )
 					->format( Dates::DBDATETIMEFORMAT ),
@@ -139,10 +139,10 @@ class EventQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 		);
 		$next_week = $this->factory->event->create(
 			[
-				'when'       => '+1 week',
-				'venue'      => $venue_id,
-				'organizers' => [ $organizer ],
-				'post_date'  => $next_week_date,
+				'when'          => '+1 week',
+				'venue'         => $venue_id,
+				'organizers'    => [ $organizer ],
+				'post_date'     => $next_week_date,
 				'post_date_gmt' => Dates::immutable( $next_week_date )
 					->setTimezone( $utc )
 					->format( Dates::DBDATETIMEFORMAT ),
@@ -150,10 +150,10 @@ class EventQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 		);
 		$last_week = $this->factory->event->create(
 			[
-				'when'       => '-1 week',
-				'venue'      => $venue_id,
-				'organizers' => [ $organizer ],
-				'post_date'  => $last_week_date,
+				'when'          => '-1 week',
+				'venue'         => $venue_id,
+				'organizers'    => [ $organizer ],
+				'post_date'     => $last_week_date,
 				'post_date_gmt' => Dates::immutable( $last_week_date )
 					->setTimezone( $utc )
 					->format( Dates::DBDATETIMEFORMAT ),

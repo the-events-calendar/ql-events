@@ -26,7 +26,7 @@ class TEC_Date_Range_Input {
 			[
 				'description' => __( 'Date range object', 'ql-events' ),
 				'fields'      => [
-					'start'    => [
+					'start' => [
 						'type'        => [ 'non_null' => 'String' ],
 						'description' => __( 'Range start datetime.', 'ql-events' ),
 					],

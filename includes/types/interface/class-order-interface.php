@@ -61,7 +61,7 @@ class Order_Interface {
 									$value->post_type
 								)
 							);
-					}
+					}//end switch
 				},
 			]
 		);

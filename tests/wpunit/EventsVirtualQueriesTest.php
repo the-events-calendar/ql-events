@@ -3,17 +3,17 @@
 class EventsVirtualQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 	public function testEventQueryWithEventsVirtualFields() {
 		$organizer_one = $this->factory->organizer->create();
-        $organizer_two = $this->factory->organizer->create();
-        $venue_id      = $this->factory->venue->create();
-        $event_id      = $this->factory->event->create(
-            array(
-                'venue'      => $venue_id,
-                'organizers' => array( $organizer_one, $organizer_two ),
-            )
-        );
+		$organizer_two = $this->factory->organizer->create();
+		$venue_id      = $this->factory->venue->create();
+		$event_id      = $this->factory->event->create(
+			[
+				'venue'      => $venue_id,
+				'organizers' => [ $organizer_one, $organizer_two ],
+			]
+		);
 
 		// Create test query.
-        $query = '
+		$query = '
             query($id: ID!) {
                 event(id: $id) {
 					id
@@ -38,9 +38,9 @@ class EventsVirtualQueriesTest extends \QL_Events\Test\TestCase\QLEventsTestCase
 		 *
 		 * Test response of a non-virtual event.
 		 */
-        $variables = array(
+		$variables = [
 			'id' => $this->toRelayId( 'post', $event_id ),
-		);
+		];
 		$response  = $this->graphql( compact( 'query', 'variables' ) );
 		$expected  = [
 			$this->expectedField( 'event.id', $this->toRelayId( 'post', $event_id ) ),

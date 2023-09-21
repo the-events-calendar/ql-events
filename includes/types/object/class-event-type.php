@@ -252,7 +252,7 @@ class Event_Type {
 									}
 								}
 							);
-						}
+						}//end if
 
 						return $dates;
 					},

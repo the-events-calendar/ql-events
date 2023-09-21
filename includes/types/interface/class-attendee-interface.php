@@ -68,7 +68,7 @@ class Attendee_Interface {
 									$value->post_type
 								)
 							);
-					}
+					}//end switch
 				},
 			]
 		);
