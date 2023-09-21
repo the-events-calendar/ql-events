@@ -3,7 +3,7 @@
  * Enum Type - EventsConnectionOrderbyEnum
  *
  * @package WPGraphQL\QL_Events\Type\WPEnum
- * @since   TBD
+ * @since   0.3.1
  */
 
 namespace WPGraphQL\QL_Events\Type\WPEnum;
@@ -15,7 +15,7 @@ class Events_Connection_Orderby_Enum {
 	/**
 	 * Registers type
 	 *
-	 * @since TBD
+	 * @since 0.3.1
 	 *
 	 * @return void
 	 */

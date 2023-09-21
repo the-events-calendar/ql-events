@@ -3,7 +3,7 @@
  * WPInputObjectType - TECDateRangeInput
  *
  * @package WPGraphQL\QL_Events\Type\WPInputObject
- * @since   TBD
+ * @since   0.3.1
  */
 
 namespace WPGraphQL\QL_Events\Type\WPInputObject;
@@ -16,7 +16,7 @@ class TEC_Date_Range_Input {
 	/**
 	 * Registers type
 	 *
-	 * @since TBD
+	 * @since 0.3.1
 	 *
 	 * @return void
 	 */

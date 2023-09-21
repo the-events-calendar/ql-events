@@ -198,7 +198,7 @@ class Event_Type {
 	/**
 	 * Registers TEC pro "Event" type fields.
 	 *
-	 * @since TBD
+	 * @since 0.3.1
 	 *
 	 * @return void
 	 */

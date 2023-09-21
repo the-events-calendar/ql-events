@@ -23,7 +23,7 @@ class Events extends PostObjects {
 	/**
 	 * Register event connections.
 	 *
-	 * @since TBD
+	 * @since 0.3.1
 	 *
 	 * @return void
 	 */
