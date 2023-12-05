@@ -106,7 +106,7 @@ class Event_Connection_Resolver extends PostObjectConnectionResolver {
 		/**
 		 * Set posts_per_page the highest value of $first and $last, with a (filterable) max of 100
 		 */
-		$query_args['posts_per_page'] = $this->one_to_one ? 1 : min( max( absint( $first ), absint( $last ), 10 ), $this->query_amount ) + 1;
+		$query_args['posts_per_page'] = $this->one_to_one ? 1 : min( max( absint( $first ), absint( $last ), 10 ), $this->query_amount ) + 2;
 
 		// set the graphql cursor args.
 		$query_args['graphql_cursor_compare'] = ( ! empty( $last ) ) ? '>' : '<';
@@ -135,6 +135,7 @@ class Event_Connection_Resolver extends PostObjectConnectionResolver {
 					'key'   => Occurrences::table_name() . '.start_date_utc',
 					'value' => $cursor_node->start_date_utc,
 					'type'  => 'DATETIME',
+					'order' => 'ASC'
 				],
 			];
 
