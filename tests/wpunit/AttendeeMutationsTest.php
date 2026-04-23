@@ -125,7 +125,20 @@ class AttendeeMutationsTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 	}
 
 	/**
-	 * Seeds a published event with an RSVP ticket and returns their IDs.
+	 * Exact error message thrown by the registerAttendee mutation when permission
+	 * is denied. Pinned as a constant so tests flag any accidental rewording — a
+	 * feature for a security-critical error surface.
+	 */
+	private const ERR_REGISTER_FORBIDDEN = 'You do not have permission to register attendees for this event.';
+
+	/**
+	 * Exact error message thrown by the updateAttendee mutation when permission
+	 * is denied.
+	 */
+	private const ERR_UPDATE_FORBIDDEN = 'You do not have permission to update this attendee.';
+
+	/**
+	 * Seeds a published event with a PayPal (TPP) ticket and returns their IDs.
 	 *
 	 * @return array{event_id:int,ticket_id:int}
 	 */
@@ -137,6 +150,44 @@ class AttendeeMutationsTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 		return [
 			'event_id'  => $event_id,
 			'ticket_id' => $ticket_id,
+		];
+	}
+
+	/**
+	 * Seeds an event, ticket, and attendee using admin privileges. Leaves the
+	 * current user logged in as admin — callers switch identity explicitly when
+	 * they want to exercise the negative path.
+	 *
+	 * @return array{event_id:int,ticket_id:int,attendee_id:string,attendee_db_id:int}
+	 */
+	private function seed_attendee_as_admin(): array {
+		$this->loginAs( 1 );
+
+		[ 'event_id' => $event_id, 'ticket_id' => $ticket_id ] = $this->seed_event_and_ticket();
+
+		$response = $this->graphql(
+			[
+				'query'     => $this->register_attendee_mutation(),
+				'variables' => [
+					'input' => [
+						'ticketId' => $ticket_id,
+						'eventId'  => $event_id,
+						'name'     => 'Original Name',
+						'email'    => 'original@proof-of-concept.test',
+					],
+				],
+			]
+		);
+
+		$attendee_id    = self::lodashGet( $response, 'data.registerAttendee.attendee.id' );
+		$attendee_db_id = (int) self::lodashGet( $response, 'data.registerAttendee.attendee.databaseId' );
+		$this->assertNotEmpty( $attendee_id, 'Seed attendee creation (as admin) should succeed.' );
+
+		return [
+			'event_id'       => $event_id,
+			'ticket_id'      => $ticket_id,
+			'attendee_id'    => $attendee_id,
+			'attendee_db_id' => $attendee_db_id,
 		];
 	}
 
@@ -161,6 +212,16 @@ class AttendeeMutationsTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 	}
 
 	/**
+	 * Asserts the GraphQL response contains exactly the expected top-level error
+	 * message. Using exact equality (rather than a lowercase substring match)
+	 * means any change to the error text forces a reviewer to touch the test.
+	 */
+	private function assert_graphql_error( array $response, string $expected_message ): void {
+		$this->assertNotEmpty( $response['errors'] ?? null, 'Expected a GraphQL error response.' );
+		$this->assertSame( $expected_message, $response['errors'][0]['message'] ?? null );
+	}
+
+	/**
 	 * An anonymous caller (no user context) must not be able to create attendees.
 	 */
 	public function testRegisterAttendeeRejectsUnauthenticatedRequests() {
@@ -182,8 +243,7 @@ class AttendeeMutationsTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 			]
 		);
 
-		$this->assertNotEmpty( $response['errors'] ?? null, 'Unauthenticated registerAttendee must return a GraphQL error.' );
-		$this->assertStringContainsString( 'permission', strtolower( $response['errors'][0]['message'] ?? '' ) );
+		$this->assert_graphql_error( $response, self::ERR_REGISTER_FORBIDDEN );
 	}
 
 	/**
@@ -209,38 +269,55 @@ class AttendeeMutationsTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 			]
 		);
 
-		$this->assertNotEmpty( $response['errors'] ?? null, 'A subscriber must not be able to register attendees.' );
-		$this->assertStringContainsString( 'permission', strtolower( $response['errors'][0]['message'] ?? '' ) );
+		$this->assert_graphql_error( $response, self::ERR_REGISTER_FORBIDDEN );
+	}
+
+	/**
+	 * The `ql_events_user_can_register_attendee` filter must be able to grant
+	 * access to a user who would otherwise fail the default capability check.
+	 * Guards the documented extension point from silent regressions.
+	 */
+	public function testRegisterAttendeeFilterCanGrantAccess() {
+		$subscriber_id = $this->factory()->user->create( [ 'role' => 'subscriber' ] );
+		$this->loginAs( $subscriber_id );
+
+		[ 'event_id' => $event_id, 'ticket_id' => $ticket_id ] = $this->seed_event_and_ticket();
+
+		add_filter( 'ql_events_user_can_register_attendee', '__return_true' );
+
+		try {
+			$response = $this->graphql(
+				[
+					'query'     => $this->register_attendee_mutation(),
+					'variables' => [
+						'input' => [
+							'ticketId' => $ticket_id,
+							'eventId'  => $event_id,
+							'name'     => 'Filter Granted',
+							'email'    => 'filter@proof-of-concept.test',
+						],
+					],
+				]
+			);
+
+			$this->assertQuerySuccessful(
+				$response,
+				[
+					$this->expectedField( 'registerAttendee.attendee', self::NOT_NULL ),
+					$this->expectedField( 'registerAttendee.attendee.fullName', 'Filter Granted' ),
+				]
+			);
+		} finally {
+			remove_filter( 'ql_events_user_can_register_attendee', '__return_true' );
+		}
 	}
 
 	/**
 	 * An anonymous caller must not be able to modify an existing attendee.
 	 */
 	public function testUpdateAttendeeRejectsUnauthenticatedRequests() {
-		// Seed an attendee as admin so we have a target.
-		$this->loginAs( 1 );
-		[ 'event_id' => $event_id, 'ticket_id' => $ticket_id ] = $this->seed_event_and_ticket();
+		$seed = $this->seed_attendee_as_admin();
 
-		$create_response = $this->graphql(
-			[
-				'query'     => $this->register_attendee_mutation(),
-				'variables' => [
-					'input' => [
-						'ticketId' => $ticket_id,
-						'eventId'  => $event_id,
-						'name'     => 'Original Name',
-						'email'    => 'original@proof-of-concept.test',
-					],
-				],
-			]
-		);
-		$attendee_id    = self::lodashGet( $create_response, 'data.registerAttendee.attendee.id' );
-		$attendee_db_id = (int) self::lodashGet( $create_response, 'data.registerAttendee.attendee.databaseId' );
-		$this->assertNotEmpty( $attendee_id, 'Seed attendee creation (as admin) should succeed.' );
-
-		$original_title = get_post_field( 'post_title', $attendee_db_id );
-
-		// Now attempt the update with no user context.
 		$this->logout();
 
 		$response = $this->graphql(
@@ -248,7 +325,7 @@ class AttendeeMutationsTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 				'query'     => $this->update_attendee_mutation(),
 				'variables' => [
 					'input' => [
-						'attendeeId' => $attendee_id,
+						'attendeeId' => $seed['attendee_id'],
 						'name'       => 'Hijacked Name',
 						'email'      => 'stolen@attacker.test',
 					],
@@ -256,12 +333,80 @@ class AttendeeMutationsTest extends \QL_Events\Test\TestCase\QLEventsTestCase {
 			]
 		);
 
-		$this->assertNotEmpty( $response['errors'] ?? null, 'Unauthenticated updateAttendee must return a GraphQL error.' );
-		$this->assertStringContainsString( 'permission', strtolower( $response['errors'][0]['message'] ?? '' ) );
+		$this->assert_graphql_error( $response, self::ERR_UPDATE_FORBIDDEN );
 		$this->assertSame(
-			$original_title,
-			get_post_field( 'post_title', $attendee_db_id ),
+			'Original Name',
+			get_post_field( 'post_title', $seed['attendee_db_id'] ),
 			'Attendee title must not have been modified by an unauthenticated updateAttendee call.'
 		);
+	}
+
+	/**
+	 * An authenticated user without `edit_post` on the parent event must not be
+	 * able to modify an existing attendee.
+	 */
+	public function testUpdateAttendeeRejectsUsersWithoutEditCapability() {
+		$seed = $this->seed_attendee_as_admin();
+
+		$subscriber_id = $this->factory()->user->create( [ 'role' => 'subscriber' ] );
+		$this->loginAs( $subscriber_id );
+
+		$response = $this->graphql(
+			[
+				'query'     => $this->update_attendee_mutation(),
+				'variables' => [
+					'input' => [
+						'attendeeId' => $seed['attendee_id'],
+						'name'       => 'Subscriber Overreach',
+						'email'      => 'sub@attacker.test',
+					],
+				],
+			]
+		);
+
+		$this->assert_graphql_error( $response, self::ERR_UPDATE_FORBIDDEN );
+		$this->assertSame(
+			'Original Name',
+			get_post_field( 'post_title', $seed['attendee_db_id'] ),
+			'Attendee title must not have been modified by a subscriber-level updateAttendee call.'
+		);
+	}
+
+	/**
+	 * The `ql_events_user_can_update_attendee` filter must be able to grant access
+	 * to a user who would otherwise fail the default capability check.
+	 */
+	public function testUpdateAttendeeFilterCanGrantAccess() {
+		$seed = $this->seed_attendee_as_admin();
+
+		$subscriber_id = $this->factory()->user->create( [ 'role' => 'subscriber' ] );
+		$this->loginAs( $subscriber_id );
+
+		add_filter( 'ql_events_user_can_update_attendee', '__return_true' );
+
+		try {
+			$response = $this->graphql(
+				[
+					'query'     => $this->update_attendee_mutation(),
+					'variables' => [
+						'input' => [
+							'attendeeId' => $seed['attendee_id'],
+							'name'       => 'Filter Granted Update',
+							'email'      => 'filter-update@proof-of-concept.test',
+						],
+					],
+				]
+			);
+
+			$this->assertQuerySuccessful(
+				$response,
+				[
+					$this->expectedField( 'updateAttendee.attendee.databaseId', $seed['attendee_db_id'] ),
+					$this->expectedField( 'updateAttendee.attendee.fullName', 'Filter Granted Update' ),
+				]
+			);
+		} finally {
+			remove_filter( 'ql_events_user_can_update_attendee', '__return_true' );
+		}
 	}
 }

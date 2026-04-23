@@ -128,6 +128,7 @@ class Register_Attendee {
 	 * Defines the mutation data modification closure.
 	 *
 	 * @since 0.2.0
+	 * @since TBD Check if user is able to register attendee.
 	 *
 	 * @return callable
 	 */
@@ -143,8 +144,8 @@ class Register_Attendee {
 		 */
 		return function( $input, AppContext $context, ResolveInfo $info ) {
 			// Get input.
-			$ticket_id = Utils::get_database_id_from_id( $input['ticketId'] );
-			$post_id   = Utils::get_database_id_from_id( $input['eventId'] );
+			$ticket_id         = Utils::get_database_id_from_id( $input['ticketId'] );
+			$post_id           = Utils::get_database_id_from_id( $input['eventId'] );
 
 			$can_register = is_user_logged_in() && current_user_can( 'edit_post', $post_id );
 			/**

@@ -140,22 +140,26 @@ class Update_Attendee extends Register_Attendee {
 
 			$attendee_data = (array) $provider->get_attendee( $attendee_id );
 
-			// Resolve the parent event ID from the attendee so the capability check is per-event.
-			$event_id = 0;
-			if ( ! empty( $attendee_data['event_id'] ) ) {
-				$event_id = (int) $attendee_data['event_id'];
-			} elseif ( ! empty( $attendee_data['post_id'] ) ) {
-				$event_id = (int) $attendee_data['post_id'];
-			}
+			/*
+			 * Resolve the parent event ID via the provider's documented `ATTENDEE_EVENT_KEY`
+			 * meta so the capability check is per-event. If the event cannot be resolved we
+			 * deny rather than falling back to a post-type-wide cap check, which would be
+			 * looser than intended.
+			 */
+			$provider_class     = get_class( $provider );
+			$attendee_event_key = defined( $provider_class . '::ATTENDEE_EVENT_KEY' )
+				? (string) constant( $provider_class . '::ATTENDEE_EVENT_KEY' )
+				: '';
+			$event_id = $attendee_event_key
+				? (int) get_post_meta( $attendee_id, $attendee_event_key, true )
+				: 0;
 
-			$can_update = $event_id
-				? current_user_can( 'edit_post', $event_id )
-				: current_user_can( 'edit_post', $attendee_id );
+			$can_update = $event_id && current_user_can( 'edit_post', $event_id );
 			/**
 			 * Filters whether the current user is permitted to update the given attendee
 			 * via the `updateAttendee` GraphQL mutation.
 			 *
-			 * @param bool  $can_update  Default: `edit_post` on the parent event (or the attendee post if the event cannot be resolved).
+			 * @param bool  $can_update  Default: the parent event was resolved and the current user has `edit_post` on it.
 			 * @param int   $attendee_id Attendee post ID being updated.
 			 * @param int   $event_id    Associated event post ID, or 0 if it could not be resolved.
 			 * @param array $input       Raw mutation input.
