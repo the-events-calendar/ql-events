@@ -143,8 +143,23 @@ class Register_Attendee {
 		 */
 		return function( $input, AppContext $context, ResolveInfo $info ) {
 			// Get input.
-			$ticket_id         = Utils::get_database_id_from_id( $input['ticketId'] );
-			$post_id           = Utils::get_database_id_from_id( $input['eventId'] );
+			$ticket_id = Utils::get_database_id_from_id( $input['ticketId'] );
+			$post_id   = Utils::get_database_id_from_id( $input['eventId'] );
+
+			$can_register = is_user_logged_in() && current_user_can( 'edit_post', $post_id );
+			/**
+			 * Filters whether the current user is permitted to register an attendee
+			 * for the given event via the `registerAttendee` GraphQL mutation.
+			 *
+			 * @param bool  $can_register Default: logged-in user with `edit_post` on the event.
+			 * @param int   $post_id      Event post ID the attendee is being registered for.
+			 * @param array $input        Raw mutation input.
+			 */
+			$can_register = (bool) apply_filters( 'ql_events_user_can_register_attendee', $can_register, $post_id, $input );
+			if ( ! $can_register ) {
+				throw new UserError( __( 'You do not have permission to register attendees for this event.', 'ql-events' ) );
+			}
+
 			$full_name         = $input['name'];
 			$email             = $input['email'];
 			$order_id          = ! empty( $input['orderId'] )
