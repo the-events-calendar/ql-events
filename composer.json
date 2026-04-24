@@ -33,9 +33,11 @@
         "exclude": [
             "/.*",
             "/bin",
+            "/local",
             "/plugin-build",
             "/tests",
             "!/vendor",
+            "/CHANGELOG.md",
             "/codeception.dist.yml",
             "/codeception.tric.yml",
             "/codeception.yml",
@@ -43,6 +45,8 @@
             "/composer.lock",
             "/docker-compose.yml",
             "/Dockerfile",
+            "/phpcs.xml",
+            "/phpcs.xml.dist",
             "/README.md"
         ]
     }

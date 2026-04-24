@@ -1,15 +1,20 @@
 <?php
 /**
  * Plugin Name: QL Events
+ * Plugin URI: https://github.com/the-events-calendar/ql-events
  * Description: Adds The Events Calendar Functionality to WPGraphQL schema.
  * Version: 0.3.2
- * Author: kidunot89
- * Author URI: https://axistaylor.com
+ * Requires at least: 6.7
+ * Requires PHP: 7.4
+ * Requires Plugins: the-events-calendar, event-tickets, wp-graphql
+ * Author: The Events Calendar
+ * Author URI: https://evnt.is/1aor
+ * License: GPLv2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: ql-events
  * Domain Path: /languages
  *
- * @package     WPGraphQL\QL_Events
- * @author      kidunot89
+ * @package WPGraphQL\QL_Events
  */
 
 namespace WPGraphQL\QL_Events;
