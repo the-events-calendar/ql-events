@@ -117,6 +117,7 @@ class Update_Attendee extends Register_Attendee {
 		 * Updates existing attendee using provided input data.
 		 *
 		 * @since 0.2.0
+		 * @since 0.3.2 Check if user is able to update attendee.
 		 *
 		 * @param array       $input    Mutation input data.
 		 * @param AppContext  $context  Mutation's AppContext instance.
@@ -127,12 +128,46 @@ class Update_Attendee extends Register_Attendee {
 		return function( $input, AppContext $context, ResolveInfo $info ) {
 			// Get Attendee ID.
 			$attendee_id = Utils::get_database_id_from_id( $input['attendeeId'] );
-			$provider    = tribe_tickets_get_ticket_provider( $attendee_id );
+
+			if ( ! is_user_logged_in() ) {
+				throw new UserError( __( 'You do not have permission to update this attendee.', 'ql-events' ) );
+			}
+
+			$provider = tribe_tickets_get_ticket_provider( $attendee_id );
 			if ( ! $provider ) {
 				throw new UserError( __( 'No ticket provider found for this\'s attendee\'s ticket', 'ql-events' ) );
 			}
 
 			$attendee_data = (array) $provider->get_attendee( $attendee_id );
+
+			/*
+			 * Resolve the parent event ID via the provider's documented `ATTENDEE_EVENT_KEY`
+			 * meta so the capability check is per-event. If the event cannot be resolved we
+			 * deny rather than falling back to a post-type-wide cap check, which would be
+			 * looser than intended.
+			 */
+			$provider_class     = get_class( $provider );
+			$attendee_event_key = defined( $provider_class . '::ATTENDEE_EVENT_KEY' )
+				? (string) constant( $provider_class . '::ATTENDEE_EVENT_KEY' )
+				: '';
+			$event_id = $attendee_event_key
+				? (int) get_post_meta( $attendee_id, $attendee_event_key, true )
+				: 0;
+
+			$can_update = $event_id && current_user_can( 'edit_post', $event_id );
+			/**
+			 * Filters whether the current user is permitted to update the given attendee
+			 * via the `updateAttendee` GraphQL mutation.
+			 *
+			 * @param bool  $can_update  Default: the parent event was resolved and the current user has `edit_post` on it.
+			 * @param int   $attendee_id Attendee post ID being updated.
+			 * @param int   $event_id    Associated event post ID, or 0 if it could not be resolved.
+			 * @param array $input       Raw mutation input.
+			 */
+			$can_update = (bool) apply_filters( 'ql_events_user_can_update_attendee', $can_update, $attendee_id, $event_id, $input );
+			if ( ! $can_update ) {
+				throw new UserError( __( 'You do not have permission to update this attendee.', 'ql-events' ) );
+			}
 
 			// Check input and prep attendee data.
 			if ( ! empty( $input['name'] ) ) {
