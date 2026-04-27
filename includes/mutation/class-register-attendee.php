@@ -128,7 +128,7 @@ class Register_Attendee {
 	 * Defines the mutation data modification closure.
 	 *
 	 * @since 0.2.0
-	 * @since TBD Check if user is able to register attendee.
+	 * @since 0.3.2 Check if user is able to register attendee.
 	 *
 	 * @return callable
 	 */

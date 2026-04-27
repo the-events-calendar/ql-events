@@ -117,7 +117,7 @@ class Update_Attendee extends Register_Attendee {
 		 * Updates existing attendee using provided input data.
 		 *
 		 * @since 0.2.0
-		 * @since TBD Check if user is able to update attendee.
+		 * @since 0.3.2 Check if user is able to update attendee.
 		 *
 		 * @param array       $input    Mutation input data.
 		 * @param AppContext  $context  Mutation's AppContext instance.
