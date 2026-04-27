@@ -17,6 +17,10 @@ Adds The Events Calendar and Event Tickets functionality to the WPGraphQL schema
 = 0.3.2 =
 * Security: Strengthened security around the GraphQL attendee mutations.
 
+= 0.3.1 =
+* Feature: Improved events filtering on the events query.
+* Fix: Resolved an issue with the events query.
+
 = 0.3.0 =
 * Feature: Added a QL Events settings tab and reorganized the schema.
 * Feature: Added Events Virtual support.

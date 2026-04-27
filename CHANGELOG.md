@@ -8,6 +8,18 @@
 
 - Strengthened security around the GraphQL attendee mutations.
 
+## [0.3.1](https://github.com/the-events-calendar/ql-events/tree/0.3.1) (2023-09-20)
+
+[Full Changelog](https://github.com/the-events-calendar/ql-events/compare/0.3.0...0.3.1)
+
+**New Features:**
+
+- feat: Improved events filtering on the events query. [\#54](https://github.com/the-events-calendar/ql-events/pull/54) ([kidunot89](https://github.com/kidunot89))
+
+**Fixed:**
+
+- fix: events query fix [\#58](https://github.com/the-events-calendar/ql-events/pull/58) ([kidunot89](https://github.com/kidunot89))
+
 ## [0.3.0](https://github.com/the-events-calendar/ql-events/tree/0.3.0) (2023-07-26)
 
 [Full Changelog](https://github.com/the-events-calendar/ql-events/compare/0.1.0...0.3.0)
