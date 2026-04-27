@@ -6,7 +6,7 @@
 
 **Security:**
 
-- Require authentication and `edit_post` capability on the parent event to register or update attendees via the GraphQL `registerAttendee` and `updateAttendee` mutations. Both checks are filterable via `ql_events_user_can_register_attendee` and `ql_events_user_can_update_attendee` for sites that need to extend access (e.g. frontend self-registration).
+- Strengthened security around the GraphQL attendee mutations.
 
 ## [0.3.0](https://github.com/the-events-calendar/ql-events/tree/0.3.0) (2023-07-26)
 
