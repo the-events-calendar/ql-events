@@ -14,28 +14,16 @@ Adds The Events Calendar and Event Tickets functionality to the WPGraphQL schema
 
 == Changelog ==
 
-= [0.3.2] 2026-04-23 =
+= 0.3.2 =
+* Security: Require authentication and `edit_post` capability on the parent event to register or update attendees via the GraphQL `registerAttendee` and `updateAttendee` mutations. Both checks are filterable via `ql_events_user_can_register_attendee` and `ql_events_user_can_update_attendee` for sites that need to extend access (e.g. frontend self-registration).
 
-**Security:**
+= 0.3.0 =
+* Feature: Added a QL Events settings tab and reorganized the schema.
+* Feature: Added Events Virtual support.
+* Feature: Added Attendee interface, connections, and mutations, plus an Order interface.
+* Feature: Implemented custom ticket field types and queries.
 
-* Require authentication and `edit_post` capability on the parent event to register or update attendees via the GraphQL `registerAttendee` and `updateAttendee` mutations. Both checks are filterable via `ql_events_user_can_register_attendee` and `ql_events_user_can_update_attendee` for sites that need to extend access (e.g. frontend self-registration).
-
-= [0.3.0] 2023-07-26 =
-
-**New Features:**
-
-* QL Events settings tab added and schema organized.
-* Events Virtual support added.
-* Attendee interface, connections, and mutations added. Order interface added.
-* Custom ticket field types and queries implemented.
-
-= [0.1.0] 2022-08-12 =
-
-**Breaking changes:**
-
-* Updated testing and CI configuration.
-
-**Fixed:**
-
-* Support for WPGraphQL v1.8+ has been added.
-* Removed extraneous comma to prevent a silent PHP error.
+= 0.1.0 =
+* Tweak: Updated testing and CI configuration (breaking change).
+* Fix: Added support for WPGraphQL v1.8+.
+* Fix: Removed extraneous comma to prevent a silent PHP error.
